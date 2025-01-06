@@ -1,46 +1,48 @@
-# import matplotlib.pyplot as plt
+class Grid():
+    def __init__(self, protein_sequence, protein_structure):
 
-def initialize_grid(protein_sequence):
-    # Create 2D array with length 2 times sequence length plus 2 buffer
-    grid_length = 2 * len(protein_sequence) + 2
-    array = []
+        self.protein_sequence = protein_sequence
+        self.protein_structure = protein_structure
 
-    for _ in range(grid_length):
-        column = []
-        for _ in range(grid_length):
-            column.append(0)
-        array.append(column)
+        # Create 2D array with length 2 times sequence length plus 2 buffer
+        self.grid_size = 2 * len(self.protein_sequence) + 2
 
-    return array
+        self._initialize_grid()
 
-def add_sequence_to_grid(protein_sequence, sequence):
-    # Initialize grid
-    grid = initialize_grid(protein_sequence)
+        self._add_structure_to_grid()
 
-    # Define starting point to be in center
-    x_point = (len(grid) // 2) - 1
-    y_point = (len(grid) // 2) - 1
+    def _initialize_grid(self):
+        self.grid = []
+        for _ in range(self.grid_size):
+            column = []
+            for _ in range(self.grid_size):
+                column.append(0)
+            self.grid.append(column)
 
-    # Add points to grid
-    for i in range(len(sequence)):
-        grid[y_point][x_point] = protein_sequence[i]
-        x_point, y_point = update_position(sequence, i, x_point, y_point) 
+    def _add_structure_to_grid(self):
+        # Define starting point to be in center
+        self.x_coord = self.grid_size // 2
+        self.y_coord = self.grid_size // 2
+        
+        # Add points to grid
+        for i in range(len(self.protein_sequence)):
+            self.grid[self.y_coord][self.x_coord] = self.protein_sequence[i]
+            self._update_position(self.protein_structure[i]) 
+
+    def _update_position(self, direction):
+        if direction == 1:
+            self.x_coord += 1
+        elif direction == -1:
+            self.x_coord -= 1
+        elif direction == 2:
+            self.y_coord -= 1
+        elif direction == -2:
+            self.y_coord += 1
     
-    # Print grid
-    for i in range(len(grid)):
-        print(grid[i])
-    return grid
-
-def update_position(sequence, i, x_coord, y_coord):
-    if sequence[i] == 1:
-        x_coord += 1
-    elif sequence[i] == -1:
-        x_coord -= 1
-    elif sequence[i] == 2:
-        y_coord -= 1
-    elif sequence[i] == -2:
-        y_coord += 1
-    return x_coord, y_coord
+    def get_grid(self):
+        for i in range(self.grid_size):
+            print(self.grid[i])
+        return self.grid
 
 # Rating functions
 def rating(grid, protein_sequence):
@@ -97,13 +99,17 @@ def two_strings_fold(protein_sequence):
     return sequence_list
 
 if __name__ == "__main__":
-    Protein1 = "HHPHHHPH"
-    Protein2 = "HHPHHHPHPHHHPH"
-    Protein3 = "HPHPPHHPHPPHPHHPPHPH"
-    Protein4 = "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP"
-    Protein5 = "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH"
-    sequence = two_strings_fold(Protein1)
-    protein = "HHPHPPPPH"
-    sequence = [1,2,-1,-1,2,2,1,-2,0]
-    grid = add_sequence_to_grid(protein, sequence)
-    print(rating(grid, protein))
+    # Protein1 = "HHPHHHPH"
+    # Protein2 = "HHPHHHPHPHHHPH"
+    # Protein3 = "HPHPPHHPHPPHPHHPPHPH"
+    # Protein4 = "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP"
+    # Protein5 = "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH"
+    # sequence = two_strings_fold(Protein1)
+    # protein = "HHPHPPPPH"
+    # sequence = [1,2,-1,-1,2,2,1,-2,0]
+    # grid = add_sequence_to_grid(protein, sequence)
+    # print(rating(grid, protein))
+    protein_sequence = "HHPHPPPPH"
+    protein_structure = [1,2,-1,-1,2,2,1,-2,0]
+    grid = Grid(protein_sequence, protein_structure)
+    grid.get_grid()
