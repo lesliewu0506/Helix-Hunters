@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 
 def initialize_grid(protein_sequence):
-    # Create 2D array with length 2 times sequence length
-    grid_length = 2 * len(protein_sequence)
+    # Create 2D array with length 2 times sequence length plus 2 buffer
+    grid_length = 2 * len(protein_sequence) + 2
     array = []
 
     for _ in range(grid_length):
@@ -24,22 +24,48 @@ def add_sequence_to_grid(protein_sequence, sequence):
     # Add points to grid
     for i in range(len(sequence)):
         grid[y_point][x_point] = protein_sequence[i]
-        if sequence[i] == 1:
-            x_point += 1
-        elif sequence[i] == -1:
-            x_point -= 1
-        elif sequence[i] == 2:
-            y_point -= 1
-        elif sequence[i] == -2:
-            y_point += 1
+        x_point, y_point = update_position(sequence, i, x_point, y_point) 
     
     # Print grid
     for i in range(len(grid)):
         print(grid[i])
-    return
+    return grid
 
-def rating():
+def update_position(sequence, i, x_coord, y_coord):
+    if sequence[i] == 1:
+        x_coord += 1
+    elif sequence[i] == -1:
+        x_coord -= 1
+    elif sequence[i] == 2:
+        y_coord -= 1
+    elif sequence[i] == -2:
+        y_coord += 1
+    return x_coord, y_coord
 
+def rating(grid):
+    score = 0
+    # Define starting point to be in center
+    x_point = (len(grid) // 2) - 1
+    y_point = (len(grid) // 2) - 1
+
+    for i in range(len(sequence)):
+        current_amino = grid[y_point][x_point]
+        print(current_amino)
+
+        # Check neighbours
+        if current_amino == 'H':
+            if grid[y_point + 1][x_point] == 'H':
+                score -= 1
+            if grid[y_point - 1][x_point] == 'H':
+                score -= 1
+            if grid[y_point][x_point + 1] == 'H': 
+                score -= 1   
+            if grid[y_point][x_point - 1] == 'H':
+                score -= 1
+        
+        elif current_amino == 'C':
+            pass
+        
     return
 
 def two_strings_fold(protein_sequence):
@@ -62,5 +88,6 @@ if __name__ == "__main__":
     Protein3 = "HPHPPHHPHPPHPHHPPHPH"
     Protein4 = "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP"
     Protein5 = "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH"
-    sequence = two_strings_fold(Protein3)
-    add_sequence_to_grid(Protein3, sequence)
+    sequence = two_strings_fold(Protein1)
+    grid = add_sequence_to_grid(Protein1, sequence)
+    rating(grid)
