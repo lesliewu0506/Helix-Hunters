@@ -1,14 +1,35 @@
-def eiwit_grid()):
+grid = [
+    ["H", "H", "P"],
+    ["H", "C", "C"],
+    ["H", "H","P"]
+]
+
+
+def count_adjacent_h(grid):
     rows = len(grid)
     cols = len(grid[0])
+    count = 0
 
     for row in range(rows):
         for col in range(cols):
-            if col < cols - 1 and grid[row][col] == "H" and grid[row][col + 1] == "H":
-                return -1
+            if col < cols - 1 and grid[row][col] == "H" and (grid[row][col + 1] == "H" or grid[row][col + 1] == "C") :
+                count += -1
+                print(f"{count}, c/h/h col")
+            if col < cols - 1 and grid[row][col] == "C" and grid[row][col + 1] == "C":
+                count += -5
+                print(count)
             if row < rows - 1 and grid[row][col] == "H" and grid[row + 1][col] == "H":
-                return -1
-            
+                count += -1
+                print(count)
+            if row < rows - 1 and grid[row][col] == "H" and (grid[row + 1][col] == "H" or grid[row + 1][col] == "C"):
+                count += -1
+                print(count)
+            if row < rows - 1 and grid[row][col] == "C" and grid[row + 1][col] == "C":
+                count += -5
+                print(count)
+                
+    return count
+
 
 def two_strings_fold(protein_sequence):
     sequence_list = []
@@ -27,3 +48,5 @@ if __name__ == "__main__":
     sequence = two_strings_fold(Protein)
     for i in range(len(Protein)):
         print(f"{Protein[i], sequence[i]}")
+    print(count_adjacent_h(grid))
+    
