@@ -4,7 +4,6 @@ grid = [
     ["H", "H","P"]
 ]
 
-
 def count_adjacent_h(grid):
     rows = len(grid)
     cols = len(grid[0])
@@ -13,17 +12,18 @@ def count_adjacent_h(grid):
     for row in range(rows):
         for col in range(cols):
             if col < cols - 1 and grid[row][col] == "C" and grid[row][col + 1] == "C":
-                count += -5
-                print(f"{count}, c/c col" )
-                if col < cols - 1 and (grid[row][col] == "H" or grid[row][col] == "C") and (grid[row][col + 1] == "H" or grid[row][col + 1] == "C") :
-                    count += -1
-                    print(f"{count}, c/h/h col")
+                count -= 5
+                print(f"{count}, c/c col")
+            elif col < cols - 1 and (grid[row][col] in ["H", "C"]) and (grid[row][col + 1] in ["H", "C"]):
+                count -= 1
+                print(f"{count}, c/h/h col")
             if row < rows - 1 and grid[row][col] == "C" and grid[row + 1][col] == "C":
-                count += -5
-                print(f"{count}, c/c row")        
-                if row < rows - 1 and (grid[row][col] == "H" or grid[row][col] == "C") and (grid[row + 1][col] == "H" or grid[row + 1][col] == "C"):
-                    count += -1
-                    print(f"{count}, c/h/h row")    
+                count -= 5
+                print(f"{count}, c/c row")
+            elif row < rows - 1 and (grid[row][col] in ["H", "C"]) and (grid[row + 1][col] in ["H", "C"]):
+                count -= 1
+                print(f"{count}, c/h/h row")
+
     return count
 
 
