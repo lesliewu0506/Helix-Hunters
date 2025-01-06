@@ -23,7 +23,7 @@ class Grid():
         # Define starting point to be in center
         self.x_coord = self.grid_size // 2
         self.y_coord = self.grid_size // 2
-        
+
         # Add points to grid
         for i in range(len(self.protein_sequence)):
             self.grid[self.y_coord][self.x_coord] = self.protein_sequence[i]
@@ -44,45 +44,50 @@ class Grid():
             print(self.grid[i])
         return self.grid
 
-# Rating functions
-def rating(grid, protein_sequence):
-    return count_adjacent(grid) + correction_to_rating(protein_sequence)
+class Rating():
+    def __init__(self, protein_sequence, protein_structure, grid):
+        self.protein_sequence = protein_sequence
+        self.protein_structure = protein_structure
+        self.grid = grid
 
-def count_adjacent(grid):
-    rows = len(grid)
-    cols = len(grid[0])
-    count = 0
+        self.score = 0
 
-    for row in range(rows):
-        for col in range(cols):
-            if col < cols - 1 and grid[row][col] == "C" and grid[row][col + 1] == "C":
-                count -= 5
-            elif col < cols - 1 and (grid[row][col] in ["H", "C"]) and (grid[row][col + 1] in ["H", "C"]):
-                count -= 1
-            if row < rows - 1 and grid[row][col] == "C" and grid[row + 1][col] == "C":
-                count -= 5
-            elif row < rows - 1 and (grid[row][col] in ["H", "C"]) and (grid[row + 1][col] in ["H", "C"]):
-                count -= 1
+        self._count_adjacent()
+        self._correction_to_rating()
 
-    return count
+    def _count_adjacent(self):
+        rows = len(self.grid)
+        cols = len(self.grid[0])
 
-def correction_to_rating(protein_sequence):
-    correction = 0
-    for i in range(1, len(protein_sequence)):
-        current_amino = protein_sequence[i]
-        previous_amino = protein_sequence[i - 1]
+        for row in range(rows):
+            for col in range(cols):
+                if col < cols - 1 and self.grid[row][col] == "C" and self.grid[row][col + 1] == "C":
+                    self.score -= 5
+                elif col < cols - 1 and (self.grid[row][col] in ["H", "C"]) and (self.grid[row][col + 1] in ["H", "C"]):
+                    self.score -= 1
+                if row < rows - 1 and self.grid[row][col] == "C" and self.grid[row + 1][col] == "C":
+                    self.score -= 5
+                elif row < rows - 1 and (self.grid[row][col] in ["H", "C"]) and (self.grid[row + 1][col] in ["H", "C"]):
+                    self.score -= 1
 
-        if current_amino == "H":
-            if previous_amino in ["H", "C"]:
-                correction += 1
+    def _correction_to_rating(self):
+        for i in range(1, len(self.protein_sequence)):
+            current_amino = self.protein_sequence[i]
+            previous_amino = self.protein_sequence[i - 1]
 
-        elif current_amino == "C":
-            if previous_amino == "H":
-                correction += 1
-            elif previous_amino == "C":
-                correction += 5
+            if current_amino == "H":
+                if previous_amino in ["H", "C"]:
+                    self.score += 1
 
-    return correction
+            elif current_amino == "C":
+                if previous_amino == "H":
+                    self.score += 1
+                elif previous_amino == "C":
+                    self.score += 5
+
+    def get_rating(self):
+        print(self.score)
+        return self.score
 
 def two_strings_fold(protein_sequence):
     sequence_list = []
@@ -113,3 +118,5 @@ if __name__ == "__main__":
     protein_structure = [1,2,-1,-1,2,2,1,-2,0]
     grid = Grid(protein_sequence, protein_structure)
     grid.get_grid()
+    rating = Rating(protein_sequence, protein_structure, grid.get_grid())
+    rating.get_rating()
