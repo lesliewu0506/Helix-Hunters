@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 def initialize_grid(protein_sequence):
     # Create 2D array with length 2 times sequence length plus 2 buffer
@@ -42,31 +42,45 @@ def update_position(sequence, i, x_coord, y_coord):
         y_coord += 1
     return x_coord, y_coord
 
-def rating(grid):
-    score = 0
-    # Define starting point to be in center
-    x_point = (len(grid) // 2) - 1
-    y_point = (len(grid) // 2) - 1
+# Rating functions
+def rating(grid, protein_sequence):
+    return count_adjacent(grid) + correction_to_rating(protein_sequence)
 
-    for i in range(len(sequence)):
-        current_amino = grid[y_point][x_point]
-        print(current_amino)
+def count_adjacent(grid):
+    rows = len(grid)
+    cols = len(grid[0])
+    count = 0
 
-        # Check neighbours
-        if current_amino == 'H':
-            if grid[y_point + 1][x_point] == 'H':
-                score -= 1
-            if grid[y_point - 1][x_point] == 'H':
-                score -= 1
-            if grid[y_point][x_point + 1] == 'H': 
-                score -= 1   
-            if grid[y_point][x_point - 1] == 'H':
-                score -= 1
-        
-        elif current_amino == 'C':
-            pass
-        
-    return
+    for row in range(rows):
+        for col in range(cols):
+            if col < cols - 1 and grid[row][col] == "C" and grid[row][col + 1] == "C":
+                count -= 5
+            elif col < cols - 1 and (grid[row][col] in ["H", "C"]) and (grid[row][col + 1] in ["H", "C"]):
+                count -= 1
+            if row < rows - 1 and grid[row][col] == "C" and grid[row + 1][col] == "C":
+                count -= 5
+            elif row < rows - 1 and (grid[row][col] in ["H", "C"]) and (grid[row + 1][col] in ["H", "C"]):
+                count -= 1
+
+    return count
+
+def correction_to_rating(protein_sequence):
+    correction = 0
+    for i in range(1, len(protein_sequence)):
+        current_amino = protein_sequence[i]
+        previous_amino = protein_sequence[i - 1]
+
+        if current_amino == "H":
+            if previous_amino in ["H", "C"]:
+                correction += 1
+
+        elif current_amino == "C":
+            if previous_amino == "H":
+                correction += 1
+            elif previous_amino == "C":
+                correction += 5
+
+    return correction
 
 def two_strings_fold(protein_sequence):
     sequence_list = []
@@ -89,5 +103,7 @@ if __name__ == "__main__":
     Protein4 = "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP"
     Protein5 = "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH"
     sequence = two_strings_fold(Protein1)
-    grid = add_sequence_to_grid(Protein1, sequence)
-    rating(grid)
+    protein = "HHPHPPPPH"
+    sequence = [1,2,-1,-1,2,2,1,-2,0]
+    grid = add_sequence_to_grid(protein, sequence)
+    print(rating(grid, protein))
