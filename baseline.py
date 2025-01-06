@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 def initialize_grid(protein_sequence):
     # Create 2D array with length 2 times sequence length
     grid_length = 2 * len(protein_sequence)
@@ -55,6 +57,10 @@ def two_strings_fold(protein_sequence):
     return sequence_list
 
 if __name__ == "__main__":
-    Protein = "HHPHHHPH"
-    sequence = two_strings_fold(Protein)
-    add_sequence_to_grid(Protein, sequence)
+    Protein1 = "HHPHHHPH"
+    Protein2 = "HHPHHHPHPHHHPH"
+    Protein3 = "HPHPPHHPHPPHPHHPPHPH"
+    Protein4 = "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP"
+    Protein5 = "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH"
+    sequence = two_strings_fold(Protein3)
+    add_sequence_to_grid(Protein3, sequence)
