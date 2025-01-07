@@ -1,12 +1,13 @@
 import csv
+import matplotlib.pyplot as plt
 
 class Protein():
-    def __init__(self, protein_sequence):
+    def __init__(self, protein_sequence, function):
         self.protein_sequence = protein_sequence
+        self._add_folding_structure(function)
 
-    def add_folding_structure(self, function):
+    def _add_folding_structure(self, function):
         self.protein_structure = function(self.protein_sequence)
-        self.function_name = function.__name__
 
         self.protein_grid = Grid(self.protein_sequence, self.protein_structure)
         self.protein_rating = Rating(self.protein_sequence, self.protein_structure, self.protein_grid.grid)
@@ -107,6 +108,35 @@ class Rating():
     def get_rating(self):
         print(self.score)
 
+class Plot():
+    def __init__(self, protein: Protein):
+        self.protein_sequence = protein.protein_sequence
+        self.protein_structure = protein.protein_structure
+
+        self._assign_coordinates()
+
+    def _assign_coordinates(self):
+        self.coordinates = []
+        self.x_coord = 0 
+        self.y_coord = 0
+
+        for i in range(len(self.protein_sequence)):
+            self.coordinates.append((self.x_coord, self.y_coord))
+            self._update_position_plot(self.protein_structure[i])
+
+    def _update_position_plot(self, direction):
+        if direction == 1:
+            self.x_coord += 1
+        elif direction == -1:
+            self.x_coord -= 1
+        elif direction == 2:
+            self.y_coord += 1
+        elif direction == -2:
+            self.y_coord -= 1
+    
+    def get_coordinates(self):
+        print(self.coordinates)
+
 def two_strings_fold(protein_sequence):
     sequence_list = []
     protein_length = len(protein_sequence)
@@ -121,13 +151,16 @@ def two_strings_fold(protein_sequence):
             sequence_list.append(-1)
     return sequence_list
 
-def main(protein_sequence, function):
-    protein = Protein(protein_sequence)
-    protein.add_folding_structure(function)
-    protein.protein_grid.get_grid()
-    protein.protein_rating.get_rating()
-    protein.output_csv()
+# def main(protein_sequence, function):
+    # protein = Protein(protein_sequence)
+    # protein.add_folding_structure(function)
+    # protein.protein_grid.get_grid()
+    # protein.protein_rating.get_rating()
+    # protein.output_csv()
 
 if __name__ == "__main__":
     protein_sequence = "HHPHPPPPH"
-    main(protein_sequence, two_strings_fold)
+    # main(protein_sequence, two_strings_fold)
+    protein = Protein(protein_sequence, two_strings_fold)
+    plot = Plot(protein)
+    plot.get_coordinates()
