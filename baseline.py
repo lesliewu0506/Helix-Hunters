@@ -104,16 +104,6 @@ def two_strings_fold(protein_sequence):
     return sequence_list
 
 if __name__ == "__main__":
-    # Protein1 = "HHPHHHPH"
-    # Protein2 = "HHPHHHPHPHHHPH"
-    # Protein3 = "HPHPPHHPHPPHPHHPPHPH"
-    # Protein4 = "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP"
-    # Protein5 = "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH"
-    # sequence = two_strings_fold(Protein1)
-    # protein = "HHPHPPPPH"
-    # sequence = [1,2,-1,-1,2,2,1,-2,0]
-    # grid = add_sequence_to_grid(protein, sequence)
-    # print(rating(grid, protein))
     protein_sequence = "HHPHPPPPH"
     protein_structure = [1,2,-1,-1,2,2,1,-2,0]
     grid = Grid(protein_sequence, protein_structure)
