@@ -146,15 +146,24 @@ class Plot():
         x_min, x_max = min(x_coords), max(x_coords)
         y_min, y_max = min(y_coords), max(y_coords)
 
+        # Set limits and distance between amino acids
         plt.xlim(x_min + 5, x_max + 5)
         plt.ylim(y_min + 5, y_max + 5)
         plt.xticks(np.arange(x_min - 5, x_max + 5, 1))
         plt.yticks(np.arange(y_min - 5, y_max + 5, 1))
 
+        # Plot amino acids as dots
         for i, (x, y) in enumerate(self.coordinates):
             amino_type = self.protein_sequence[i]
-            plt.scatter(x, y, color = color_map[amino_type], s = 200)
+            plt.scatter(x, y, color = color_map[amino_type], s = 200, zorder = 2)
 
+        # Plot sequential connections
+        for i in range(len(self.coordinates) - 1):
+            x_prev, y_prev = self.coordinates[i]
+            x_next, y_next = self.coordinates[i + 1]
+            plt.plot([x_prev, x_next], [y_prev, y_next], color = 'black', linestyle ='-', linewidth = 2, zorder= 1)
+
+        # Dummy plot for legend
         for amino_type, colour in color_map.items():
            plt.scatter([], [], color=colour, label = amino_type)
 
