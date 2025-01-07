@@ -3,15 +3,21 @@ import csv
 class Protein():
     def __init__(self, protein_sequence):
         self.protein_sequence = protein_sequence
-        self.protein_structures = {}
 
     def add_folding_structure(self, function):
-        protein_structure = function(self.protein_sequence)
-        
-        protein_grid = Grid(self.protein_sequence, protein_structure)
-        protein_rating = Rating(self.protein_sequence, protein_structure, protein_grid.grid)
+        self.protein_structure = function(self.protein_sequence)
+        self.function_name = function.__name__
 
-        self.protein_structures[function.__name__] = [protein_rating, protein_structure, protein_grid]
+        self.protein_grid = Grid(self.protein_sequence, self.protein_structure)
+        self.protein_rating = Rating(self.protein_sequence, self.protein_structure, self.protein_grid.grid)
+
+    def output_csv(self):
+        with open('output.csv', 'w', newline = '') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(['amino', 'fold'])
+            for amino, direction in zip(self.protein_sequence, self.protein_structure):
+                writer.writerow([amino, direction])
+            writer.writerow(['score', self.protein_rating.score])
 
 class Grid():
     def __init__(self, protein_sequence, protein_structure):
@@ -117,7 +123,11 @@ def two_strings_fold(protein_sequence):
 
 if __name__ == "__main__":
     protein_sequence = "HHPHPPPPH"
-    protein_structure = [1,2,-1,-1,2,2,1,-2,0]
-    grid = Grid(protein_sequence, protein_structure)
-    rating = Rating(protein_sequence, protein_structure, grid.grid)
-    print(rating.score)
+    # protein_structure = [1,2,-1,-1,2,2,1,-2,0]
+    # grid = Grid(protein_sequence, protein_structure)
+    # rating = Rating(protein_sequence, protein_structure, grid.grid)
+    # print(rating.score)
+    protein = Protein(protein_sequence)
+    protein.add_folding_structure(two_strings_fold)
+    protein.protein_grid.get_grid()
+    protein.output_csv()
