@@ -121,13 +121,13 @@ def two_strings_fold(protein_sequence):
             sequence_list.append(-1)
     return sequence_list
 
+def main(protein_sequence, function):
+    protein = Protein(protein_sequence)
+    protein.add_folding_structure(function)
+    protein.protein_grid.get_grid()
+    protein.protein_rating.get_rating()
+    protein.output_csv()
+
 if __name__ == "__main__":
     protein_sequence = "HHPHPPPPH"
-    # protein_structure = [1,2,-1,-1,2,2,1,-2,0]
-    # grid = Grid(protein_sequence, protein_structure)
-    # rating = Rating(protein_sequence, protein_structure, grid.grid)
-    # print(rating.score)
-    protein = Protein(protein_sequence)
-    protein.add_folding_structure(two_strings_fold)
-    protein.protein_grid.get_grid()
-    protein.output_csv()
+    main(protein_sequence, two_strings_fold)
