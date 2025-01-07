@@ -155,7 +155,12 @@ class Plot():
             amino_type = self.protein_sequence[i]
             plt.scatter(x, y, color = color_map[amino_type], s = 200)
 
+        for amino_type, colour in color_map.items():
+           plt.scatter([], [], color=colour, label = amino_type)
+
         plt.title('2D Protein Plot')
+        plt.legend(loc = 'best')
+        plt.axis('off')
         plt.show()
 
     def get_coordinates(self):
