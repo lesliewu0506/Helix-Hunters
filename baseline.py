@@ -117,12 +117,14 @@ class Plot():
         self._assign_coordinates()
 
     def _assign_coordinates(self):
-        self.coordinates = []
+        self.coordinates = {}
+        self.coordinates_list = []
         self.x_coord = 0 
         self.y_coord = 0
 
         for i in range(len(self.protein_sequence)):
-            self.coordinates.append((self.x_coord, self.y_coord))
+            self.coordinates[(self.x_coord, self.y_coord)] = self.protein_sequence[i]
+            self.coordinates_list.append((self.x_coord, self.y_coord))
             self._update_position_plot(self.protein_structure[i])
 
     def _update_position_plot(self, direction):
@@ -155,14 +157,30 @@ class Plot():
         # Plot amino acids as dots
         for i, (x, y) in enumerate(self.coordinates):
             amino_type = self.protein_sequence[i]
-            plt.scatter(x, y, color = color_map[amino_type], s = 200, zorder = 2)
+            plt.scatter(x, y, color = color_map[amino_type], s = 200, zorder = 3)
 
         # Plot sequential connections
         for i in range(len(self.coordinates) - 1):
-            x_prev, y_prev = self.coordinates[i]
-            x_next, y_next = self.coordinates[i + 1]
-            plt.plot([x_prev, x_next], [y_prev, y_next], color = 'black', linestyle ='-', linewidth = 2, zorder= 1)
+            x_prev, y_prev = self.coordinates_list[i]
+            x_next, y_next = self.coordinates_list[i + 1]
+            plt.plot([x_prev, x_next], [y_prev, y_next], color = 'black', linestyle ='-', linewidth = 2, zorder= 2)
 
+        # Plot polar bonds
+        for self.x_polar, self.y_polar in self.coordinates:
+            if (self.coordinates[self.x_polar, self.y_polar] != 'P'):
+                if (self.x_polar - 1, self.y_polar) in self.coordinates:
+                    if self._check_neighbour(-1):
+                        plt.plot([self.x_polar, self.x_polar - 1], [self.y_polar, self.y_polar], color = 'grey', linestyle = '--', linewidth = 2, zorder = 1)
+                if (self.x_polar + 1, self.y_polar) in self.coordinates:        
+                    if self._check_neighbour(1):
+                        plt.plot([self.x_polar, self.x_polar + 1], [self.y_polar, self.y_polar], color = 'grey', linestyle = '--', linewidth = 2, zorder = 1)
+                if (self.x_polar, self.y_polar - 1) in self.coordinates:        
+                    if self._check_neighbour(-2):
+                        plt.plot([self.x_polar, self.x_polar], [self.y_polar, self.y_polar - 1], color = 'grey', linestyle = '--', linewidth = 2, zorder = 1)
+                if (self.x_polar, self.y_polar + 1) in self.coordinates:        
+                    if self._check_neighbour(2):
+                        plt.plot([self.x_polar, self.x_polar], [self.y_polar, self.y_polar + 1], color = 'grey', linestyle = '--', linewidth = 2, zorder = 1)
+            
         # Dummy plot for legend
         for amino_type, colour in color_map.items():
            plt.scatter([], [], color=colour, label = amino_type)
@@ -171,6 +189,28 @@ class Plot():
         plt.legend(loc = 'best')
         plt.axis('off')
         plt.show()
+
+    def _check_neighbour(self, direction):
+        if direction == -1:
+            amino_1 = self.coordinates[self.x_polar, self.y_polar]
+            amino_2 = self.coordinates[self.x_polar - 1, self.y_polar]
+            return self._check_pair(amino_1, amino_2)
+        elif direction == 1:
+            amino_1 = self.coordinates[self.x_polar, self.y_polar]
+            amino_2 = self.coordinates[self.x_polar + 1, self.y_polar]
+            return self._check_pair(amino_1, amino_2)
+        if direction == -2:
+            amino_1 = self.coordinates[self.x_polar, self.y_polar]
+            amino_2 = self.coordinates[self.x_polar, self.y_polar - 1]
+            return self._check_pair(amino_1, amino_2)
+        if direction == 2:
+            amino_1 = self.coordinates[self.x_polar, self.y_polar]
+            amino_2 = self.coordinates[self.x_polar, self.y_polar + 1]
+            return self._check_pair(amino_1, amino_2)
+
+    def _check_pair(self, amino_1, amino_2):
+        if amino_2 in ['H', 'C']:
+            return True
 
     def get_coordinates(self):
         print(self.coordinates)
@@ -197,7 +237,7 @@ def two_strings_fold(protein_sequence):
     # protein.output_csv()
 
 if __name__ == "__main__":
-    protein_sequence = "HHPHPPPPH"
+    protein_sequence = "HHPHHHPHPHHHPH"
     # main(protein_sequence, two_strings_fold)
     protein = Protein(protein_sequence, two_strings_fold)
     plot = Plot(protein)
