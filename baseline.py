@@ -1,5 +1,6 @@
 import csv
 import matplotlib.pyplot as plt
+import numpy as np
 
 class Protein():
     def __init__(self, protein_sequence, function):
@@ -134,6 +135,29 @@ class Plot():
         elif direction == -2:
             self.y_coord -= 1
     
+    def plot_structure(self):
+        plt.figure(figsize = (10, 10))
+
+        color_map = {'H' : 'red', 'P' : 'blue', 'C' : 'green'}
+
+        x_coords = [x[0] for x in self.coordinates]
+        y_coords = [y[1] for y in self.coordinates]
+        
+        x_min, x_max = min(x_coords), max(x_coords)
+        y_min, y_max = min(y_coords), max(y_coords)
+
+        plt.xlim(x_min + 5, x_max + 5)
+        plt.ylim(y_min + 5, y_max + 5)
+        plt.xticks(np.arange(x_min - 5, x_max + 5, 1))
+        plt.yticks(np.arange(y_min - 5, y_max + 5, 1))
+
+        for i, (x, y) in enumerate(self.coordinates):
+            amino_type = self.protein_sequence[i]
+            plt.scatter(x, y, color = color_map[amino_type], s = 200)
+
+        plt.title('2D Protein Plot')
+        plt.show()
+
     def get_coordinates(self):
         print(self.coordinates)
 
@@ -164,3 +188,4 @@ if __name__ == "__main__":
     protein = Protein(protein_sequence, two_strings_fold)
     plot = Plot(protein)
     plot.get_coordinates()
+    plot.plot_structure()
