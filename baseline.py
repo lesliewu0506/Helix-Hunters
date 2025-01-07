@@ -3,9 +3,15 @@ import csv
 class Protein():
     def __init__(self, protein_sequence):
         self.protein_sequence = protein_sequence
+        self.protein_structures = {}
+
+    def add_folding_structure(self, function):
+        protein_structure = function(self.protein_sequence)
         
-    def add_folding_structure(self):
-        pass
+        protein_grid = Grid(self.protein_sequence, protein_structure)
+        protein_rating = Rating(self.protein_sequence, protein_structure, protein_grid.grid)
+
+        self.protein_structures[function.__name__] = [protein_rating, protein_structure, protein_grid]
 
 class Grid():
     def __init__(self, protein_sequence, protein_structure):
