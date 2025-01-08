@@ -60,34 +60,19 @@ class Rating():
     def _count_adjacent(self):
         direction_map = {1 : (1, 0), -1 : (-1, 0), 2 : (0, 1), -2 : (0, -1)}
 
-        for self.x_current, self.y_current in self.structure:
+        for x_current, y_current in self.structure:
             for direction, (dx, dy) in direction_map.items():
-                x_next = self.x_current + dx
-                y_next = self.y_current + dy
+                x_next = x_current + dx
+                y_next = y_current + dy
 
-                if (x_next, y_next) in self.structure:
-                    self.score += self._check_neighbour(direction)
-
-    def _check_neighbour(self, direction):
-        if direction == -1 and not self._check_sequential(self.x_current - 1, self.y_current):
-            dx, dy = -1, 0
-        elif direction == 1 and not self._check_sequential(self.x_current + 1, self.y_current):
-            dx, dy = 1, 0
-        elif direction == -2 and not self._check_sequential(self.x_current, self.y_current - 1):
-            dx, dy = 0, -1
-        elif direction == 2 and not self._check_sequential(self.x_current, self.y_current + 1):
-            dx, dy = 0, 1
-        else:
-            dx, dy = 0, 0
-            return 0
-        
-        amino_1 = self.structure[self.x_current, self.y_current][0]
-        amino_2 = self.structure[self.x_current + dx, self.y_current + dy][0]
-        return self._check_pair(amino_1, amino_2)
-
-    def _check_sequential(self, x, y):
-        i = self.structure[(self.x_current, self.y_current)][1]
-        return self.structure[(x, y)][1] in [(i - 1), (i + 1)]
+                if (x_next, y_next) in self.structure and not self._check_sequential(x_current, y_current, x_next, y_next):
+                    amino_1 = self.structure[(x_current, y_current)][0]
+                    amino_2 = self.structure[(x_next, y_next)][0]
+                    self.score += self._check_pair(amino_1, amino_2)
+    
+    def _check_sequential(self, x_old, y_old, x_new, y_new):
+        i = self.structure[(x_old, y_old)][1]
+        return self.structure[(x_new, y_new)][1] in [(i - 1), (i + 1)]
 
     def _check_pair(self, amino_1, amino_2):
         if (amino_1 == 'H' and amino_2 in ['H', 'C']) or (amino_1 == 'C' and amino_2 == 'H'):
