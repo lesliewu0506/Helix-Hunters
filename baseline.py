@@ -157,7 +157,7 @@ class Plot():
         # Plot amino acids as dots
         for i, (x, y) in enumerate(self.coordinates):
             amino_type = self.protein_sequence[i]
-            plt.scatter(x, y, color = color_map[amino_type], s = 200, zorder = 3)
+            plt.scatter(x, y, color = color_map[amino_type], s = 100, zorder = 3)
 
         # Plot sequential connections
         for i in range(len(self.coordinates) - 1):
@@ -237,7 +237,7 @@ def two_strings_fold(protein_sequence):
     # protein.output_csv()
 
 if __name__ == "__main__":
-    protein_sequence = "HHPHHHPHPHHHPH"
+    protein_sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
     # main(protein_sequence, two_strings_fold)
     protein = Protein(protein_sequence, two_strings_fold)
     plot = Plot(protein)
