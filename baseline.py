@@ -9,10 +9,9 @@ class Protein():
 
     def _add_folding_structure(self, function):
         self.amino_direction = function(self.protein_sequence)
-        self.structure = Grid(self.protein_sequence, self.amino_direction).get_structure()
 
+        self.structure = Grid(self.protein_sequence, self.amino_direction).get_structure()
         self.protein_rating = Rating(self.protein_sequence, self.structure)
-        self.protein_rating.get_rating()
 
     def output_csv(self):
         with open('output.csv', 'w', newline = '') as csvfile:
@@ -46,7 +45,6 @@ class Grid():
             self.y_coord -= 1
 
     def get_structure(self):
-        print(self.structure)
         return self.structure
 
 class Rating():
@@ -55,23 +53,20 @@ class Rating():
         self.structure = structure
 
         self.score = 0
-
         self._count_adjacent()
+        # Prevent double counting
         self.score = self.score // 2
 
     def _count_adjacent(self):
+        direction_map = {1 : (1, 0), -1 : (-1, 0), 2 : (0, 1), -2 : (0, -1)}
+
         for self.x_current, self.y_current in self.structure:
-            if (self.x_current - 1, self.y_current) in self.structure:
-                self.score += self._check_neighbour(-1)
+            for direction, (dx, dy) in direction_map.items():
+                x_next = self.x_current + dx
+                y_next = self.y_current + dy
 
-            if (self.x_current + 1, self.y_current) in self.structure:        
-                self.score += self._check_neighbour(1)
-
-            if (self.x_current, self.y_current - 1) in self.structure:        
-                self.score +=  self._check_neighbour(-2)
-
-            if (self.x_current, self.y_current + 1) in self.structure:
-                self.score +=  self._check_neighbour(2)
+                if (x_next, y_next) in self.structure:
+                    self.score += self._check_neighbour(direction)
 
     def _check_neighbour(self, direction):
         if direction == -1 and not self._check_sequential(self.x_current - 1, self.y_current):
@@ -104,6 +99,7 @@ class Rating():
     
     def get_rating(self):
         print(self.score)
+        return self.score
 
 class Plot():
     def __init__(self, protein: Protein):
@@ -220,8 +216,9 @@ def two_strings_fold(protein_sequence):
     # protein.output_csv()
 
 if __name__ == "__main__":
-    protein_sequence = "HHPHHHPHPHHHPH"
+    protein_sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
     # main(protein_sequence, two_strings_fold)
     protein = Protein(protein_sequence, two_strings_fold)
+    protein.protein_rating.get_rating()
     plot = Plot(protein)
     plot.plot_structure()
