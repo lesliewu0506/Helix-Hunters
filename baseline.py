@@ -1,25 +1,44 @@
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
+from typing import Callable, List, Dict, Tuple
 
 class Protein():
-    def __init__(self, protein_sequence, function):
-        self.protein_sequence = protein_sequence
-        self._add_folding_structure(function)
+    """
+    A class to represent a protein and its attributes.
+    It stores a protein sequence and uses a provided folding function
+    to generate a folding pattern (amino_directions). Then it creates
+    a structure (mapping of positions to amino acids) and computes
+    the total rating of the protein.
+    """
 
-    def _add_folding_structure(self, function):
-        self.amino_direction = function(self.protein_sequence)
+    def __init__(self, protein_sequence: str, function: Callable[[str], list[int]]) -> None:
+        self.protein_sequence: str = protein_sequence
+        self.amino_directions: list[int] = []
+        self.structure: dict[tuple[int, int], tuple[str, int]] = {}
+        self.protein_rating: int = 0
+        self._build_folding_structure(function)
 
-        self.structure = Grid(self.protein_sequence, self.amino_direction).get_structure()
-        self.protein_rating = Rating(self.protein_sequence, self.structure)
+    def _build_folding_structure(self, function: Callable[[str], list[int]]) -> None:
+        """Creates the attributes for the protein with specific fold."""
+        self.amino_directions = function(self.protein_sequence)
 
-    def output_csv(self):
+        self.structure = Grid(self.protein_sequence, self.amino_directions).get_structure()
+        self.protein_rating = Rating(self.protein_sequence, self.structure).get_rating()
+
+    def output_csv(self) -> None:
+        """Creates a csv file containing the amino acids and their fold."""
         with open('output.csv', 'w', newline = '') as csvfile:
             writer = csv.writer(csvfile)
+
+            # Mandatory header line
             writer.writerow(['amino', 'fold'])
-            for amino, direction in zip(self.protein_sequence, self.amino_direction):
+
+            for amino, direction in zip(self.protein_sequence, self.amino_directions):
                 writer.writerow([amino, direction])
-            writer.writerow(['score', self.protein_rating.score])
+
+            # Mandatory footer line
+            writer.writerow(['score', self.protein_rating])
 
 class Grid():
     """
@@ -45,7 +64,7 @@ class Grid():
 
         return structure
     
-    def _update_position(self, x_old: int, y_old: int, direction: int) -> None:
+    def _update_position(self, x_old: int, y_old: int, direction: int) -> tuple[int, int]:
         """Updates x and y based on direction."""
         # Maps direction to a change in x and y
         direction_map = {0 : (0, 0), 1 : (1, 0), -1 : (-1, 0), 2: (0, 1), -2: (0, -1)}
@@ -60,7 +79,7 @@ class Grid():
 class Rating():
     """A class to represent the rating of a protein structure based on its sequence and structure."""
 
-    def __init__(self, protein_sequence, structure: dict[tuple[int, int], tuple[str, int]]) -> None:
+    def __init__(self, protein_sequence: str, structure: dict[tuple[int, int], tuple[str, int]]) -> None:
         self.protein_sequence: str = protein_sequence
         self.structure: dict[tuple[int, int], tuple[str, int]] = structure
         self.score: int = 0
@@ -71,7 +90,7 @@ class Rating():
         """Calculates the strength of the protein based on adjacent amino acids."""
         # Mapping for all neighbouring points
         direction_map = {(1, 0), (-1, 0), (0, 1), (0, -1)}
-        print(self.structure)
+
         for x_current, y_current in self.structure:
 
             amino_1 = self.structure[(x_current, y_current)][0]
@@ -109,8 +128,7 @@ class Rating():
             return 0
 
     def get_rating(self) -> int:
-        """Prints rating and returns rating"""        
-        print(self.score)
+        """Returns rating of the protein."""
         return self.score
 
 class Plot():
@@ -231,6 +249,6 @@ if __name__ == "__main__":
     protein_sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
     # main(protein_sequence, two_strings_fold)
     protein = Protein(protein_sequence, two_strings_fold)
-    protein.protein_rating.get_rating()
+    protein.protein_rating
     plot = Plot(protein)
     plot.plot_structure()
