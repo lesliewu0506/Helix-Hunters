@@ -10,8 +10,10 @@ class Protein():
     def _add_folding_structure(self, function):
         self.amino_direction = function(self.protein_sequence)
         grid = Grid(self.protein_sequence, self.amino_direction)
+        
         self.structure = grid.get_structure()
         self.protein_rating = Rating(self.protein_sequence, self.structure)
+        self.protein_rating.get_rating()
 
     def output_csv(self):
         with open('output.csv', 'w', newline = '') as csvfile:
@@ -23,15 +25,15 @@ class Protein():
 
 class Grid():
     def __init__(self, protein_sequence, amino_direction):
-        self.structure = self._create_structure(protein_sequence, amino_direction)
+        self.structure = {}
+        self._create_structure(protein_sequence, amino_direction)
 
     def _create_structure(self, protein_sequence, amino_direction):
-        self.coordinates = {}
         self.x_coord = 0 
         self.y_coord = 0
 
         for i in range(len(protein_sequence)):
-            self.coordinates[(self.x_coord, self.y_coord)] = (protein_sequence[i], i)
+            self.structure[(self.x_coord, self.y_coord)] = (protein_sequence[i], i)
             self._update_position(amino_direction[i])
 
     def _update_position(self, direction):
@@ -56,7 +58,7 @@ class Rating():
         self.score = 0
 
         self._count_adjacent()
-        self._correction_to_rating()
+        self.score = self.score // 2
 
     def _count_adjacent(self):
         for self.x_current, self.y_current in self.structure:
@@ -69,7 +71,7 @@ class Rating():
             if (self.x_current, self.y_current - 1) in self.structure:        
                 self.score +=  self._check_neighbour(-2)
 
-            if (self.x_current, self.y_current + 1) in self.structure:        
+            if (self.x_current, self.y_current + 1) in self.structure:
                 self.score +=  self._check_neighbour(2)
 
     def _check_neighbour(self, direction):
@@ -85,8 +87,8 @@ class Rating():
             dx, dy = 0, 0
             return 0
         
-        amino_1 = self.structure[self.x_current, self.y_current]
-        amino_2 = self.structure[self.x_current + dx, self.y_current + dy]
+        amino_1 = self.structure[self.x_current, self.y_current][0]
+        amino_2 = self.structure[self.x_current + dx, self.y_current + dy][0]
         return self._check_pair(amino_1, amino_2)
 
     def _check_sequential(self, x, y):
@@ -94,26 +96,17 @@ class Rating():
         return self.structure[(x, y)][1] in [(i - 1), (i + 1)]
 
     def _check_pair(self, amino_1, amino_2):
+        print(amino_1, amino_2)
         if (amino_1 == 'H' and amino_2 in ['H', 'C']) or (amino_1 == 'C' and amino_2 == 'H'):
+            print("Yes")
             return -1
         elif amino_1 == 'C' and amino_2 == 'C':
+            print("No")
             return -5
+        else:
+            print("None")
+            return 0
     
-    def _correction_to_rating(self):
-        for i in range(1, len(self.protein_sequence)):
-            current_amino = self.protein_sequence[i]
-            previous_amino = self.protein_sequence[i - 1]
-
-            if current_amino == "H":
-                if previous_amino in ["H", "C"]:
-                    self.score += 1
-
-            elif current_amino == "C":
-                if previous_amino == "H":
-                    self.score += 1
-                elif previous_amino == "C":
-                    self.score += 5
-
     def get_rating(self):
         print(self.score)
 
@@ -245,7 +238,7 @@ def two_strings_fold(protein_sequence):
     # protein.output_csv()
 
 if __name__ == "__main__":
-    protein_sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
+    protein_sequence = "HHPHHHPHPHHHPH"
     # main(protein_sequence, two_strings_fold)
     protein = Protein(protein_sequence, two_strings_fold)
     # plot = Plot(protein)
