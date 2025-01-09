@@ -1,6 +1,6 @@
-from protein import Protein
 import plot_functions as plot
 import folding_functions as fold
+from protein import Protein
 from typing import Callable
 
 def main(sequence: str, fold_function: Callable[[str], list[int]]) -> None:

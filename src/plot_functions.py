@@ -3,9 +3,14 @@ import numpy as np
 from protein import Protein
 
 def visualize(protein: Protein) -> None:
+    """Main function for visualizing the protein structure."""
     Plot_visualizer(protein)
     
 class Plot_visualizer():
+    """
+    A class to plot the structure of a protein with a specific fold.
+    It shows the sequential connections and polar connections.
+    """
     def __init__(self, protein: Protein) -> None:
         self.protein: Protein = protein
         self.protein_sequence: str = protein.protein_sequence
