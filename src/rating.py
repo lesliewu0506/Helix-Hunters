@@ -16,7 +16,7 @@ class Rating():
         for x_current, y_current in self.structure:
 
             amino_1 = self.structure[(x_current, y_current)][0]
-            # Check for non polar amino acid
+            # Check for polar amino acid
             if amino_1 != 'P':
                 # Find neighbouring coordinates
                 for (dx, dy) in direction_map:
@@ -46,8 +46,7 @@ class Rating():
             return -1
         elif amino_1 == 'C' and amino_2 == 'C':
             return -5
-        else:
-            return 0
+        return 0
 
     def get_rating(self) -> int:
         """Returns rating of the protein."""

@@ -58,44 +58,43 @@ class Plot():
                 x_prev, y_prev = x, y
     
     def _plot_polar_connections(self) -> None:
-         for self.x_polar, self.y_polar in self.structure:
-            if (self.structure[self.x_polar, self.y_polar][0] != 'P'):
-                if (self.x_polar - 1, self.y_polar) in self.structure:
-                    if self._check_neighbour(-1):
-                        plt.plot([self.x_polar, self.x_polar - 1], [self.y_polar, self.y_polar], color = 'grey', linestyle = '--', linewidth = 2, zorder = 1)
-                if (self.x_polar + 1, self.y_polar) in self.structure:        
-                    if self._check_neighbour(1):
-                        plt.plot([self.x_polar, self.x_polar + 1], [self.y_polar, self.y_polar], color = 'grey', linestyle = '--', linewidth = 2, zorder = 1)
-                if (self.x_polar, self.y_polar - 1) in self.structure:        
-                    if self._check_neighbour(-2):
-                        plt.plot([self.x_polar, self.x_polar], [self.y_polar, self.y_polar - 1], color = 'grey', linestyle = '--', linewidth = 2, zorder = 1)
-                if (self.x_polar, self.y_polar + 1) in self.structure:        
-                    if self._check_neighbour(2):
-                        plt.plot([self.x_polar, self.x_polar], [self.y_polar, self.y_polar + 1], color = 'grey', linestyle = '--', linewidth = 2, zorder = 1)
-    
-    def _check_neighbour(self, direction: int) -> bool:
-        if direction == -1 and not self._check_sequential(self.x_polar - 1, self.y_polar):
-            dx, dy = -1, 0
-        elif direction == 1 and not self._check_sequential(self.x_polar + 1, self.y_polar):
-            dx, dy = 1, 0
-        elif direction == -2 and not self._check_sequential(self.x_polar, self.y_polar - 1):
-            dx, dy = 0, -1
-        elif direction == 2 and not self._check_sequential(self.x_polar, self.y_polar + 1):
-            dx, dy = 0, 1
-        else:
-            return False
-        
-        amino_1 = self.structure[self.x_polar, self.y_polar][0]
-        amino_2 = self.structure[self.x_polar + dx, self.y_polar + dy][0]
-        return self._check_pair(amino_1, amino_2)
+        # Mapping for all neighbouring points
+        direction_map = {(1, 0) , (-1, 0), (0, 1), (0, -1)}
 
-    def _check_sequential(self, x: int, y: int) -> bool:
-        i = self.structure[(self.x_polar, self.y_polar)][1]
-        return self.structure[(x, y)][1] in [(i - 1), (i + 1)]
+        for x_current, y_current in self.structure:
 
-    def _check_pair(self, amino_1: str, amino_2: str) -> bool:
-        if (amino_1 == 'H' and amino_2 in ['H', 'C']) or (amino_1 == 'C' and amino_2 == 'H'):
-            return True
+            amino_1 = self.structure[(x_current, y_current)][0]
+            # Check for polar amino acid
+            if amino_1 != 'P':
+                # Find neighbouring coordinates
+                for (dx, dy) in direction_map:
+                    x_next = x_current + dx
+                    y_next = y_current + dy
+
+                    # Check for valid and non sequential points
+                    if (x_next, y_next) in self.structure and not self._check_sequential(x_current, y_current, x_next, y_next):
+                        amino_2 = self.structure[(x_next, y_next)][0]
+                        
+                        color = self._check_connection_type(amino_1, amino_2)
+                        self._helper_plot_polar_(x_current, y_current, x_next, y_next, color)
+
+    def _check_sequential(self, x_old: int, y_old: int, x_new: int, y_new: int) -> bool:
+        """
+        Checks if two amino acids are in a sequential order. 
+        Returns True if sequential, False otherwise.
+        """        
+        i = self.structure[(x_old, y_old)][1]
+        return self.structure[(x_new, y_new)][1] in [(i - 1), (i + 1)]
+
+    def _check_connection_type(self, amino_1: str, amino_2: str) -> str:
+        """Checks the pair for possible connections and returns the type of connection with color."""
+        if (amino_1 == 'H' and amino_2 == 'H'):
+            return "grey"
+        elif (amino_1 == 'H' and amino_2 == 'C') or (amino_1 == 'C' and amino_2 == 'H'):
+            return "lightgreen"
         elif amino_1 == 'C' and amino_2 == 'C':
-            return True
-        return False
+            return "green"
+        return "white"
+    
+    def _helper_plot_polar_(self, x_old: int, y_old: int, x_new: int, y_new: int, colour: str) -> None:
+        plt.plot([x_old, x_new], [y_old, y_new], color = colour, linestyle = '--', linewidth = 2, zorder = 1)
