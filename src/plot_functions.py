@@ -3,9 +3,9 @@ import numpy as np
 from protein import Protein
 
 def visualize(protein: Protein) -> None:
-    Plot(protein)
+    Plot_visualizer(protein)
     
-class Plot():
+class Plot_visualizer():
     def __init__(self, protein: Protein) -> None:
         self.protein_sequence = protein.protein_sequence
         self.structure = protein.structure

@@ -12,8 +12,8 @@ class Grid():
     def _create_structure(self, protein_sequence: str, amino_directions: list[int]) -> dict[tuple[int, int], tuple[str, int]]:
         """Builds the dictionary structure and returns the structure."""
         structure: dict[tuple[int, int], tuple[str, int]] = {}    
-        x_current: int = 0 
-        y_current: int = 0
+        x_current= 0 
+        y_current= 0
 
         for i in range(len(protein_sequence)):
             # Adds coordinates as keys with values [type of amino, order in chain]
