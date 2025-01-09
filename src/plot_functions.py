@@ -77,7 +77,7 @@ class Plot_visualizer():
         """
         Plots the polar connections of the protein.
         Type of connections is highlighted by the color of the dashed line.
-        grey: H-H connection and C-H connection
+        lime: H-H connection and C-H connection
         darkorange: C-C connection
         """
         # Mapping for all neighbouring points
@@ -111,7 +111,7 @@ class Plot_visualizer():
     def _check_connection_type(self, amino_1: str, amino_2: str) -> str | None:
         """Checks the pair for possible connections and returns the type of connection with color."""
         if (amino_1 == 'H' and amino_2 in ['H', 'C']) or (amino_1 == 'C' and amino_2 == 'H'):
-            return "grey"
+            return "lime"
         elif amino_1 == 'C' and amino_2 == 'C':
             return "darkorange"
         return None
@@ -128,8 +128,8 @@ class Plot_visualizer():
         It also adds the type of connections between polar amino acids.
         """
         # Label polar connections with dashed colored lines
-        plt.plot([], [], color = "grey", linestyle = '--', label = "H-H Connection")
-        plt.plot([], [], color = "grey", linestyle = '--', label = "H-C Connection")
+        plt.plot([], [], color = "lime", linestyle = '--', label = "H-H Connection")
+        plt.plot([], [], color = "lime", linestyle = '--', label = "H-C Connection")
         plt.plot([], [], color = "darkorange", linestyle = '--', label = "C-C Connection")
 
         for amino_type, colour in color_map.items():
