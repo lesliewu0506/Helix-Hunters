@@ -39,3 +39,7 @@ class Protein():
 
             # Mandatory footer line
             writer.writerow(['score', self.protein_rating])
+    
+    def get_rating(self) -> int:
+        """Return the rating of the protein fold."""
+        return self.protein_rating

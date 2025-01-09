@@ -7,8 +7,10 @@ def visualize(protein: Protein) -> None:
     
 class Plot_visualizer():
     def __init__(self, protein: Protein) -> None:
-        self.protein_sequence = protein.protein_sequence
-        self.structure = protein.structure
+        self.protein: Protein = protein
+        self.protein_sequence: str = protein.protein_sequence
+        self.structure: dict[tuple[int, int], tuple[str, int]] = protein.structure
+
         self.plot_structure()
         
     def plot_structure(self) -> None:
@@ -49,7 +51,7 @@ class Plot_visualizer():
         # Dummy plot for legend
         self._plot_legend(color_map)
 
-        plt.title('2D Protein Plot')
+        plt.title(f"2D protein plot \nProtein:{self.protein_sequence}\nscore: {self.protein.get_rating()}")
         plt.legend(loc = 'best')
         plt.axis('off')
         plt.show()
@@ -68,8 +70,7 @@ class Plot_visualizer():
         """
         Plots the polar connections of the protein.
         Type of connections is highlighted by the color of the dashed line.
-        grey: H-H connection
-        lightgreen: C-H connection
+        grey: H-H connection and C-H connection
         darkorange: C-C connection
         """
         # Mapping for all neighbouring points
@@ -102,10 +103,8 @@ class Plot_visualizer():
 
     def _check_connection_type(self, amino_1: str, amino_2: str) -> str | None:
         """Checks the pair for possible connections and returns the type of connection with color."""
-        if (amino_1 == 'H' and amino_2 == 'H'):
+        if (amino_1 == 'H' and amino_2 in ['H', 'C']) or (amino_1 == 'C' and amino_2 == 'H'):
             return "grey"
-        elif (amino_1 == 'H' and amino_2 == 'C') or (amino_1 == 'C' and amino_2 == 'H'):
-            return "lightgreen"
         elif amino_1 == 'C' and amino_2 == 'C':
             return "darkorange"
         return None
@@ -123,7 +122,7 @@ class Plot_visualizer():
         """
         # Label polar connections with dashed colored lines
         plt.plot([], [], color = "grey", linestyle = '--', label = "H-H Connection")
-        plt.plot([], [], color = "lightgreen", linestyle = '--', label = "H-C Connection")
+        plt.plot([], [], color = "grey", linestyle = '--', label = "H-C Connection")
         plt.plot([], [], color = "darkorange", linestyle = '--', label = "C-C Connection")
 
         for amino_type, colour in color_map.items():
