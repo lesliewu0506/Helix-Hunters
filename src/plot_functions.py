@@ -2,15 +2,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 from protein import Protein
 
-def visualize(protein: Protein):
-    Plot(protein).plot_structure()
+def visualize(protein: Protein) -> None:
+    Plot(protein)
     
 class Plot():
-    def __init__(self, protein: Protein):
+    def __init__(self, protein: Protein) -> None:
         self.protein_sequence = protein.protein_sequence
         self.structure = protein.structure
-    
-    def plot_structure(self):
+        self.plot_structure()
+        
+    def plot_structure(self) -> None:
         plt.figure(figsize = (10, 10))
 
         color_map = {'H' : 'red', 'P' : 'blue', 'C' : 'green'}
@@ -47,7 +48,7 @@ class Plot():
         plt.axis('off')
         plt.show()
 
-    def _plot_sequential_connections(self):
+    def _plot_sequential_connections(self) -> None:
         x_prev, y_prev = 0, 0 
         for i, (x, y) in enumerate(self.structure):
             if i == 0:
@@ -56,7 +57,7 @@ class Plot():
                 plt.plot([x_prev, x], [y_prev, y], color = 'black', linestyle ='-', linewidth = 2, zorder= 2)
                 x_prev, y_prev = x, y
     
-    def _plot_polar_connections(self):
+    def _plot_polar_connections(self) -> None:
          for self.x_polar, self.y_polar in self.structure:
             if (self.structure[self.x_polar, self.y_polar][0] != 'P'):
                 if (self.x_polar - 1, self.y_polar) in self.structure:
@@ -72,7 +73,7 @@ class Plot():
                     if self._check_neighbour(2):
                         plt.plot([self.x_polar, self.x_polar], [self.y_polar, self.y_polar + 1], color = 'grey', linestyle = '--', linewidth = 2, zorder = 1)
     
-    def _check_neighbour(self, direction):
+    def _check_neighbour(self, direction: int) -> bool:
         if direction == -1 and not self._check_sequential(self.x_polar - 1, self.y_polar):
             dx, dy = -1, 0
         elif direction == 1 and not self._check_sequential(self.x_polar + 1, self.y_polar):
@@ -88,12 +89,13 @@ class Plot():
         amino_2 = self.structure[self.x_polar + dx, self.y_polar + dy][0]
         return self._check_pair(amino_1, amino_2)
 
-    def _check_sequential(self, x, y):
+    def _check_sequential(self, x: int, y: int) -> bool:
         i = self.structure[(self.x_polar, self.y_polar)][1]
         return self.structure[(x, y)][1] in [(i - 1), (i + 1)]
 
-    def _check_pair(self, amino_1, amino_2):
+    def _check_pair(self, amino_1: str, amino_2: str) -> bool:
         if (amino_1 == 'H' and amino_2 in ['H', 'C']) or (amino_1 == 'C' and amino_2 == 'H'):
             return True
         elif amino_1 == 'C' and amino_2 == 'C':
             return True
+        return False

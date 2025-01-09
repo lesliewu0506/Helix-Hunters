@@ -1,4 +1,4 @@
-def two_strings_fold(protein_sequence):
+def two_strings_fold(protein_sequence: str) -> list[int]:
     sequence_list = []
     protein_length = len(protein_sequence)
     for i in range(protein_length):

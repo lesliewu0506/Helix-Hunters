@@ -1,8 +1,9 @@
 from protein import Protein
 import plot_functions as plot
 import folding_functions as fold
+from typing import Callable
 
-def main(sequence, fold_function):
+def main(sequence: str, fold_function: Callable[[str], list[int]]) -> None:
     protein = Protein(sequence, fold_function)
     print(protein.protein_rating)
     plot.visualize(protein)
