@@ -238,9 +238,13 @@ def two_strings_fold(protein_sequence):
             sequence_list.append(-1)
     return sequence_list
 
-if __name__ == "__main__":
-    protein_sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
-    protein = Protein(protein_sequence, two_strings_fold)
+def main(sequence, fold_function):
+    protein = Protein(sequence, fold_function)
     protein.protein_rating
     plot = Plot(protein)
     plot.plot_structure()
+    protein.output_csv()
+
+if __name__ == "__main__":
+    protein_sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+    main(protein_sequence, two_strings_fold)
