@@ -23,8 +23,13 @@ class Protein():
         """Creates the attributes for the protein with specific fold."""
         self.amino_directions = function(self.protein_sequence)
 
-        self.structure = Grid(self.protein_sequence, self.amino_directions).get_structure()
-        self.protein_rating = Rating(self.protein_sequence, self.structure).get_rating()
+        structure = Grid(self.protein_sequence, self.amino_directions)
+        # Check if structure is valid else give rating 1
+        if not structure.create_structure():
+            self.protein_rating = 1
+        else:
+            self.structure = structure.get_structure()
+            self.protein_rating = Rating(self.protein_sequence, self.structure).get_rating()
 
     def output_csv(self) -> None:
         """Creates a csv file containing the amino acids and their fold."""

@@ -4,6 +4,8 @@ from protein import Protein
 
 def visualize(protein: Protein) -> None:
     """Main function for visualizing the protein structure."""
+    if protein.protein_rating == 1:
+        return None
     Plot_visualizer(protein)
     
 class Plot_visualizer():
