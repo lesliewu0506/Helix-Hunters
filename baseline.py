@@ -1,7 +1,7 @@
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
-from typing import Callable, List, Dict, Tuple
+from typing import Callable
 
 class Protein():
     """
@@ -238,16 +238,8 @@ def two_strings_fold(protein_sequence):
             sequence_list.append(-1)
     return sequence_list
 
-# def main(protein_sequence, function):
-    # protein = Protein(protein_sequence)
-    # protein.add_folding_structure(function)
-    # protein.protein_grid.get_grid()
-    # protein.protein_rating.get_rating()
-    # protein.output_csv()
-
 if __name__ == "__main__":
     protein_sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
-    # main(protein_sequence, two_strings_fold)
     protein = Protein(protein_sequence, two_strings_fold)
     protein.protein_rating
     plot = Plot(protein)
