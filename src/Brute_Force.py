@@ -24,9 +24,19 @@ def brute_force(sequence: str) -> None:
     protein.output_csv(file_name = f"best_fold_{sequence}")
 
 def generate_all_foldings(sequence_length: int) -> list[list[int]]:
-    """Generate all possible foldings for a given sequence length where the last item is always 0."""
-    directions = [-2, -1, 1, 2]
-    all_foldings = [[1] + list(folding) + [0] for folding in itertools.product(directions, repeat=sequence_length - 2)]
+    """Generate all possible foldings for a given sequence length where the last item is always 0,
+    and consecutive items are never opposing directions."""
+    directions = [-2, -1, 1, 2]  # Possible folding directions excluding 0
+    all_foldings = []
+
+    for folding in itertools.product(directions, repeat = sequence_length - 2):
+        valid = True
+        for i in range(1, len(folding)):
+            if folding[i] == -folding[i - 1]:  # Check if consecutive items are opposing
+                valid = False
+                break
+        if valid:
+            all_foldings.append([1] + list(folding) + [0])
     print(len(all_foldings))
     return all_foldings
 
