@@ -3,15 +3,34 @@ import folding_functions as fold
 from protein import Protein
 from typing import Callable
 
+def random_iterated(sequence: str, fold_function: Callable[[str], list[int]]) -> list[int]:
+    score_list: list[int] = []
+    best_structure: Protein | None = None
+    best_score: int = 0
+
+    for _ in range(10000):
+        protein = Protein(sequence, fold_function)
+        while protein.protein_rating == 1:
+            protein = Protein(sequence, fold_function)
+        score_list.append(protein.protein_rating)
+
+        if protein.protein_rating < best_score:
+            best_score = protein.protein_rating
+            best_structure = protein
+        
+    plot.histogram(score_list)
+    plot.visualize(best_structure)
+
 def main(sequence: str, fold_function: Callable[[str], list[int]]) -> None:
     protein = Protein(sequence, fold_function)
     
     while protein.protein_rating == 1:
         protein = Protein(sequence, fold_function)
 
-    plot.visualize(protein)
+    # plot.visualize(protein)
     # protein.output_csv()
 
 if __name__ == "__main__":
     protein_sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
-    main(protein_sequence, fold.random_fold)
+    # main(protein_sequence, fold.random_fold)
+    random_iterated(protein_sequence, fold.random_fold)

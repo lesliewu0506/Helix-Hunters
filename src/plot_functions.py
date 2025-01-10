@@ -7,7 +7,11 @@ def visualize(protein: Protein) -> None:
     if protein.protein_rating == 1:
         return None
     Plot_visualizer(protein)
-    
+
+def histogram(score: list[int]) -> None:
+    plt.hist(score)
+    plt.show()
+
 class Plot_visualizer():
     """
     A class to plot the structure of a protein with a specific fold.
