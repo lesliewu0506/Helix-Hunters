@@ -8,7 +8,7 @@ def random_iterated(sequence: str, fold_function: Callable[[str], list[int]]) ->
     best_structure: Protein | None = None
     best_score: int = 0
 
-    for _ in range(10000):
+    for _ in range(1000):
         protein = Protein(sequence, fold_function)
         while protein.protein_rating == 1:
             protein = Protein(sequence, fold_function)
