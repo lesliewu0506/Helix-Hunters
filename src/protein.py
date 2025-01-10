@@ -12,12 +12,14 @@ class Protein():
     the total rating of the protein.
     """
 
-    def __init__(self, protein_sequence: str, function: Callable[[str], list[int]]) -> None:
+    # def __init__(self, protein_sequence: str, function: Callable[[str], list[int]]) -> None:
+    def __init__(self, protein_sequence: str, amino_directions: list[int]) -> None:
         self.protein_sequence: str = protein_sequence
-        self.amino_directions: list[int] = []
+        self.amino_directions: list[int] = amino_directions
         self.structure: dict[tuple[int, int], tuple[str, int]] = {}
         self.protein_rating: int = 0
-        self._build_structure(function)
+        # self._build_structure(function)
+        self._build_no_function()
 
     def _build_structure(self, function: Callable[[str], list[int]]) -> None:
         """Creates the attributes for the protein with specific fold."""
@@ -31,6 +33,15 @@ class Protein():
             self.structure = structure.get_structure()
             self.protein_rating = Rating(self.protein_sequence, self.structure).get_rating()
 
+    def _build_no_function(self) -> None:
+        structure = Grid(self.protein_sequence, self.amino_directions)
+        # Check if structure is valid else give rating 1
+        if not structure.create_structure():
+            self.protein_rating = 1
+        else:
+            self.structure = structure.get_structure()
+            self.protein_rating = Rating(self.protein_sequence, self.structure).get_rating()
+            
     def output_csv(self) -> None:
         """Creates a csv file containing the amino acids and their fold."""
         with open('output.csv', 'w', newline = '') as csvfile:
