@@ -2,11 +2,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from protein import Protein
 
-def visualize(protein: Protein) -> None:
+def visualize(protein: Protein, save: bool = False) -> None:
     """Main function for visualizing the protein structure."""
     if protein.protein_rating == 1:
         return None
-    Plot_visualizer(protein)
+    Plot_visualizer(protein, save)
 
 def histogram(score: list[int]) -> None:
     """Creates a stylish histogram with gradient color and improved aesthetics."""
@@ -40,14 +40,14 @@ class Plot_visualizer():
     A class to plot the structure of a protein with a specific fold.
     It shows the sequential connections and polar connections.
     """
-    def __init__(self, protein: Protein) -> None:
+    def __init__(self, protein: Protein, save: bool) -> None:
         self.protein: Protein = protein
         self.protein_sequence: str = protein.protein_sequence
         self.structure: dict[tuple[int, int], tuple[str, int]] = protein.structure
 
-        self.plot_structure()
+        self.plot_structure(save)
         
-    def plot_structure(self) -> None:
+    def plot_structure(self, save: bool) -> None:
         """
         Plots the entire protein structure with the amino acids,
         sequential connections and polar connections.
@@ -88,6 +88,7 @@ class Plot_visualizer():
         plt.title(f"2D protein plot \nProtein:{self.protein_sequence}\nscore: {self.protein.get_rating()}")
         plt.legend(loc = 'best')
         plt.axis('off')
+        plt.savefig(f"Best folding structure {self.protein_sequence}", dpi = 300)
         plt.show()
 
     def _plot_sequential_connections(self) -> None:

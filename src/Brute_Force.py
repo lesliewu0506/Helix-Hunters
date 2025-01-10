@@ -21,7 +21,7 @@ def brute_force(sequence: str) -> None:
 
     plot.visualize(protein)
     print(f"Best rating: {best_score}")
-    protein.output_csv()
+    protein.output_csv(file_name = f"best_fold_{sequence}")
 
 def generate_all_foldings(sequence_length: int) -> list[list[int]]:
     """Generate all possible foldings for a given sequence length where the last item is always 0."""
