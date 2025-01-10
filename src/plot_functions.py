@@ -98,7 +98,7 @@ class Plot_visualizer():
                         amino_2 = self.structure[(x_next, y_next)][0]
 
                         color = self._check_connection_type(amino_1, amino_2)
-                        self._helper_plot_polar_(x_current, y_current, x_next, y_next, color)
+                        self._helper_plot_polar(x_current, y_current, x_next, y_next, color)
 
     def _check_sequential(self, x_old: int, y_old: int, x_new: int, y_new: int) -> bool:
         """
@@ -116,7 +116,7 @@ class Plot_visualizer():
             return "darkorange"
         return None
 
-    def _helper_plot_polar_(self, x_old: int, y_old: int, x_new: int, y_new: int, colour: str | None) -> None:
+    def _helper_plot_polar(self, x_old: int, y_old: int, x_new: int, y_new: int, colour: str | None) -> None:
         """Helper functions that plots the polar connections."""
         if colour is not None:
             plt.plot([x_old, x_new], [y_old, y_new], color = colour, linestyle = '--', linewidth = 2, zorder = 1)
