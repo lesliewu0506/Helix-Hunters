@@ -1,36 +1,19 @@
+import itertools
+
 import plot_functions as plot
 import folding_functions as fold
 from protein import Protein
-from typing import Callable
 
-def random_iterated(sequence: str, fold_function: Callable[[str], list[int]]) -> list[int]:
-    score_list: list[int] = []
-    best_structure: Protein | None = None
-    best_score: int = 0
+def generate_all_foldings(sequence_length: int) -> list[list[int]]:
+    """Generate all possible foldings for a given sequence length where the last item is always 0."""
+    directions = [-2, -1, 1, 2]
+    all_foldings = [[1] + list(folding) + [0] for folding in itertools.product(directions, repeat=sequence_length - 2)]
+    print(all_foldings[0])
+    return all_foldings
 
-    for _ in range(1000):
-        protein = Protein(sequence, fold_function)
-        while protein.protein_rating == 1:
-            protein = Protein(sequence, fold_function)
-        score_list.append(protein.protein_rating)
-
-        if protein.protein_rating < best_score:
-            best_score = protein.protein_rating
-            best_structure = protein
-        
-    plot.histogram(score_list)
-    plot.visualize(best_structure)
-
-def main(sequence: str, fold_function: Callable[[str], list[int]]) -> None:
-    protein = Protein(sequence, fold_function)
-    
-    while protein.protein_rating == 1:
-        protein = Protein(sequence, fold_function)
-
-    # plot.visualize(protein)
-    # protein.output_csv()
+def main() -> None:
+    pass
 
 if __name__ == "__main__":
-    protein_sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
-    # main(protein_sequence, fold.random_fold)
-    random_iterated(protein_sequence, fold.random_fold)
+    protein_sequence = "HHPHHHPHPHHHPH"
+    print(len(generate_all_foldings(14)))
