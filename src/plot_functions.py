@@ -9,7 +9,30 @@ def visualize(protein: Protein) -> None:
     Plot_visualizer(protein)
 
 def histogram(score: list[int]) -> None:
-    plt.hist(score)
+    """Creates a stylish histogram with gradient color and improved aesthetics."""
+    plt.figure(figsize=(12, 7))
+
+    n, bins, patches = plt.hist(
+        score, bins=30, edgecolor='black', alpha=0.85, linewidth=1.5
+    )
+    
+    cmap = plt.get_cmap('plasma')
+    for patch, value in zip(patches, n):
+        patch.set_facecolor(cmap(value / max(n)))
+    
+    plt.title('Protein Score Distribution', fontsize=18, fontweight='bold', pad=20)
+    plt.xlabel('Protein Score', fontsize=14, labelpad=15)
+    plt.ylabel('Frequency', fontsize=14, labelpad=15)
+    
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+    
+    plt.grid(axis='y', linestyle='--', alpha=0.6)
+    
+    plt.gca().spines['top'].set_visible(False)
+    plt.gca().spines['right'].set_visible(False)
+    
+    plt.tight_layout()
     plt.show()
 
 class Plot_visualizer():
