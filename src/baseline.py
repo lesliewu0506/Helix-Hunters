@@ -34,10 +34,10 @@ def main(sequence: str, fold_function: Callable[[str], list[int]]) -> None:
     # protein.output_csv()
 
 if __name__ == "__main__":
-    protein_sequence = "HHPHHHPHPHHHPH"
+    protein_sequence = "HHPHHHPHPH"
+    generate_all_foldings(protein_sequence)
     refine_csv(protein_sequence)
     # brute_force(protein_sequence)
-    # generate_all_foldings(protein_sequence)
     # protein_sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
     # main(protein_sequence, fold.random_fold)
     # random_iterated(protein_sequence, fold.random_fold)
