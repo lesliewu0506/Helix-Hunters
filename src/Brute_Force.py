@@ -25,7 +25,7 @@ def brute_force(sequence: str, foldings: list[list[int]], save: Optional[bool] =
     print(f"Best rating: {best_score}")
     protein.output_csv(file_name = f"best_fold_{sequence}")
 
-def generate_all_foldings(protein_sequence: str) -> list[list[int]]:
+def generate_all_foldings(protein_sequence: str) -> None:
     """
     Generate all possible foldings for a given sequence length 
     where the first item is always 1 and the last item 0
@@ -34,30 +34,33 @@ def generate_all_foldings(protein_sequence: str) -> list[list[int]]:
     """
     sequence_length = len(protein_sequence)
     directions = [-2, -1, 1, 2]
-    all_foldings = []
+    # all_foldings = []
 
-    for folding in itertools.product(directions, repeat = sequence_length - 2):
-        valid = True
-        for i in range(1, len(folding)):
-            # Check if consecutive items are opposing
-            if folding[i] == -folding[i - 1]:
-                valid = False
-                break
-
-        if valid:
-            all_foldings.append([1] + list(folding) + [0])
-    write_to_csv(protein_sequence, all_foldings)
-    print(len(all_foldings))
-    return all_foldings
-
-def write_to_csv(protein_sequence: str,foldings: list[list[int]]):
     with open(f'{protein_sequence}.csv', 'w', newline = '') as csvfile:
-
+        
         writer = csv.writer(csvfile)
-        for folding in foldings:
-            writer.writerow(folding)
 
+        for folding in itertools.product(directions, repeat = sequence_length - 2):
+            result = _check_valid_sequence(folding)
+            if result is not None:
+                writer.writerow(result)
     csvfile.close()
+
+def _check_valid_sequence(folding: list[int]) -> Optional[list[int]]:
+    """
+    Helper function for checking valid sequence.
+    Returns the complete directions if valid, else None.
+    """
+    # Checks if the first one is valid
+    if folding[0] == -1:
+        return None
+    
+    # Check if consecutive items are opposing
+    for i in range(1, len(folding)):
+            if folding[i] == -folding[i - 1]:
+                return None
+
+    return ([1] + list(folding) + [0])
 
 def evaluate_folding_wrapper(args: tuple[str, list[int]]) -> tuple[int, Protein]:
     """Wrapper function to unpack arguments for evaluate_folding."""
