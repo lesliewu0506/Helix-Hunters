@@ -1,9 +1,11 @@
 import itertools
 import multiprocessing
 import csv
+import pandas as pd
 
 import plot_functions as plot
 from protein import Protein
+from grid import Grid
 from typing import Optional
 
 def brute_force(sequence: str, foldings: list[list[int]], save: Optional[bool] = False) -> None:
@@ -67,6 +69,26 @@ def _check_valid_sequence(folding: list[int]) -> Optional[list[int]]:
 
     return ([1] + list(folding) + [0])
 
+def refine_csv():
+    pass
+
+def _check_valid_folding(folding: list[int]) -> Optional[list[int]]:
+    """
+    Helper function that checks a folding sequence.
+    If folding is not valid, return the invalid prefix.
+    Else return None.
+    """
+    dummy_sequence = ''
+    for _ in range(len(folding)):
+        dummy_sequence += 'H'
+
+    grid = Grid(dummy_sequence, folding)
+
+    if not grid.create_structure():
+        return grid.invalid_prefix
+
+    return None
+    
 def evaluate_folding_wrapper(args: tuple[str, list[int]]) -> tuple[int, Protein]:
     """Wrapper function to unpack arguments for evaluate_folding."""
     sequence, folding = args

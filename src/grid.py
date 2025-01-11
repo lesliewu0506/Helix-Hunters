@@ -10,6 +10,7 @@ class Grid():
         self.structure: dict[tuple[int, int], tuple[str, int]] = {}
         self.protein_sequence: str = protein_sequence
         self.amino_directions: list[int] = amino_directions
+        self.invalid_prefix: list[int] | None = None
         self.x_current: int = 0 
         self.y_current: int = 0
 
@@ -20,6 +21,7 @@ class Grid():
         """
         for i in range(len(self.protein_sequence)):
             if not self._add_amino(self.protein_sequence[i], i, self.amino_directions[i]):
+                self.invalid_prefix = self.amino_directions[:i]
                 return False
         return True
     
