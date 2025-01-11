@@ -86,6 +86,31 @@ def _check_valid_sequence(folding: list[int]) -> Optional[list[int]]:
         return None
     return candidate
 
+def _check_valid_folding(folding: list[int]) -> Optional[list[int]]:
+    """
+    Helper function that checks a folding sequence.
+    If folding is not valid, return the invalid prefix.
+    Else return None.
+    """
+    dummy_sequence = 'H' * len(folding)
+    grid = Grid(dummy_sequence, folding)
+
+    if not grid.create_structure():
+        return grid.invalid_prefix
+
+    return None
+    
+def evaluate_folding_wrapper(args: tuple[str, list[int]]) -> tuple[int, Protein]:
+    """Wrapper function to unpack arguments for evaluate_folding."""
+    sequence, folding = args
+    return evaluate_folding(sequence, folding)
+
+def evaluate_folding(sequence: str, folding: list[int]) -> tuple[int, Protein]:
+    """Evaluate a single folding and return the result."""
+    protein = Protein(sequence, amino_directions = folding)
+    rating = protein.get_rating()
+    return rating, protein
+
 # def refine_csv(sequence: str) -> None:
 #     """Filter the csv by removing rows with invalid prefixes."""
 #     df = pd.read_csv(f"{sequence}.csv", header = None)
@@ -124,28 +149,3 @@ def _check_valid_sequence(folding: list[int]) -> Optional[list[int]]:
 #             valid_rows.append(row_list)
 
 #     return valid_rows
-
-def _check_valid_folding(folding: list[int]) -> Optional[list[int]]:
-    """
-    Helper function that checks a folding sequence.
-    If folding is not valid, return the invalid prefix.
-    Else return None.
-    """
-    dummy_sequence = 'H' * len(folding)
-    grid = Grid(dummy_sequence, folding)
-
-    if not grid.create_structure():
-        return grid.invalid_prefix
-
-    return None
-    
-def evaluate_folding_wrapper(args: tuple[str, list[int]]) -> tuple[int, Protein]:
-    """Wrapper function to unpack arguments for evaluate_folding."""
-    sequence, folding = args
-    return evaluate_folding(sequence, folding)
-
-def evaluate_folding(sequence: str, folding: list[int]) -> tuple[int, Protein]:
-    """Evaluate a single folding and return the result."""
-    protein = Protein(sequence, amino_directions = folding)
-    rating = protein.get_rating()
-    return rating, protein
