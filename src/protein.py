@@ -17,14 +17,17 @@ class Protein():
         self.amino_directions: Optional[list[int]] = amino_directions
         self.structure: dict[tuple[int, int], tuple[str, int]] = {}
         self.protein_rating: int = 0
-        self.function: Optional[Callable[[str], list[int]]] = function
 
-    def build_structure(self) -> None:
+        if function is not None:
+            self.build_structure(function)
+        elif amino_directions is not None:
+            self.build_no_function()
+
+    def build_structure(self, function: Callable[[str], list[int]]) -> None:
         """Creates the attributes for the protein with specific fold."""
-        if self.function is not None:
-            self.amino_directions = self.function(self.protein_sequence)
-        if self.amino_directions is not None:
-            structure = Grid(self.protein_sequence, self.amino_directions)
+        self.amino_directions = function(self.protein_sequence)
+        structure = Grid(self.protein_sequence, self.amino_directions)
+        
         # Check if structure is valid else give rating 1
         if not structure.create_structure():
             self.protein_rating = 1
