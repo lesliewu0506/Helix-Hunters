@@ -69,8 +69,27 @@ def _check_valid_sequence(folding: list[int]) -> Optional[list[int]]:
 
     return ([1] + list(folding) + [0])
 
-def refine_csv():
-    pass
+def refine_csv(sequence: str) -> None:
+    """Filter the csv by removing rows with invalid prefixes dynamically."""
+    df = pd.read_csv(f"{sequence}.csv", header = None)
+    invalid_prefixes: set[tuple[int]] = set()
+    valid_rows: list[list[int]] = []
+
+    # Iterate over all rows with index
+    for _, row in df.iterrows():
+        # Convert to list
+        row_list = row.tolist()
+
+        # Check if sequence contains invalid prefix
+
+        # Check if sequence has new invalid prefix
+        invalid_prefix = _check_valid_folding(row_list)
+        if invalid_prefix is not None:
+            invalid_prefixes.add(tuple(invalid_prefix))
+        else:
+            valid_rows.append(row_list)
+    print(len(invalid_prefixes))
+    pd.DataFrame(valid_rows).to_csv(f"{sequence}_refined.csv", index = False, header = False)
 
 def _check_valid_folding(folding: list[int]) -> Optional[list[int]]:
     """
@@ -78,10 +97,7 @@ def _check_valid_folding(folding: list[int]) -> Optional[list[int]]:
     If folding is not valid, return the invalid prefix.
     Else return None.
     """
-    dummy_sequence = ''
-    for _ in range(len(folding)):
-        dummy_sequence += 'H'
-
+    dummy_sequence = 'H' * len(folding)
     grid = Grid(dummy_sequence, folding)
 
     if not grid.create_structure():
