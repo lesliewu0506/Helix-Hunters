@@ -1,7 +1,6 @@
 import itertools
 import multiprocessing
 import csv
-import pandas as pd
 
 import plot_functions as plot
 from protein import Protein
@@ -14,7 +13,8 @@ def brute_force(sequence: str, save: Optional[bool] = False) -> None:
     Plots the best structure and prints the rating of the best structure.
     Finally saves the directions into a csv file.
     """
-    num_processes: int = multiprocessing.cpu_count()
+    # num_processes: int = multiprocessing.cpu_count()
+    num_processes: int = 8
     best_score = 1
     # Load data
     foldings: list[list[int]] = read_csv(sequence)

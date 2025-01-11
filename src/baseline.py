@@ -2,7 +2,7 @@ import plot_functions as plot
 import folding_functions as fold
 
 from protein import Protein
-from Brute_Force import brute_force, generate_all_foldings, _check_valid_folding
+from Brute_Force import brute_force, generate_all_foldings
 from typing import Callable, Optional
 
 def random_iterated(sequence: str, fold_function: Callable[[str], list[int]]) -> None:
@@ -31,5 +31,5 @@ def main(sequence: str) -> None:
     brute_force(sequence, save = True)
 
 if __name__ == "__main__":
-    protein_sequence = "HHPHHHPHPHHHPH"
+    protein_sequence = "HPHPPHHPHPPHPHHPPHPH"
     main(protein_sequence)
