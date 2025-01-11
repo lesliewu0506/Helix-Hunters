@@ -88,7 +88,8 @@ class Plot_visualizer():
         plt.title(f"2D protein plot \nProtein:{self.protein_sequence}\nscore: {self.protein.get_rating()}")
         plt.legend(loc = 'best')
         plt.axis('off')
-        plt.savefig(f"Best folding structure {self.protein_sequence}", dpi = 300)
+        if save:
+            plt.savefig(f"Best folding structure {self.protein_sequence}", dpi = 300)
         plt.show()
 
     def _plot_sequential_connections(self) -> None:
