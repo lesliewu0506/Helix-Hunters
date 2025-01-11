@@ -2,7 +2,7 @@ import plot_functions as plot
 import folding_functions as fold
 
 from protein import Protein
-from Brute_Force import brute_force, generate_all_foldings, _check_valid_folding, refine_csv
+from Brute_Force import brute_force, generate_all_foldings, _check_valid_folding
 from typing import Callable, Optional
 
 def random_iterated(sequence: str, fold_function: Callable[[str], list[int]]) -> None:
@@ -25,18 +25,11 @@ def random_iterated(sequence: str, fold_function: Callable[[str], list[int]]) ->
     if best_structure is not None:
         plot.visualize(best_structure)
 
-def main(sequence: str, fold_function: Callable[[str], list[int]]) -> None:
-    protein = Protein(sequence, fold_function)
-
-    while protein.protein_rating == 1:
-        protein = Protein(sequence, fold_function)
-    plot.visualize(protein)
-    # protein.output_csv()
+def main(sequence: str) -> None:
+    generate_all_foldings(sequence)
+    print("Done generating")
+    brute_force(sequence, save = True)
 
 if __name__ == "__main__":
-    protein_sequence = "HPHPPHHPHPPHPHHPPHPH"
-    generate_all_foldings(protein_sequence)
-    print("Done generating")
-    refine_csv(protein_sequence)
-    print("Done refining")
-    brute_force(protein_sequence, save = True)
+    protein_sequence = "HHPHHHPHPHHHPH"
+    main(protein_sequence)

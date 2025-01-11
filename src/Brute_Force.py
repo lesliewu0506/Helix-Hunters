@@ -38,7 +38,7 @@ def read_csv(protein_sequence: str) -> list[list[int]]:
     """Reads csv file and returns the directions as list in list."""
     foldings: list[list[int]] = []
 
-    with open(f"{protein_sequence}_refined.csv", 'r') as csvfile:
+    with open(f"{protein_sequence}.csv", 'r') as csvfile:
         reader = csv.reader(csvfile)
 
         for row in reader:
@@ -81,46 +81,49 @@ def _check_valid_sequence(folding: list[int]) -> Optional[list[int]]:
         if folding[i] == -folding[i - 1]:
             return None
 
-    return ([1] + list(folding) + [0])
+    candidate = ([1] + list(folding) + [0])
+    if _check_valid_folding(candidate) is not None:
+        return None
+    return candidate
 
-def refine_csv(sequence: str) -> None:
-    """Filter the csv by removing rows with invalid prefixes."""
-    df = pd.read_csv(f"{sequence}.csv", header = None)
-    # Split df into equal sizes
-    cpu_cores = multiprocessing.cpu_count()
-    chunk_size = len(df) // cpu_cores
-    chunks = [df.iloc[i : i + chunk_size] for i in range(0, len(df), chunk_size)]
+# def refine_csv(sequence: str) -> None:
+#     """Filter the csv by removing rows with invalid prefixes."""
+#     df = pd.read_csv(f"{sequence}.csv", header = None)
+#     # Split df into equal sizes
+#     cpu_cores = multiprocessing.cpu_count()
+#     chunk_size = len(df) // cpu_cores
+#     chunks = [df.iloc[i : i + chunk_size] for i in range(0, len(df), chunk_size)]
 
-    # Use multiprocessing pool to distribute work load
-    with multiprocessing.Pool(cpu_cores) as pool:
-        results = pool.map(_process_chunk, chunks)
+#     # Use multiprocessing pool to distribute work load
+#     with multiprocessing.Pool(cpu_cores) as pool:
+#         results = pool.map(_process_chunk, chunks)
     
-    # Retrieve results
-    valid_rows = (itertools.chain.from_iterable(result for result in results))
-    pd.DataFrame(valid_rows).to_csv(f"{sequence}_refined.csv", index = False, header = False)
+#     # Retrieve results
+#     valid_rows = (itertools.chain.from_iterable(result for result in results))
+#     pd.DataFrame(valid_rows).to_csv(f"{sequence}_refined.csv", index = False, header = False)
 
-def _process_chunk(chunk: pd.DataFrame) -> list[list[int]]:
-    """Process a chunk of the dataframe and returns valid rows."""
-    invalid_prefixes: set[tuple[int]] = set()
-    valid_rows: list[list[int]] = []
+# def _process_chunk(chunk: pd.DataFrame) -> list[list[int]]:
+#     """Process a chunk of the dataframe and returns valid rows."""
+#     invalid_prefixes: set[tuple[int]] = set()
+#     valid_rows: list[list[int]] = []
 
-    # Iterate over all rows with index
-    for _, row in chunk.iterrows():
-        # Convert to list
-        row_list = row.tolist()
+#     # Iterate over all rows with index
+#     for _, row in chunk.iterrows():
+#         # Convert to list
+#         row_list = row.tolist()
         
-        # Check if sequence contains invalid prefix
-        if any(tuple(row_list[:len(prefix)]) == prefix for prefix in invalid_prefixes):
-            continue
+#         # Check if sequence contains invalid prefix
+#         if any(tuple(row_list[:len(prefix)]) == prefix for prefix in invalid_prefixes):
+#             continue
 
-        # Check if sequence has new invalid prefix
-        invalid_prefix = _check_valid_folding(row_list)
-        if invalid_prefix is not None:
-            invalid_prefixes.add(tuple(invalid_prefix))
-        else:
-            valid_rows.append(row_list)
+#         # Check if sequence has new invalid prefix
+#         invalid_prefix = _check_valid_folding(row_list)
+#         if invalid_prefix is not None:
+#             invalid_prefixes.add(tuple(invalid_prefix))
+#         else:
+#             valid_rows.append(row_list)
 
-    return valid_rows
+#     return valid_rows
 
 def _check_valid_folding(folding: list[int]) -> Optional[list[int]]:
     """
