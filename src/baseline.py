@@ -3,11 +3,11 @@ import folding_functions as fold
 
 from protein import Protein
 from Brute_Force import brute_force
-from typing import Callable
+from typing import Callable, Optional
 
-def random_iterated(sequence: str, fold_function: Callable[[str], list[int]]) -> list[int]:
+def random_iterated(sequence: str, fold_function: Callable[[str], list[int]]) -> None:
     score_list: list[int] = []
-    best_structure: Protein | None = None
+    best_structure: Optional[Protein] = None
     best_score: int = 0
 
     for _ in range(1000):
@@ -21,20 +21,21 @@ def random_iterated(sequence: str, fold_function: Callable[[str], list[int]]) ->
             best_structure = protein
         
     plot.histogram(score_list)
-    plot.visualize(best_structure)
+
+    if best_structure is not None:
+        plot.visualize(best_structure)
 
 def main(sequence: str, fold_function: Callable[[str], list[int]]) -> None:
     protein = Protein(sequence, fold_function)
-    
+
     while protein.protein_rating == 1:
         protein = Protein(sequence, fold_function)
-
-    # plot.visualize(protein)
+    plot.visualize(protein)
     # protein.output_csv()
 
 if __name__ == "__main__":
-    protein_sequence = "HHPHHHPHPHHHPH"
-    brute_force(protein_sequence)
+    # protein_sequence = "HPHPPHHPHPPHPHHPPHPH"
+    # brute_force(protein_sequence)
 
     # protein_sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
     # main(protein_sequence, fold.random_fold)
