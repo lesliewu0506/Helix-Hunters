@@ -1,13 +1,13 @@
 import itertools
 import multiprocessing
+import csv
 
 import plot_functions as plot
 from protein import Protein
 from typing import Optional
 
-def brute_force(sequence: str, save: Optional[bool] = False) -> None:
+def brute_force(sequence: str, foldings: list[list[int]], save: Optional[bool] = False) -> None:
     num_processes: int = multiprocessing.cpu_count()
-    foldings: list[list[int]] = generate_all_foldings(len(sequence))
     best_score = 1
 
     # Use multiprocessing pool and map to distribute work load
@@ -25,12 +25,14 @@ def brute_force(sequence: str, save: Optional[bool] = False) -> None:
     print(f"Best rating: {best_score}")
     protein.output_csv(file_name = f"best_fold_{sequence}")
 
-def generate_all_foldings(sequence_length: int) -> list[list[int]]:
+def generate_all_foldings(protein_sequence: str) -> list[list[int]]:
     """
     Generate all possible foldings for a given sequence length 
     where the first item is always 1 and the last item 0
     and consecutive items are never opposing directions.
+    Then saves it to a csv file.
     """
+    sequence_length = len(protein_sequence)
     directions = [-2, -1, 1, 2]
     all_foldings = []
 
@@ -44,8 +46,18 @@ def generate_all_foldings(sequence_length: int) -> list[list[int]]:
 
         if valid:
             all_foldings.append([1] + list(folding) + [0])
+    write_to_csv(protein_sequence, all_foldings)
     print(len(all_foldings))
     return all_foldings
+
+def write_to_csv(protein_sequence: str,foldings: list[list[int]]):
+    with open(f'{protein_sequence}.csv', 'w', newline = '') as csvfile:
+
+        writer = csv.writer(csvfile)
+        for folding in foldings:
+            writer.writerow(folding)
+
+    csvfile.close()
 
 def evaluate_folding_wrapper(args: tuple[str, list[int]]) -> tuple[int, Protein]:
     """Wrapper function to unpack arguments for evaluate_folding."""
