@@ -7,10 +7,15 @@ from protein import Protein
 from typing import Optional
 
 def brute_force(sequence: str, foldings: list[list[int]], save: Optional[bool] = False) -> None:
+    """
+    Function that brute forces every possible combination.
+    Plots the best structure and prints the rating of the best structure.
+    Finally saves the directions into a csv file.
+    """
     num_processes: int = multiprocessing.cpu_count()
     best_score = 1
 
-    # Use multiprocessing pool and map to distribute work load
+    # Use multiprocessing pool to distribute work load
     with multiprocessing.Pool(num_processes) as pool:
         results = pool.map(evaluate_folding_wrapper, [(sequence, folding) for folding in foldings])
 
@@ -34,7 +39,6 @@ def generate_all_foldings(protein_sequence: str) -> None:
     """
     sequence_length = len(protein_sequence)
     directions = [-2, -1, 1, 2]
-    # all_foldings = []
 
     with open(f'{protein_sequence}.csv', 'w', newline = '') as csvfile:
         
@@ -44,6 +48,7 @@ def generate_all_foldings(protein_sequence: str) -> None:
             result = _check_valid_sequence(folding)
             if result is not None:
                 writer.writerow(result)
+
     csvfile.close()
 
 def _check_valid_sequence(folding: list[int]) -> Optional[list[int]]:
@@ -57,8 +62,8 @@ def _check_valid_sequence(folding: list[int]) -> Optional[list[int]]:
     
     # Check if consecutive items are opposing
     for i in range(1, len(folding)):
-            if folding[i] == -folding[i - 1]:
-                return None
+        if folding[i] == -folding[i - 1]:
+            return None
 
     return ([1] + list(folding) + [0])
 
