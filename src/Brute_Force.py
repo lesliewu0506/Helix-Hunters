@@ -8,7 +8,7 @@ from protein import Protein
 from grid import Grid
 from typing import Optional
 
-def brute_force(sequence: str, foldings: list[list[int]], save: Optional[bool] = False) -> None:
+def brute_force(sequence: str, save: Optional[bool] = False) -> None:
     """
     Function that brute forces every possible combination.
     Plots the best structure and prints the rating of the best structure.
@@ -16,6 +16,8 @@ def brute_force(sequence: str, foldings: list[list[int]], save: Optional[bool] =
     """
     num_processes: int = multiprocessing.cpu_count()
     best_score = 1
+    # Load data
+    foldings: list[list[int]] = read_csv(sequence)
 
     # Use multiprocessing pool to distribute work load
     with multiprocessing.Pool(num_processes) as pool:
@@ -31,6 +33,18 @@ def brute_force(sequence: str, foldings: list[list[int]], save: Optional[bool] =
     plot.visualize(protein, save)
     print(f"Best rating: {best_score}")
     protein.output_csv(file_name = f"best_fold_{sequence}")
+
+def read_csv(protein_sequence: str) -> list[list[int]]:
+    """Reads csv file and returns the directions as list in list."""
+    foldings: list[list[int]] = []
+
+    with open(f"{protein_sequence}_refined.csv", 'r') as csvfile:
+        reader = csv.reader(csvfile)
+
+        for row in reader:
+            foldings.append([int(x) for x in row])
+
+    return foldings
 
 def generate_all_foldings(protein_sequence: str) -> None:
     """
