@@ -70,13 +70,28 @@ def _check_valid_sequence(folding: list[int]) -> Optional[list[int]]:
     return ([1] + list(folding) + [0])
 
 def refine_csv(sequence: str) -> None:
-    """Filter the csv by removing rows with invalid prefixes dynamically."""
+    """Filter the csv by removing rows with invalid prefixes."""
     df = pd.read_csv(f"{sequence}.csv", header = None)
+    # Split df into equal sizes
+    cpu_cores = multiprocessing.cpu_count()
+    chunk_size = len(df) // cpu_cores
+    chunks = [df.iloc[i : i + chunk_size] for i in range(0, len(df), chunk_size)]
+
+    # Use multiprocessing pool to distribute work load
+    with multiprocessing.Pool(cpu_cores) as pool:
+        results = pool.map(_process_chunk, chunks)
+    
+    # Retrieve results
+    valid_rows = (itertools.chain.from_iterable(result for result in results))
+    pd.DataFrame(valid_rows).to_csv(f"{sequence}_refined.csv", index = False, header = False)
+
+def _process_chunk(chunk: pd.DataFrame) -> list[list[int]]:
+    """Process a chunk of the dataframe and returns valid rows."""
     invalid_prefixes: set[tuple[int]] = set()
     valid_rows: list[list[int]] = []
 
     # Iterate over all rows with index
-    for i, row in df.iterrows():
+    for _, row in chunk.iterrows():
         # Convert to list
         row_list = row.tolist()
         
@@ -91,7 +106,7 @@ def refine_csv(sequence: str) -> None:
         else:
             valid_rows.append(row_list)
 
-    pd.DataFrame(valid_rows).to_csv(f"{sequence}_refined.csv", index = False, header = False)
+    return valid_rows
 
 def _check_valid_folding(folding: list[int]) -> Optional[list[int]]:
     """
