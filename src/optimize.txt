@@ -1,2 +1,0 @@
-python -m cProfile -o output.prof baseline.py  
-snakeviz output.prof

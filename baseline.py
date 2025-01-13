@@ -1,8 +1,8 @@
-import plot_functions as plot
-import folding_functions as fold
+import code.visualisation.plot_functions as plot
+import code.algorithm.folding_functions as fold
 
-from protein import Protein
-from Brute_Force import brute_force, generate_all_foldings
+from code.classes.protein import Protein
+from code.brute_force.Brute_Force import brute_force, generate_all_foldings
 from typing import Callable, Optional
 
 def random_iterated(sequence: str, fold_function: Callable[[str], list[int]]) -> None:
