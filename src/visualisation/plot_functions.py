@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from code.classes.protein import Protein
+from src.classes.protein import Protein
 
 def visualize(protein: Protein, save: bool = False) -> None:
     """Main function for visualizing the protein structure."""

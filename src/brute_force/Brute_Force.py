@@ -2,9 +2,9 @@ import itertools
 import multiprocessing
 import csv
 
-import code.visualisation.plot_functions as plot
-from code.classes.protein import Protein
-from code.classes.grid import Grid
+import src.visualisation.plot_functions as plot
+from src.classes.protein import Protein
+from src.classes.grid import Grid
 from typing import Optional
 
 def brute_force(sequence: str, save: Optional[bool] = False) -> None:

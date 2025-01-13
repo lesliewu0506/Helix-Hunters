@@ -1,8 +1,8 @@
-import code.visualisation.plot_functions as plot
-import code.algorithm.folding_functions as fold
+import src.visualisation.plot_functions as plot
+import src.algorithm.folding_functions as fold
 
-from code.classes.protein import Protein
-from code.brute_force.Brute_Force import brute_force, generate_all_foldings
+from src.classes.protein import Protein
+from src.brute_force.Brute_Force import brute_force, generate_all_foldings
 from typing import Callable, Optional
 
 def random_iterated(sequence: str, fold_function: Callable[[str], list[int]]) -> None:
@@ -23,7 +23,7 @@ def random_iterated(sequence: str, fold_function: Callable[[str], list[int]]) ->
     plot.histogram(score_list)
 
     if best_structure is not None:
-        plot.visualize(best_structure)
+        plot.visualize(best_structure, save = True)
 
 def main(sequence: str) -> None:
     generate_all_foldings(sequence)

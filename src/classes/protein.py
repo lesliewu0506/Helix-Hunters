@@ -1,6 +1,6 @@
 import csv
-from code.classes.grid import Grid
-from code.classes.rating import Rating
+from src.classes.grid import Grid
+from src.classes.rating import Rating
 from typing import Callable, Optional
 
 class Protein():
