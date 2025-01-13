@@ -1,4 +1,7 @@
 import random as rd
+from src.classes.protein import Protein
+import src.visualisation.plot_functions as plot
+from typing import Callable, Optional
 
 def two_strings_fold(protein_sequence: str) -> list[int]:
     sequence_list: list[int] = []
@@ -30,3 +33,23 @@ def random_fold(protein_sequence: str) -> list[int]:
 
     sequence_list.append(0)
     return sequence_list
+
+def random_iterated(sequence: str, fold_function: Callable[[str], list[int]], n: Optional[int] = 10000) -> None:
+    score_list: list[int] = []
+    best_structure: Optional[Protein] = None
+    best_score: int = 0
+
+    for _ in range(n):
+        protein = Protein(sequence, fold_function)
+        while protein.protein_rating == 1:
+            protein = Protein(sequence, fold_function)
+        score_list.append(protein.protein_rating)
+
+        if protein.protein_rating < best_score:
+            best_score = protein.protein_rating
+            best_structure = protein
+        
+    plot.histogram(protein, score_list, save = True, iterations = n)
+
+    if best_structure is not None:
+        plot.visualize(best_structure, save = True)

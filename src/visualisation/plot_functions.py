@@ -1,14 +1,15 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from src.classes.protein import Protein
+from typing import Optional
 
-def visualize(protein: Protein, save: bool = False) -> None:
+def visualize(protein: Protein, save: Optional[bool] = False) -> None:
     """Main function for visualizing the protein structure."""
     if protein.protein_rating == 1:
         return None
     Plot_visualizer(protein, save)
 
-def histogram(score: list[int]) -> None:
+def histogram(protein: Protein, score: list[int], save: Optional[bool] = False, iterations: Optional[int] = 10000) -> None:
     """Creates a stylish histogram with gradient color and improved aesthetics."""
     plt.figure(figsize=(12, 7))
 
@@ -20,7 +21,7 @@ def histogram(score: list[int]) -> None:
     for patch, value in zip(patches, n):
         patch.set_facecolor(cmap(value / max(n)))
     
-    plt.title('Protein Score Distribution', fontsize=18, fontweight='bold', pad=20)
+    plt.title(f'Protein Score Distribution {protein.protein_sequence} ({iterations} iterations)', fontsize=18, fontweight='bold', pad=20)
     plt.xlabel('Protein Score', fontsize=14, labelpad=15)
     plt.ylabel('Frequency', fontsize=14, labelpad=15)
     
@@ -33,6 +34,10 @@ def histogram(score: list[int]) -> None:
     plt.gca().spines['right'].set_visible(False)
     
     plt.tight_layout()
+
+    if save:
+        plt.savefig(f"Protein score distribution {protein.protein_sequence} ({iterations} iterations).png", dpi = 600)
+
     plt.show()
 
 class Plot_visualizer():
