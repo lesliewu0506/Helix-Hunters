@@ -31,5 +31,6 @@ def main(sequence: str) -> None:
     brute_force(sequence, save = True)
 
 if __name__ == "__main__":
-    protein_sequence = "HPHPPHHPHPPHPHHPPHPH"
-    main(protein_sequence)
+    protein_sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
+    # main(protein_sequence)
+    random_iterated(protein_sequence, fold.random_fold)
