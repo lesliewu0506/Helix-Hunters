@@ -54,7 +54,7 @@ def generate_all_foldings(protein_sequence: str) -> None:
     Then saves it to a csv file.
     """
     sequence_length = len(protein_sequence)
-    directions = [-2, -1, 1, 2]
+    directions = [0, 1, 2]
 
     with open(f'{protein_sequence}.csv', 'w', newline = '') as csvfile:
         
@@ -66,6 +66,20 @@ def generate_all_foldings(protein_sequence: str) -> None:
                 writer.writerow(result)
 
     csvfile.close()
+
+def _direction_translator(directions: list[int]) -> list[int]:
+    """
+    Helper function for translating the relative paths (0, 1, 2),
+    to absolute paths (-2, -1, 1, 2). Returns list of directions.
+    """
+    direction_map: dict[int, list[int]] = {1: [2, 1, -2], -1: [-2, -1, 2], 2: [-1, 2, 1], -2: [1, -2, -1]}
+    folding_sequence: list[int] = [1]
+
+    for i, direction in enumerate(directions):
+        folding_sequence.append(direction_map[folding_sequence[i]][direction])
+
+    folding_sequence.append(0)
+    return folding_sequence
 
 def _check_valid_sequence(folding: list[int]) -> Optional[list[int]]:
     """
@@ -110,42 +124,3 @@ def evaluate_folding(sequence: str, folding: list[int]) -> tuple[int, Protein]:
     protein = Protein(sequence, amino_directions = folding)
     rating = protein.get_rating()
     return rating, protein
-
-# def refine_csv(sequence: str) -> None:
-#     """Filter the csv by removing rows with invalid prefixes."""
-#     df = pd.read_csv(f"{sequence}.csv", header = None)
-#     # Split df into equal sizes
-#     cpu_cores = multiprocessing.cpu_count()
-#     chunk_size = len(df) // cpu_cores
-#     chunks = [df.iloc[i : i + chunk_size] for i in range(0, len(df), chunk_size)]
-
-#     # Use multiprocessing pool to distribute work load
-#     with multiprocessing.Pool(cpu_cores) as pool:
-#         results = pool.map(_process_chunk, chunks)
-    
-#     # Retrieve results
-#     valid_rows = (itertools.chain.from_iterable(result for result in results))
-#     pd.DataFrame(valid_rows).to_csv(f"{sequence}_refined.csv", index = False, header = False)
-
-# def _process_chunk(chunk: pd.DataFrame) -> list[list[int]]:
-#     """Process a chunk of the dataframe and returns valid rows."""
-#     invalid_prefixes: set[tuple[int]] = set()
-#     valid_rows: list[list[int]] = []
-
-#     # Iterate over all rows with index
-#     for _, row in chunk.iterrows():
-#         # Convert to list
-#         row_list = row.tolist()
-        
-#         # Check if sequence contains invalid prefix
-#         if any(tuple(row_list[:len(prefix)]) == prefix for prefix in invalid_prefixes):
-#             continue
-
-#         # Check if sequence has new invalid prefix
-#         invalid_prefix = _check_valid_folding(row_list)
-#         if invalid_prefix is not None:
-#             invalid_prefixes.add(tuple(invalid_prefix))
-#         else:
-#             valid_rows.append(row_list)
-
-#     return valid_rows
