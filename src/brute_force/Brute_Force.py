@@ -61,11 +61,18 @@ def generate_all_foldings(protein_sequence: str) -> None:
         writer = csv.writer(csvfile)
 
         for folding in itertools.product(directions, repeat = sequence_length - 2):
-            result = _check_valid_sequence(folding)
+            result = _check_folding(folding)
             if result is not None:
                 writer.writerow(result)
 
     csvfile.close()
+
+def _check_folding(folding: list[int]) -> Optional[list[int]]:
+    abs_folding: list[int] = _direction_translator(folding)
+    candidate = _check_valid_folding(abs_folding)
+    if candidate is not None:
+        return None
+    return abs_folding
 
 def _direction_translator(directions: list[int]) -> list[int]:
     """
@@ -81,25 +88,6 @@ def _direction_translator(directions: list[int]) -> list[int]:
     folding_sequence.append(0)
     return folding_sequence
 
-def _check_valid_sequence(folding: list[int]) -> Optional[list[int]]:
-    """
-    Helper function for checking valid sequence.
-    Returns the complete directions if valid, else None.
-    """
-    # Checks if the first one is valid
-    if folding[0] == -1:
-        return None
-    
-    # Check if consecutive items are opposing
-    for i in range(1, len(folding)):
-        if folding[i] == -folding[i - 1]:
-            return None
-
-    candidate = ([1] + list(folding) + [0])
-    if _check_valid_folding(candidate) is not None:
-        return None
-    return candidate
-
 def _check_valid_folding(folding: list[int]) -> Optional[list[int]]:
     """
     Helper function that checks a folding sequence.
@@ -109,10 +97,10 @@ def _check_valid_folding(folding: list[int]) -> Optional[list[int]]:
     dummy_sequence = 'H' * len(folding)
     grid = Grid(dummy_sequence, folding)
 
-    if not grid.create_structure():
-        return grid.invalid_prefix
+    if grid.create_structure():
+        return None
 
-    return None
+    return [1]
     
 def evaluate_folding_wrapper(args: tuple[str, list[int]]) -> tuple[int, Protein]:
     """Wrapper function to unpack arguments for evaluate_folding."""
