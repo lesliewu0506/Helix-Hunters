@@ -3,11 +3,16 @@ import numpy as np
 from src.classes.protein import Protein
 from typing import Optional
 
-def visualize(protein: Protein, save: Optional[bool] = False) -> None:
-    """Main function for visualizing the protein structure."""
+def visualize(protein: Protein, show: Optional[bool] = True, save: Optional[bool] = False) -> None:
+    """
+    Main function for visualizing the protein structure.
+    Has optional arguments:
+    - show: Shows the plot. Default is always True.
+    - save: saves the plot. Default is always False.
+    """
     if protein.protein_rating == 1:
         return None
-    Plot_visualizer(protein, save)
+    Plot_visualizer(protein, show, save)
 
 def histogram(protein: Protein, score: list[int], save: Optional[bool] = False, iterations: Optional[int] = 10000) -> None:
     """Creates a stylish histogram with gradient color and improved aesthetics."""
@@ -45,14 +50,14 @@ class Plot_visualizer():
     A class to plot the structure of a protein with a specific fold.
     It shows the sequential connections and polar connections.
     """
-    def __init__(self, protein: Protein, save: bool) -> None:
+    def __init__(self, protein: Protein, show: bool, save: bool) -> None:
         self.protein: Protein = protein
         self.protein_sequence: str = protein.protein_sequence
         self.structure: dict[tuple[int, int], tuple[str, int]] = protein.structure
 
-        self.plot_structure(save)
+        self.plot_structure(show, save)
         
-    def plot_structure(self, save: bool) -> None:
+    def plot_structure(self, show: bool, save: bool) -> None:
         """
         Plots the entire protein structure with the amino acids,
         sequential connections and polar connections.
@@ -95,7 +100,11 @@ class Plot_visualizer():
         plt.axis('off')
         if save:
             plt.savefig(f"Best folding structure {self.protein_sequence}", dpi = 300)
-        plt.show()
+
+        if show:
+            plt.show()
+        else:
+            plt.clf()
 
     def _plot_sequential_connections(self) -> None:
         """Plots the sequential connections of the protein with a black line."""
