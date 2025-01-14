@@ -74,11 +74,17 @@ def generate_all_foldings(protein_sequence: str) -> None:
     csvfile.close()
 
 def _check_folding(folding: list[int]) -> Optional[list[int]]:
+    """
+    Checks if a configuration is valid.
+    Translates the folding list first into absolute directions.
+    Returns the list of directions if valid, else None.
+    """
     abs_folding: list[int] = _direction_translator(folding)
-    candidate = _check_valid_folding(abs_folding)
-    if candidate is not None:
-        return None
-    return abs_folding
+    invalid_prefix: Optional[list[int]] = _check_valid_folding(abs_folding)
+
+    if invalid_prefix is None:
+        return abs_folding
+    return None
 
 def _direction_translator(directions: list[int]) -> list[int]:
     """
@@ -97,7 +103,7 @@ def _direction_translator(directions: list[int]) -> list[int]:
 def _check_valid_folding(folding: list[int]) -> Optional[list[int]]:
     """
     Helper function that checks a folding sequence.
-    If folding is not valid, return the invalid prefix.
+    If folding is not valid, returns the invalid prefix.
     Else return None.
     """
     dummy_sequence = 'H' * len(folding)
@@ -106,7 +112,7 @@ def _check_valid_folding(folding: list[int]) -> Optional[list[int]]:
     if grid.create_structure():
         return None
 
-    return [1]
+    return grid.invalid_prefix
     
 def evaluate_folding_wrapper(args: tuple[str, list[int]]) -> tuple[int, Protein]:
     """Wrapper function to unpack arguments for evaluate_folding."""
