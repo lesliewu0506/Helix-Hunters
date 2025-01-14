@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+
 from src.classes.protein import Protein
 from typing import Optional
 
@@ -140,25 +141,29 @@ def _plot_legend(color_map: dict[str, str]) -> None:
     for amino_type, colour in color_map.items():
         plt.scatter([], [], color=colour, label = amino_type)
 
-def histogram(protein: Protein, score: list[int], save: Optional[bool] = False, iterations: Optional[int] = 10000) -> None:
+def histogram(protein: Protein, score: list[int], iterations: int, show: bool = False, save: bool = False, file_path: str = "output") -> None:
     """Creates a stylish histogram with gradient color and improved aesthetics."""
     plt.figure(figsize=(12, 7))
 
-    n, bins, patches = plt.hist(
-        score, bins=30, edgecolor='black', alpha=0.85, linewidth=1.5
-    )
+    # Center bars on each x-tick
+    bins = np.arange(min(score) - 0.5, max(score) + 1.5, 1)
+    x_ticks = np.arange(min(score), max(score) + 1, 1)
+
+    n, bins, patches = plt.hist(score, bins = bins, edgecolor = 'black', alpha = 0.85, linewidth = 1.5)
     
+    # Set different color for bars
     cmap = plt.get_cmap('plasma')
     for patch, value in zip(patches, n):
         patch.set_facecolor(cmap(value / max(n)))
     
-    plt.title(f'Protein Score Distribution {protein.protein_sequence} ({iterations} iterations)', fontsize=18, fontweight='bold', pad=20)
+    plt.title(f'Protein Score Distribution {protein.protein_sequence} ({iterations} iterations)', fontsize=12, fontweight='bold', pad=20)
     plt.xlabel('Protein Score', fontsize=14, labelpad=15)
     plt.ylabel('Frequency', fontsize=14, labelpad=15)
     
-    plt.xticks(fontsize=12)
+    plt.xticks(x_ticks, fontsize=12)
     plt.yticks(fontsize=12)
     
+    # Add y-grid for clarity
     plt.grid(axis='y', linestyle='--', alpha=0.6)
     
     plt.gca().spines['top'].set_visible(False)
@@ -167,6 +172,10 @@ def histogram(protein: Protein, score: list[int], save: Optional[bool] = False, 
     plt.tight_layout()
 
     if save:
-        plt.savefig(f"Protein score distribution {protein.protein_sequence} ({iterations} iterations).png", dpi = 600)
+        string = f"Protein_score_distribution_{iterations}_iterations"
+        plt.savefig(f"{file_path}/{string}.png", dpi = 600)
 
-    plt.show()
+    if show:
+        plt.show()
+    else:
+        plt.close()
