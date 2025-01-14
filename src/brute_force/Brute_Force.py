@@ -36,7 +36,7 @@ def brute_force(sequence: str, save: Optional[bool] = False) -> None:
              
     # Plot best structure and save data
     for i, protein in enumerate(best_structures):
-        plot.visualize(protein, show = False, save = save)
+        plot.visualize(protein, show = False, save = save, file_path = f"src/brute_force/protein_structures/{sequence}_{i}")
         protein.output_csv(file_path = f"src/brute_force/best_folding/{sequence}_{i}")
     print(f"Best rating: {best_score}")
 
