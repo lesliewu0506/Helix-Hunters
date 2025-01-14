@@ -47,10 +47,10 @@ class Protein():
             self.structure = structure.get_structure()
             self.protein_rating = Rating(self.protein_sequence, self.structure).get_rating()
             
-    def output_csv(self, file_name: Optional[str] = "output") -> None:
+    def output_csv(self, file_path: Optional[str] = "output") -> None:
         """Creates a csv file containing the amino acids and their fold."""
         if self.amino_directions is not None:
-            with open(f'{file_name}.csv', 'w', newline = '') as csvfile:
+            with open(f'{file_path}.csv', 'w', newline = '') as csvfile:
                 writer = csv.writer(csvfile)
 
                 # Mandatory header line
