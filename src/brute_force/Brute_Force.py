@@ -7,7 +7,7 @@ from src.classes.protein import Protein
 from src.classes.grid import Grid
 from typing import Optional
 
-def brute_force(sequence: str, save: Optional[bool] = False) -> None:
+def brute_force(sequence: str, save: bool = False) -> None:
     """
     Function that brute forces every possible combination.
     Plots the best structure and prints the rating of the best structure.
@@ -24,7 +24,7 @@ def brute_force(sequence: str, save: Optional[bool] = False) -> None:
         results = pool.map(evaluate_folding_wrapper, [(sequence, folding) for folding in foldings])
 
     # Process results
-    best_structures = []
+    best_structures: list[Protein] = []
     i = 0
     for rating, structure in results:
         if rating < best_score:
