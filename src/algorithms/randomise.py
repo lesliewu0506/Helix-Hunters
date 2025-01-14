@@ -11,9 +11,9 @@ class Random():
     def __init__(self, protein_sequence: str):
         self.protein_sequence: str = protein_sequence
         self.best_score: int = 0
-        self.best_protein: Optional[Protein] = None
 
-    def run(self, show_plot: bool = False, save_plot: bool = False, n: int = 10000):
+    def run(self, show_plot: bool = False, save_plot: bool = False, n: int = 10000) -> None:
+        """Randomly generates sequences for a protein and calculates the scores."""
         self._random_iterated(show_plot, save_plot, n)
 
     def _random_iterated(self, show_plot: bool, save_plot: bool, n: int) -> None:
@@ -34,7 +34,7 @@ class Random():
 
             if protein.protein_rating < self.best_score:
                 self.best_score = protein.protein_rating
-                self.best_protein = protein
+                best_protein = protein
 
         protein_sequence_map = {"HHPHHHPHPHHHPH" : "1",
                                 "HPHPPHHPHPPHPHHPPHPH" : "2",
@@ -45,11 +45,10 @@ class Random():
                                 "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH" : "7",
                                 "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" : "8"}
 
-        folder = protein_sequence_map[self.best_protein.protein_sequence]
-        plot.histogram(protein, score_list, n, show = show_plot, save = save_plot, file_path = f"data/protein_random_folds/{folder}")
-
-        if self.best_protein is not None:
-            plot.visualize(self.best_protein, show = show_plot, save = save_plot, file_path = f"data/protein_random_folds/{folder}/best_random_fold") 
+        folder = protein_sequence_map[best_protein.protein_sequence]
+        plot.histogram(self.protein_sequence, score_list, n, show = show_plot, save = save_plot, file_path = f"data/protein_random_folds/{folder}")
+        plot.visualize(best_protein, show = show_plot, save = save_plot, file_path = f"data/protein_random_folds/{folder}/best_random_fold")
+        best_protein.output_csv(f"data/protein_random_folds/{folder}/output")
 
     def _random_fold(self, protein_sequence: str) -> list[int]:
         """
