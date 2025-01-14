@@ -104,7 +104,7 @@ class Plot_visualizer():
         if show:
             plt.show()
         else:
-            plt.clf()
+            plt.close()
 
     def _plot_sequential_connections(self) -> None:
         """Plots the sequential connections of the protein with a black line."""
