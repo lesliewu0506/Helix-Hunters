@@ -24,21 +24,27 @@ def brute_force(sequence: str, save: Optional[bool] = False) -> None:
         results = pool.map(evaluate_folding_wrapper, [(sequence, folding) for folding in foldings])
 
     # Process results
+    best_structures = []
+    i = 0
     for rating, structure in results:
         if rating < best_score:
             best_score = rating
             protein = structure
-
+            best_structures = []
+        elif rating == best_score and protein not in best_structures:
+            best_structures.append(protein)
+             
     # Plot best structure and save data
-    plot.visualize(protein, save)
+    for i, protein in enumerate(best_structures):
+        plot.visualize(protein, show = False, save = save)
+        protein.output_csv(file_path = f"src/brute_force/best_folding/{sequence}_{i}")
     print(f"Best rating: {best_score}")
-    protein.output_csv(file_name = f"best_fold_{sequence}")
 
 def read_csv(protein_sequence: str) -> list[list[int]]:
     """Reads csv file and returns the directions as list in list."""
     foldings: list[list[int]] = []
 
-    with open(f"{protein_sequence}.csv", 'r') as csvfile:
+    with open(f"src/brute_force/all_foldings/{protein_sequence}.csv", 'r') as csvfile:
         reader = csv.reader(csvfile)
 
         for row in reader:
