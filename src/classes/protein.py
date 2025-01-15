@@ -9,22 +9,17 @@ class Protein():
     It stores a protein sequence and uses a provided folding function
     to generate a folding pattern (amino_directions) or it uses a prebuilt folding pattern. Then it creates
     a structure (mapping of positions to amino acids) and computes
-    the total rating of the protein.
+    the total rating of the protein. It can also create the structure by adding directions manually.
     """
 
-    def __init__(self, protein_sequence: str, function: Optional[Callable[[str], list[int]]] = None, amino_directions: Optional[list[int]] = None) -> None:
+    def __init__(self, protein_sequence: str, amino_directions: Optional[list[int]] = None) -> None:
         self.protein_sequence: str = protein_sequence
         self.amino_directions: Optional[list[int]] = amino_directions
-        self.structure: dict[tuple[int, int], tuple[str, int]] = {}
+        self.structure: Grid = Grid(protein_sequence, amino_directions)
         self.protein_rating: int = 0
 
-        if function is not None:
-            self.build_structure(function)
-        elif amino_directions is not None:
-            self.build_no_function()
-
     def build_structure(self, function: Callable[[str], list[int]]) -> None:
-        """Creates the attributes for the protein with specific fold."""
+        """Creates the attributes for the protein with specific folding function."""
         self.amino_directions = function(self.protein_sequence)
         structure = Grid(self.protein_sequence, self.amino_directions)
         
@@ -33,10 +28,10 @@ class Protein():
             self.protein_rating = 1
         else:
             self.structure = structure.get_structure()
-            self.protein_rating = Rating(self.protein_sequence, self.structure).get_rating()
+            self.protein_rating = Rating(self.structure).get_rating()
 
     def build_no_function(self) -> None:
-        """Builds the strcucture with given folding pattern."""
+        """Builds the structure with given folding pattern."""
         if self.amino_directions is not None:
             structure = Grid(self.protein_sequence, self.amino_directions)
 
@@ -45,8 +40,17 @@ class Protein():
             self.protein_rating = 1
         else:
             self.structure = structure.get_structure()
-            self.protein_rating = Rating(self.protein_sequence, self.structure).get_rating()
-            
+            self.protein_rating = Rating(self.structure).get_rating()
+    
+    def build_manual(self, amino: str, order: int, direction: int) -> bool:
+        """
+        Manually builds the structure by adding amino acids.
+        Updates protein rating and returns True on success, else False.
+        """
+        success = self.structure._add_amino(amino, order, direction)
+        self.protein_rating = Rating(self.structure.get_structure())
+        return success
+
     def output_csv(self, file_path: Optional[str] = "output") -> None:
         """
         Creates a csv file containing the amino acids and their fold.
