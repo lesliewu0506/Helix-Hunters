@@ -9,13 +9,13 @@ class Protein():
     It stores a protein sequence and uses a provided folding function
     to generate a folding pattern (amino_directions) or it uses a prebuilt folding pattern. Then it creates
     a structure (mapping of positions to amino acids) and computes
-    the total rating of the protein. It can also create the structure by adding directions manually.
+    the total rating of the protein.
     """
 
     def __init__(self, protein_sequence: str, amino_directions: Optional[list[int]] = None) -> None:
         self.protein_sequence: str = protein_sequence
         self.amino_directions: Optional[list[int]] = amino_directions
-        self.structure: Grid = Grid(protein_sequence, amino_directions)
+        self.structure: Optional[Grid] = None
         self.protein_rating: int = 1
 
     def build_structure(self, function: Callable[[str], list[int]]) -> None:
@@ -27,7 +27,7 @@ class Protein():
         if not structure.create_structure():
             self.protein_rating = 1
         else:
-            self.structure = structure.get_structure()
+            self.structure = structure
             self.protein_rating = Rating(self.structure).get_rating()
 
     def build_no_function(self) -> None:
@@ -39,17 +39,8 @@ class Protein():
         if not structure.create_structure():
             self.protein_rating = 1
         else:
-            self.structure = structure.get_structure()
+            self.structure = structure
             self.protein_rating = Rating(self.structure).get_rating()
-    
-    def build_manual(self, amino: str, order: int, direction: int) -> bool:
-        """
-        Manually builds the structure by adding amino acids.
-        Updates protein rating and returns True on success, else False.
-        """
-        success = self.structure._add_amino(amino, order, direction)
-        self.protein_rating = Rating(self.structure.get_structure()).get_rating()
-        return success
 
     def output_csv(self, file_path: Optional[str] = "output") -> None:
         """
