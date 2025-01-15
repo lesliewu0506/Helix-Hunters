@@ -18,6 +18,7 @@ class Random():
         self._random_iterated(show_plot, save_plot, n)
         if save_data:
             self.output_csv()
+
     def _random_iterated(self, show_plot: bool, save_plot: bool, n: int) -> None:
         """
         Iterates over multiple random generated folding sequences for a given protein string.
@@ -72,7 +73,7 @@ class Random():
     
     def output_csv(self) -> None:
         """Saves histogram data into a csv file."""
-        with open(f"data/histogram_data/greedy_{self.protein_sequence}.csv", 'w', newline = '') as csvfile:
+        with open(f"data/histogram_data/random_{self.protein_sequence}.csv", 'w', newline = '') as csvfile:
             writer = csv.writer(csvfile)
 
             writer.writerow(self.score_list)
