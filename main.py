@@ -30,5 +30,6 @@ if __name__ == "__main__":
     #     print(f"Best score for random algorithm for protein {protein_sequence}: {random.best_score}")
 
     # ====================== Random Greedy ==============================
-    greedy = Greedy(protein_sequences[-1])
-    greedy.run(show_plot= True, n = 100)
+    # greedy = Greedy(protein_sequences[-1])
+    # greedy.run(show_plot= True, n = 100)
+    pass
