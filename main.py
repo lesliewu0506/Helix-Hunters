@@ -23,6 +23,8 @@ if __name__ == "__main__":
     # brute_force(protein_sequences[0], save = True)
 
     # =========================== Random ===============================
+    # random = rd(protein_sequences[0])
+    # random.run(show_plot=True, n = 1000)
     # for protein_sequence in protein_sequences:
     #     random = rd(protein_sequence)
     #     random.run(show_plot = False, save_plot = True)
@@ -31,4 +33,4 @@ if __name__ == "__main__":
 
     # ====================== Random Greedy ==============================
     greedy = Greedy(protein_sequences[-1])
-    greedy.run(show_plot= True, n = 100, save_data = True)
+    greedy.run(show_plot= True, n= 100)

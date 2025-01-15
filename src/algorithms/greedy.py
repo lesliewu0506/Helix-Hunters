@@ -15,21 +15,23 @@ class Greedy():
 
     def run(self, show_plot: bool = False, save_plot: bool = False, n: int = 10000, save_data: bool = False) -> None:
         """Randomly generates sequences for a protein and calculates the scores."""
-        self._random_iterated(show_plot, save_plot, n)
+        self._greedy_iterated(show_plot, save_plot, n)
         if save_data:
             self.output_csv()
 
-    def _random_iterated(self, show_plot: bool, save_plot: bool, n: int) -> None:
+    def _greedy_iterated(self, show_plot: bool, save_plot: bool, n: int) -> None:
         """
         Iterates over multiple random generated folding sequences for a given protein string.
         Plots the distribution of the scores in a histogram.
         Shows the best structure that the random algorithm has generated.
         """
         for _ in range(n):
-            protein = Protein(self.protein_sequence, self._random_fold)
+            protein = Protein(self.protein_sequence)
+            protein.build_structure(self._greedy_fold)
             # Constraint to make sure a valid sequence is created
             while protein.protein_rating == 1:
-                protein = Protein(self.protein_sequence, self._random_fold)
+                protein = Protein(self.protein_sequence)
+                protein.build_structure(self._greedy_fold)
 
             self.score_list.append(protein.protein_rating)
 
@@ -54,7 +56,7 @@ class Greedy():
         plot.visualize(best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{folder}/best_greedy_fold")
         best_protein.output_csv(f"{base_path}{folder}/output")
 
-    def _random_fold(self, protein_sequence) -> list[int]:
+    def _greedy_fold(self, protein_sequence) -> list[int]:
         """
         Generates a random folding sequence.
         Uses relative directions (0, 1, 2) and translates them 
@@ -64,18 +66,19 @@ class Greedy():
         relative_direction_list: list[int] = []
         directions = [0, 1, 2]
 
-        for _ in range(len(protein_sequence) - 2):
-            if relative_direction_list:
-
+        for i in range(len(protein_sequence) - 2):
+            
+            if i % 5 == 0:
                 direction = self._check_greedy(relative_direction_list)
                 relative_direction_list.append(direction)
+
             else:
                 direction = rd.choice(directions)
                 relative_direction_list.append(direction)
 
         return self._direction_translator(relative_direction_list)
     
-    def _direction_translator(directions: list[int]) -> list[int]:
+    def _direction_translator(self, directions: list[int]) -> list[int]:
         """
         Helper function for translating the relative paths (0, 1, 2),
         to absolute paths (-2, -1, 1, 2). Returns list of directions.
@@ -86,6 +89,7 @@ class Greedy():
         for i, direction in enumerate(directions):
             folding_sequence.append(direction_map[folding_sequence[i]][direction])
 
+        folding_sequence.append(0)
         return folding_sequence
 
     def _check_greedy(self, direction_list: list[int]) -> int:
@@ -101,6 +105,7 @@ class Greedy():
         for direction in [0, 1, 2]:
             new_direction_list = direction_list + [direction]
             abs_direction = self._direction_translator(new_direction_list)
+            abs_direction.remove(0)
 
             # Create a Protein object and compute its rating
             protein = Protein(self.protein_sequence[:len(new_direction_list)], amino_directions=abs_direction)
