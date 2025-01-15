@@ -6,10 +6,10 @@ class Grid():
     - values (type, order): type of amino acid and the order in the chain.
     """
 
-    def __init__(self, protein_sequence: str, amino_directions: list[int]) -> None:
+    def __init__(self, protein_sequence: str, amino_directions: list[int] | None) -> None:
         self.structure: dict[tuple[int, int], tuple[str, int]] = {}
         self.protein_sequence: str = protein_sequence
-        self.amino_directions: list[int] = amino_directions
+        self.amino_directions: list[int] | None = amino_directions
         self.invalid_prefix: list[int] | None = None
         self.x_current: int = 0 
         self.y_current: int = 0
@@ -19,6 +19,9 @@ class Grid():
         Builds the dictionary structure.
         Returns True on success, else False.
         """
+        if self.amino_directions is None:
+            return False
+
         for i in range(len(self.protein_sequence)):
             if not self._add_amino(self.protein_sequence[i], i, self.amino_directions[i]):
                 self.invalid_prefix = self.amino_directions[:i]
