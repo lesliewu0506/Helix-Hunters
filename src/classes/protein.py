@@ -16,7 +16,7 @@ class Protein():
         self.protein_sequence: str = protein_sequence
         self.amino_directions: Optional[list[int]] = amino_directions
         self.structure: Grid = Grid(protein_sequence, amino_directions)
-        self.protein_rating: int = 0
+        self.protein_rating: int = 1
 
     def build_structure(self, function: Callable[[str], list[int]]) -> None:
         """Creates the attributes for the protein with specific folding function."""
@@ -48,7 +48,7 @@ class Protein():
         Updates protein rating and returns True on success, else False.
         """
         success = self.structure._add_amino(amino, order, direction)
-        self.protein_rating = Rating(self.structure.get_structure())
+        self.protein_rating = Rating(self.structure.get_structure()).get_rating()
         return success
 
     def output_csv(self, file_path: Optional[str] = "output") -> None:
