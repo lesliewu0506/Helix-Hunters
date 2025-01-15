@@ -172,7 +172,7 @@ def histogram(protein_sequence: str, score: list[int], iterations: int, show: bo
     plt.tight_layout()
 
     if save:
-        string = f"Protein_score_distribution_{iterations}_iterations"
+        string = f"Protein_score_distribution_{algorithm}"
         plt.savefig(f"{file_path}/{string}.png", dpi = 600)
 
     if show:

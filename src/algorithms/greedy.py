@@ -4,8 +4,8 @@ import src.visualisation.plot_functions as plot
 from src.classes.protein import Protein
 from src.brute_force.brute_force import _direction_translator
 
-class Random():
-    """The Random class generates a random sequence for the folding direction"""
+class Greedy():
+    """The Greedy random class generates a sequence for the folding direction"""
 
     def __init__(self, protein_sequence: str):
         self.protein_sequence: str = protein_sequence
@@ -48,11 +48,11 @@ class Random():
         base_path = "data/protein_random_folds/"
 
         # Plot histogram and visualize protein
-        plot.histogram(self.protein_sequence, score_list, n, show = show_plot, save = save_plot, file_path = f"{base_path}{folder}", algorithm = "Random")
-        plot.visualize(best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{folder}/best_random_fold")
+        plot.histogram(self.protein_sequence, score_list, n, show = show_plot, save = save_plot, file_path = f"{base_path}{folder}", algorithm = "Greedy")
+        plot.visualize(best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{folder}/best_greedy_fold")
         best_protein.output_csv(f"{base_path}{folder}/output")
 
-    def _random_fold(self, protein_sequence: str) -> list[int]:
+    def _random_fold(self, protein_sequence) -> list[int]:
         """
         Generates a random folding sequence.
         Uses relative directions (0, 1, 2) and translates them 
@@ -60,10 +60,46 @@ class Random():
         Returns the sequence as a list.
         """
         relative_direction_list: list[int] = []
-        random_choice = [0, 1, 2]
+        directions = [0, 1, 2]
 
         for _ in range(len(protein_sequence) - 2):
-            direction = rd.choice(random_choice)
-            relative_direction_list.append(direction)
+            if relative_direction_list:
+
+                direction = self._check_greedy(relative_direction_list)
+                relative_direction_list.append(direction)
+            else:
+                direction = rd.choice(directions)
+                relative_direction_list.append(direction)
 
         return _direction_translator(relative_direction_list)
+    
+    def _check_greedy(self, direction_list: list[int]) -> int:
+        """
+        Implements a greedy algorithm to find the best possible next direction.
+        Evaluates all possible continuations and selecting lowest score directions randomly if there are ties.
+        """
+        # Evaluate all possible next directions (0, 1, 2) and collect scores
+        protein_scores = []
+        best_directions = []
+        minimum_score = 1
+
+        for direction in [0, 1, 2]:
+            new_direction_list = direction_list + [direction]
+            abs_direction = _direction_translator(new_direction_list)
+            abs_direction.remove(0)
+
+            # Create a Protein object and compute its rating
+            protein = Protein(self.protein_sequence[:len(new_direction_list)], amino_directions=abs_direction)
+            score = protein.protein_rating
+            protein_scores.append(score)
+
+            # Update best directions based on the current score
+            if score < minimum_score:
+                minimum_score = score
+                best_directions = [direction]
+
+            elif score == minimum_score:
+                best_directions.append(direction)
+
+        # Randomly choose one of the best directions
+        return rd.choice(best_directions)
