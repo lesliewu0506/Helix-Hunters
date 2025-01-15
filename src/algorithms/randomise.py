@@ -1,4 +1,5 @@
 import random as rd
+import csv
 import src.visualisation.plot_functions as plot
 
 from src.classes.protein import Protein
@@ -9,27 +10,28 @@ class Random():
 
     def __init__(self, protein_sequence: str):
         self.protein_sequence: str = protein_sequence
+        self.score_list: list[int] = []
         self.best_score: int = 0
 
-    def run(self, show_plot: bool = False, save_plot: bool = False, n: int = 10000) -> None:
+    def run(self, show_plot: bool = False, save_plot: bool = False, n: int = 10000, save_data: bool = False) -> None:
         """Randomly generates sequences for a protein and calculates the scores."""
         self._random_iterated(show_plot, save_plot, n)
-
+        if save_data:
+            self.output_csv()
     def _random_iterated(self, show_plot: bool, save_plot: bool, n: int) -> None:
         """
         Iterates over multiple random generated folding sequences for a given protein string.
         Plots the distribution of the scores in a histogram.
         Shows the best structure that the random algorithm has generated.
         """
-        score_list: list[int] = []
-
         for _ in range(n):
-            protein = Protein(self.protein_sequence, self._random_fold)
+            protein = Protein(self.protein_sequence)
+            protein.build_structure(self._random_fold)
             # Constraint to make sure a valid sequence is created
             while protein.protein_rating == 1:
-                protein = Protein(self.protein_sequence, self._random_fold)
+                protein.build_structure(self._random_fold)
 
-            score_list.append(protein.protein_rating)
+            self.score_list.append(protein.protein_rating)
 
             if protein.protein_rating < self.best_score:
                 self.best_score = protein.protein_rating
@@ -48,7 +50,7 @@ class Random():
         base_path = "data/protein_random_folds/"
 
         # Plot histogram and visualize protein
-        plot.histogram(self.protein_sequence, score_list, n, show = show_plot, save = save_plot, file_path = f"{base_path}{folder}", algorithm = "Random")
+        plot.histogram(self.protein_sequence, self.score_list, n, show = show_plot, save = save_plot, file_path = f"{base_path}{folder}", algorithm = "Random")
         plot.visualize(best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{folder}/best_random_fold")
         best_protein.output_csv(f"{base_path}{folder}/output")
 
@@ -67,3 +69,12 @@ class Random():
             relative_direction_list.append(direction)
 
         return _direction_translator(relative_direction_list)
+    
+    def output_csv(self) -> None:
+        """Saves histogram data into a csv file."""
+        with open(f"data/histogram_data/greedy_{self.protein_sequence}.csv", 'w', newline = '') as csvfile:
+            writer = csv.writer(csvfile)
+
+            writer.writerow(self.score_list)
+
+        csvfile.close()
