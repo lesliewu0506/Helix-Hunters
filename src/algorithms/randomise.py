@@ -3,7 +3,6 @@ import src.visualisation.plot_functions as plot
 
 from src.classes.protein import Protein
 from src.brute_force.brute_force import _direction_translator
-from typing import Optional
 
 class Random():
     """The Random class generates a random sequence for the folding direction"""
@@ -46,9 +45,12 @@ class Random():
                                 "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" : "8"}
 
         folder = protein_sequence_map[best_protein.protein_sequence]
-        plot.histogram(self.protein_sequence, score_list, n, show = show_plot, save = save_plot, file_path = f"data/protein_random_folds/{folder}")
-        plot.visualize(best_protein, show = show_plot, save = save_plot, file_path = f"data/protein_random_folds/{folder}/best_random_fold")
-        best_protein.output_csv(f"data/protein_random_folds/{folder}/output")
+        base_path = "data/protein_random_folds/"
+
+        # Plot histogram and visualize protein
+        plot.histogram(self.protein_sequence, score_list, n, show = show_plot, save = save_plot, file_path = f"{base_path}{folder}")
+        plot.visualize(best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{folder}/best_random_fold")
+        best_protein.output_csv(f"{base_path}{folder}/output")
 
     def _random_fold(self, protein_sequence: str) -> list[int]:
         """
@@ -62,7 +64,6 @@ class Random():
 
         for _ in range(len(protein_sequence) - 2):
             direction = rd.choice(random_choice)
-
             relative_direction_list.append(direction)
 
         return _direction_translator(relative_direction_list)
