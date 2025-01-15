@@ -1,8 +1,7 @@
 class Rating():
     """A class to represent the rating of a protein structure based on its sequence and structure."""
 
-    def __init__(self, protein_sequence: str, structure: dict[tuple[int, int], tuple[str, int]]) -> None:
-        self.protein_sequence: str = protein_sequence
+    def __init__(self, structure: dict[tuple[int, int], tuple[str, int]]) -> None:
         self.structure: dict[tuple[int, int], tuple[str, int]] = structure
         self.score: int = 0
 
