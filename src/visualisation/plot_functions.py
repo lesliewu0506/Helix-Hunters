@@ -141,7 +141,7 @@ def _plot_legend(color_map: dict[str, str]) -> None:
     for amino_type, colour in color_map.items():
         plt.scatter([], [], color=colour, label = amino_type)
 
-def histogram(protein_sequence: str, score: list[int], iterations: int, show: bool = False, save: bool = False, file_path: str = "output") -> None:
+def histogram(protein_sequence: str, score: list[int], iterations: int, show: bool = False, save: bool = False, file_path: str = "output", algorithm: str = None) -> None:
     """Creates a stylish histogram with gradient color and improved aesthetics."""
     plt.figure(figsize=(12, 7))
 
@@ -156,7 +156,7 @@ def histogram(protein_sequence: str, score: list[int], iterations: int, show: bo
     for patch, value in zip(patches, n):
         patch.set_facecolor(cmap(value / max(n)))
     
-    plt.title(f'Protein Score Distribution {protein_sequence} ({iterations} iterations)', fontsize=12, fontweight='bold', pad=20)
+    plt.title(f'Protein Score Distribution\nProtein sequence:{protein_sequence}\nAlgorithm:{algorithm}, {iterations} iterations', fontsize=12, fontweight='bold', pad=20)
     plt.xlabel('Protein Score', fontsize=14, labelpad=15)
     plt.ylabel('Frequency', fontsize=14, labelpad=15)
     
