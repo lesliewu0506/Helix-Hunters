@@ -28,7 +28,7 @@ class Protein():
             self.protein_rating = 1
         else:
             self.structure = structure
-            self.protein_rating = Rating(self.structure).get_rating()
+            self.protein_rating = Rating(self.structure.get_structure()).get_rating()
 
     def build_no_function(self) -> None:
         """Builds the structure with given folding pattern."""
@@ -40,7 +40,7 @@ class Protein():
             self.protein_rating = 1
         else:
             self.structure = structure
-            self.protein_rating = Rating(self.structure).get_rating()
+            self.protein_rating = Rating(self.structure.get_structure()).get_rating()
 
     def output_csv(self, file_path: Optional[str] = "output") -> None:
         """

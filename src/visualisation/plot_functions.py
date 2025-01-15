@@ -27,14 +27,14 @@ def _plot_structure(protein: Protein, show: bool, save: bool, file_path: str) ->
     Polar connections are highlighted by colored dashed lines.
     """
     protein_sequence: str = protein.protein_sequence
-    protein_structure: dict[tuple[int, int], tuple[str, int]] = protein.structure
+    protein_structure: dict[tuple[int, int], tuple[str, int]] = protein.structure.get_structure()
 
     plt.figure(figsize = (10, 10))
 
     color_map = {'H' : 'red', 'P' : 'blue', 'C' : 'green'}
 
-    x_coords = [p[0] for p in protein.structure]
-    y_coords = [p[1] for p in protein.structure]
+    x_coords = [p[0] for p in protein_structure]
+    y_coords = [p[1] for p in protein_structure]
 
     x_min, x_max = min(x_coords), max(x_coords)
     y_min, y_max = min(y_coords), max(y_coords)
@@ -46,7 +46,7 @@ def _plot_structure(protein: Protein, show: bool, save: bool, file_path: str) ->
     plt.yticks(np.arange(y_min - 5, y_max + 5, 1))
 
     # Plot amino acids as dots
-    for i, (x, y) in enumerate(protein.structure):
+    for i, (x, y) in enumerate(protein_structure):
         amino_type = protein_sequence[i]
         plt.scatter(x, y, color = color_map[amino_type], s = 100, zorder = 3)
 
