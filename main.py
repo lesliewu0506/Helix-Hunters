@@ -38,4 +38,4 @@ if __name__ == "__main__":
 
     # ====================== Hill Climber ===============================
     hillclimber = HillClimber(protein_sequences[6])
-    hillclimber.run(iterations=3000)
+    hillclimber.run(show_plot = True, save_data= True, repeats = 100, iterations=3000)
