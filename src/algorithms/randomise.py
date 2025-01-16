@@ -27,12 +27,19 @@ class Random():
     def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 10000) -> None:
         """Randomly generates sequences for a protein and calculates the scores."""
         for _ in range(repeats):
-            self._random_iterated(show_plot, save_plot, iterations)
+            self._random_iterated(iterations)
+
+        base_path = "data/protein_random_folds/"
+        # Plot histogram and visualize protein
+        if self.best_protein is not None:
+            plot.histogram(self.protein_sequence, self.histogram_data[-1], iterations, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}", algorithm = "Random")
+            plot.visualize(self.best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}/best_random_fold")
+            self.best_protein.output_csv(f"{base_path}{self.folder}/output")
 
         if save_data:
             self.output_csv()
 
-    def _random_iterated(self, show_plot: bool, save_plot: bool, n: int) -> None:
+    def _random_iterated(self, n: int) -> None:
         """
         Iterates over multiple random generated folding sequences for a given protein string.
         Plots the distribution of the scores in a histogram.
@@ -55,13 +62,6 @@ class Random():
 
         self.histogram_data.append(score_list)
 
-        base_path = "data/protein_random_folds/"
-        # Plot histogram and visualize protein
-        plot.histogram(self.protein_sequence, score_list, n, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}", algorithm = "Random")
-        plot.visualize(self.best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}/best_random_fold")
-        if save_plot:
-            self.best_protein.output_csv(f"{base_path}{self.folder}/output")
-    
     def output_csv(self) -> None:
         """Saves histogram data into a csv file."""
         with open(f"data/histogram_data/{self.folder}/random_{self.protein_sequence}.csv", 'w', newline = '') as csvfile:

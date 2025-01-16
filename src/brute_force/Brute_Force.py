@@ -67,7 +67,7 @@ def generate_all_foldings(protein_sequence: str) -> None:
         writer = csv.writer(csvfile)
 
         for folding in itertools.product(directions, repeat = sequence_length - 2):
-            result = _check_folding(folding)
+            result = _check_folding(list(folding))
             if result is not None:
                 writer.writerow(result)
 

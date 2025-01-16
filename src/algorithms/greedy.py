@@ -27,12 +27,20 @@ class Greedy():
     def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 10000) -> None:
         """Greedily generates sequences for a protein and calculates the scores."""
         for _ in range(repeats):
-            self._greedy_iterated(show_plot, save_plot, iterations)
+            self._greedy_iterated(iterations)
+
+        # Plot histogram and visualize protein
+        base_path = "data/protein_greedy_folds/"
+       
+        if self.best_protein is not None:
+            plot.histogram(self.protein_sequence, self.histogram_data[-1], iterations, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}", algorithm = "Greedy")
+            plot.visualize(self.best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}/best_greedy_fold")
+            self.best_protein.output_csv(f"{base_path}{self.folder}/output")
 
         if save_data:
             self.output_csv()
 
-    def _greedy_iterated(self, show_plot: bool, save_plot: bool, n: int) -> None:
+    def _greedy_iterated(self, n: int) -> None:
         """
         Iterates over multiple random generated folding sequences for a given protein string.
         Plots the distribution of the scores in a histogram.
@@ -56,14 +64,7 @@ class Greedy():
 
         self.histogram_data.append(score_list)
 
-        base_path = "data/protein_greedy_folds/"
-        # Plot histogram and visualize protein
-        plot.histogram(self.protein_sequence, score_list, n, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}", algorithm = "Greedy")
-        plot.visualize(self.best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}/best_greedy_fold")
-        if save_plot:
-            self.best_protein.output_csv(f"{base_path}{self.folder}/output")
-
-    def _greedy_fold(self, protein_sequence) -> list[int]:
+    def _greedy_fold(self, protein_sequence: str) -> list[int]:
         """
         Generates a random folding sequence.
         Uses relative directions (0, 1, 2) and translates them 

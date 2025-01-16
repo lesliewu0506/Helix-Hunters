@@ -30,7 +30,8 @@ def _plot_structure(protein: Protein, show: bool, save: bool, file_path: str) ->
     Polar connections are highlighted by colored dashed lines.
     """
     protein_sequence: str = protein.protein_sequence
-    protein_structure: dict[tuple[int, int], tuple[str, int]] = protein.structure.get_structure()
+    if protein.structure is not None:
+        protein_structure: dict[tuple[int, int], tuple[str, int]] = protein.structure.get_structure()
 
     plt.figure(figsize = (12, 7))
 
@@ -150,7 +151,7 @@ def _plot_legend(color_map: dict[str, str]) -> None:
 # ========================================================================================================
 # Start Histogram protein distribution for specific algorithm
 # ========================================================================================================
-def histogram(protein_sequence: str, score: list[int], iterations: int, show: bool = False, save: bool = False, file_path: str = "output", algorithm: str = None) -> None:
+def histogram(protein_sequence: str, score: list[int], iterations: int, show: bool = False, save: bool = False, file_path: str = "output", algorithm: str = "") -> None:
     """Creates a stylish histogram with gradient color and improved aesthetics."""
     plt.figure(figsize=(12, 7))
 
@@ -195,7 +196,7 @@ def histogram(protein_sequence: str, score: list[int], iterations: int, show: bo
 # ========================================================================================================
 # Start Hill Climber iterations plot
 # ========================================================================================================
-def hill_visualizer(protein_sequence: str, score_list: list[int], show_plot: bool, save_plot: bool, file_path: str):
+def hill_visualizer(protein_sequence: str, score_list: list[int], show_plot: bool, save_plot: bool, file_path: str) -> None:
     """Creates a plot for the evolution of the protein score with the hill climb algorithm."""
     plt.figure(figsize = (10,10))
     plt.plot(list(range(1, len(score_list) + 1)), score_list, label = "Score Progression")

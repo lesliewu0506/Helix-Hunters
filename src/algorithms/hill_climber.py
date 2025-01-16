@@ -45,9 +45,13 @@ class HillClimber():
             self.histogram_data.append(best_score_list)
 
         # Plot and save best protein structure
-        plot.hill_visualizer(self.protein_sequence, self.best_score_list, show_plot = show_plot, save_plot = save_plot, file_path = f"data/protein_hill_folds/{self.folder}")
-        plot.histogram(self.protein_sequence, self.histogram_data[-1], iterations = iterations, show = show_plot, save = save_plot, file_path = f"data/histogram_data/{self.folder}", algorithm = "Hill Climber")
-        plot.visualize(self.best_protein, show = show_plot, save = save_plot, file_path = f"data/protein_hill_folds/{self.folder}/best_hill_fold")
+        base_path = "data/protein_hill_folds/"
+
+        if self.best_protein is not None:
+            plot.hill_visualizer(self.protein_sequence, self.best_score_list, show_plot = show_plot, save_plot = save_plot, file_path = f"{base_path}{self.folder}")
+            plot.histogram(self.protein_sequence, self.histogram_data[-1], iterations = iterations, show = show_plot, save = save_plot, file_path = f"data/histogram_data/{self.folder}", algorithm = "Hill Climber")
+            plot.visualize(self.best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}/best_hill_fold")
+            self.best_protein.output_csv(f"{base_path}{self.folder}/output")
 
         if save_data:
             self.output_csv()
@@ -61,8 +65,8 @@ class HillClimber():
 
         # Force start with valid sequence
         while protein.protein_rating == 1:
-            amino_directions: list[int] = random_fold(self.protein_sequence)
-            protein: Protein = Protein(self.protein_sequence, amino_directions)
+            amino_directions = random_fold(self.protein_sequence)
+            protein = Protein(self.protein_sequence, amino_directions)
             protein.build_no_function()
 
         best_rating: int = protein.protein_rating
