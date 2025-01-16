@@ -6,7 +6,7 @@ import src.visualisation.plot_functions as plot
 from src.classes.protein import Protein
 
 class Greedy():
-    """The Greedy random class generates a sequence for the folding direction"""
+    """The Greedy random class generates a sequence for the folding direction."""
 
     def __init__(self, protein_sequence: str):
         self.protein_sequence: str = protein_sequence
