@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
     # =========================== Random ===============================
     # random = rd(protein_sequences[0])
-    # random.run(show_plot=True, n = 1000)
+    # random.run(show_plot=True, save_data=True, n = 10000)
     # for protein_sequence in protein_sequences:
     #     random = rd(protein_sequence)
     #     random.run(show_plot = False, save_plot = True)
@@ -32,5 +32,5 @@ if __name__ == "__main__":
     #     print(f"Best score for random algorithm for protein {protein_sequence}: {random.best_score}")
 
     # ====================== Random Greedy ==============================
-    greedy = Greedy(protein_sequences[-1])
-    greedy.run(show_plot= True, n= 100)
+    greedy = Greedy(protein_sequences[0])
+    greedy.run(show_plot= True, save_data=True, n= 10000)

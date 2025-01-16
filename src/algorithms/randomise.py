@@ -12,8 +12,17 @@ class Random():
         self.protein_sequence: str = protein_sequence
         self.score_list: list[int] = []
         self.best_score: int = 0
+        self.protein_sequence_map = {"HHPHHHPHPHHHPH" : "1",
+                                    "HPHPPHHPHPPHPHHPPHPH" : "2",
+                                    "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP" : "3",
+                                    "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH" : "4",
+                                    "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP" : "5",
+                                    "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC" : "6",
+                                    "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH" : "7",
+                                    "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" : "8"}
+        self.folder = self.protein_sequence_map[protein_sequence]
 
-    def run(self, show_plot: bool = False, save_plot: bool = False, n: int = 10000, save_data: bool = False) -> None:
+    def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, n: int = 10000) -> None:
         """Randomly generates sequences for a protein and calculates the scores."""
         self._random_iterated(show_plot, save_plot, n)
         if save_data:
@@ -38,22 +47,12 @@ class Random():
                 self.best_score = protein.protein_rating
                 best_protein = protein
 
-        protein_sequence_map = {"HHPHHHPHPHHHPH" : "1",
-                                "HPHPPHHPHPPHPHHPPHPH" : "2",
-                                "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP" : "3",
-                                "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH" : "4",
-                                "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP" : "5",
-                                "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC" : "6",
-                                "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH" : "7",
-                                "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" : "8"}
-
-        folder = protein_sequence_map[best_protein.protein_sequence]
         base_path = "data/protein_random_folds/"
 
         # Plot histogram and visualize protein
-        plot.histogram(self.protein_sequence, self.score_list, n, show = show_plot, save = save_plot, file_path = f"{base_path}{folder}", algorithm = "Random")
-        plot.visualize(best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{folder}/best_random_fold")
-        best_protein.output_csv(f"{base_path}{folder}/output")
+        plot.histogram(self.protein_sequence, self.score_list, n, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}", algorithm = "Random")
+        plot.visualize(best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}/best_random_fold")
+        best_protein.output_csv(f"{base_path}{self.folder}/output")
 
     def _random_fold(self, protein_sequence: str) -> list[int]:
         """
@@ -73,7 +72,7 @@ class Random():
     
     def output_csv(self) -> None:
         """Saves histogram data into a csv file."""
-        with open(f"data/histogram_data/random_{self.protein_sequence}.csv", 'w', newline = '') as csvfile:
+        with open(f"data/histogram_data/{self.folder}/random_{self.protein_sequence}.csv", 'w', newline = '') as csvfile:
             writer = csv.writer(csvfile)
 
             writer.writerow(self.score_list)
