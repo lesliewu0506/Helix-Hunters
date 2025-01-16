@@ -10,8 +10,10 @@ class Greedy():
 
     def __init__(self, protein_sequence: str):
         self.protein_sequence: str = protein_sequence
-        self.score_list: list[int] = []
+        self.histogram_data: list[list[int]] = []
         self.best_score: int = 0
+        self.best_protein: Protein | None = None
+
         self.protein_sequence_map = {"HHPHHHPHPHHHPH" : "1",
                                     "HPHPPHHPHPPHPHHPPHPH" : "2",
                                     "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP" : "3",
@@ -22,9 +24,11 @@ class Greedy():
                                     "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" : "8"}
         self.folder = self.protein_sequence_map[protein_sequence]
 
-    def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, n: int = 10000) -> None:
-        """Randomly generates sequences for a protein and calculates the scores."""
-        self._greedy_iterated(show_plot, save_plot, n)
+    def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 10000) -> None:
+        """Greedily generates sequences for a protein and calculates the scores."""
+        for _ in range(repeats):
+            self._greedy_iterated(show_plot, save_plot, iterations)
+
         if save_data:
             self.output_csv()
 
@@ -34,6 +38,8 @@ class Greedy():
         Plots the distribution of the scores in a histogram.
         Shows the best structure that the random algorithm has generated.
         """
+        score_list: list[int] = []
+
         for _ in range(n):
             protein = Protein(self.protein_sequence)
             protein.build_structure(self._greedy_fold)
@@ -42,27 +48,20 @@ class Greedy():
                 protein = Protein(self.protein_sequence)
                 protein.build_structure(self._greedy_fold)
 
-            self.score_list.append(protein.protein_rating)
+            score_list.append(protein.protein_rating)
 
             if protein.protein_rating < self.best_score:
                 self.best_score = protein.protein_rating
-                best_protein = protein
+                self.best_protein = protein
 
-        protein_sequence_map = {"HHPHHHPHPHHHPH" : "1",
-                                "HPHPPHHPHPPHPHHPPHPH" : "2",
-                                "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP" : "3",
-                                "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH" : "4",
-                                "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP" : "5",
-                                "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC" : "6",
-                                "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH" : "7",
-                                "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" : "8"}
+        self.histogram_data.append(score_list)
 
         base_path = "data/protein_greedy_folds/"
-
         # Plot histogram and visualize protein
-        plot.histogram(self.protein_sequence, self.score_list, n, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}", algorithm = "Greedy")
-        plot.visualize(best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}/best_greedy_fold")
-        best_protein.output_csv(f"{base_path}{self.folder}/output")
+        plot.histogram(self.protein_sequence, score_list, n, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}", algorithm = "Greedy")
+        plot.visualize(self.best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}/best_greedy_fold")
+        if save_plot:
+            self.best_protein.output_csv(f"{base_path}{self.folder}/output")
 
     def _greedy_fold(self, protein_sequence) -> list[int]:
         """
@@ -136,6 +135,7 @@ class Greedy():
         with open(f"data/histogram_data/{self.folder}/greedy_{self.protein_sequence}.csv", 'w', newline = '') as csvfile:
             writer = csv.writer(csvfile)
 
-            writer.writerow(self.score_list)
+            for histogram in self.histogram_data:
+                writer.writerow(histogram)
 
         csvfile.close()
