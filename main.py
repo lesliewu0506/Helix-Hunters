@@ -35,10 +35,10 @@ if __name__ == "__main__":
         greedy = Greedy(protein_sequence)
         greedy.run(save_plot = True, save_data = True, repeats = 10)
 
-        print(f"Best score for Greedy algorithm for protein {protein_sequence}: {random.best_score}")
+        print(f"Best score for Greedy algorithm for protein {protein_sequence}: {greedy.best_score}")
     # ====================== Hill Climber ===============================
     for protein_sequence in protein_sequences:
         hillclimber = HillClimber(protein_sequence)
         hillclimber.run(save_plot = True, save_data= True, repeats = 10)
 
-        print(f"Best score for Hill Climber algorithm for protein {protein_sequence}: {random.best_score}")
+        print(f"Best score for Hill Climber algorithm for protein {protein_sequence}: {hillclimber.best_score}")
