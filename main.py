@@ -37,5 +37,5 @@ if __name__ == "__main__":
     # greedy.run(save_data=True, repeats = 10, iterations= 10000)
 
     # ====================== Hill Climber ===============================
-    hillclimber = HillClimber(protein_sequences[6])
-    hillclimber.run(show_plot = True, save_data= True, repeats = 100, iterations=3000)
+    hillclimber = HillClimber(protein_sequences[0])
+    hillclimber.run(show_plot = True, save_data= True, repeats = 10, iterations = 1000)
