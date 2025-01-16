@@ -42,10 +42,10 @@ class Random():
 
         for _ in range(n):
             protein = Protein(self.protein_sequence)
-            protein.build_structure(self._random_fold)
+            protein.build_structure(random_fold)
             # Constraint to make sure a valid sequence is created
             while protein.protein_rating == 1:
-                protein.build_structure(self._random_fold)
+                protein.build_structure(random_fold)
 
             score_list.append(protein.protein_rating)
 
@@ -61,22 +61,6 @@ class Random():
         plot.visualize(self.best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}/best_random_fold")
         if save_plot:
             self.best_protein.output_csv(f"{base_path}{self.folder}/output")
-
-    def _random_fold(self, protein_sequence: str) -> list[int]:
-        """
-        Generates a random folding sequence.
-        Uses relative directions (0, 1, 2) and translates them 
-        into absolute directions (-2, -1, 1, 2).
-        Returns the sequence as a list.
-        """
-        relative_direction_list: list[int] = []
-        random_choice = [0, 1, 2]
-
-        for _ in range(len(protein_sequence) - 2):
-            direction = rd.choice(random_choice)
-            relative_direction_list.append(direction)
-
-        return _direction_translator(relative_direction_list)
     
     def output_csv(self) -> None:
         """Saves histogram data into a csv file."""
@@ -87,3 +71,19 @@ class Random():
                 writer.writerow(histogram)
 
         csvfile.close()
+
+def random_fold(protein_sequence: str) -> list[int]:
+    """
+    Generates a random folding sequence.
+    Uses relative directions (0, 1, 2) and translates them 
+    into absolute directions (-2, -1, 1, 2).
+    Returns the sequence as a list.
+    """
+    relative_direction_list: list[int] = []
+    random_choice = [0, 1, 2]
+
+    for _ in range(len(protein_sequence) - 2):
+        direction = rd.choice(random_choice)
+        relative_direction_list.append(direction)
+
+    return _direction_translator(relative_direction_list)

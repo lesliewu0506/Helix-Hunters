@@ -1,6 +1,7 @@
 from src.brute_force.brute_force import generate_all_foldings, brute_force
 from src.algorithms.randomise import Random as rd
 from src.algorithms.greedy import Greedy
+from src.algorithms.hill_climber import HillClimber
 
 protein_sequences = ["HHPHHHPHPHHHPH",
                      "HPHPPHHPHPPHPHHPPHPH",
@@ -32,5 +33,9 @@ if __name__ == "__main__":
     #     print(f"Best score for random algorithm for protein {protein_sequence}: {random.best_score}")
 
     # ====================== Random Greedy ==============================
-    greedy = Greedy(protein_sequences[0])
-    greedy.run(save_data=True, repeats = 10, iterations= 10000)
+    # greedy = Greedy(protein_sequences[0])
+    # greedy.run(save_data=True, repeats = 10, iterations= 10000)
+
+    # ====================== Hill Climber ===============================
+    hillclimber = HillClimber(protein_sequences[6])
+    hillclimber.run(iterations=3000)
