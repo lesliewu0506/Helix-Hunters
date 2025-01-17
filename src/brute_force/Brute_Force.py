@@ -24,44 +24,50 @@ def brute_force(sequence: str, save: bool = False) -> None:
     # num_processes: int = multiprocessing.cpu_count()
     num_processes: int = 16
     best_score = 0
-    # Load data
-    foldings: list[list[int]] = read_csv(sequence)
-
-    # Use multiprocessing pool to distribute work load
-    with multiprocessing.Pool(num_processes) as pool:
-        results = pool.map(evaluate_folding_wrapper, [(sequence, folding) for folding in foldings])
-
-    # Process results
     best_structures: list[Protein] = []
 
-    for rating, new_protein in results:
+    # Open CSV once
+    with open(f"src/brute_force/all_foldings/{sequence}.csv", 'r') as csvfile:
+        reader = csv.reader(csvfile)
+        chunk: list[list[int]] = []
 
-        if rating < best_score:
-            best_score = rating
-            protein = new_protein
-            best_structures = []
+        for row in reader:
+            directions = [int(x) for x in row]
+            chunk.append(directions)
 
-        elif rating == best_score and new_protein not in best_structures:
-            best_structures.append(new_protein)
-             
+            # Process chunk when chunk size reached
+            if len(chunk) == 100000:
+                best_score, best_structures = process_chunk(sequence, chunk, best_score, best_structures, num_processes)
+                chunk = []
+
+        # Process final chunk
+        if chunk:
+            best_score, best_structures = process_chunk(sequence, chunk, best_score, best_structures, num_processes)
+
+    csvfile.close()
+
     # Plot best structure and save data
     for i, protein in enumerate(best_structures):
         plot.visualize(protein, "Brute Force", show = False, save = save, file_path = f"src/brute_force/protein_structures/{folder}/{sequence}_{i}")
         protein.output_csv(file_path = f"src/brute_force/best_folding/{folder}/{sequence}_{i}")
+
     print(f"Best rating: {best_score}")
 
-def read_csv(protein_sequence: str) -> list[list[int]]:
-    """Reads csv file and returns the directions as list in list."""
-    foldings: list[list[int]] = []
+def process_chunk(sequence: str, foldings: list[list[int]], best_score: int, best_structures: list[Protein], num_processes: int) -> tuple[int, list[Protein]]:
+    """Processes chunk in parallel and updates best_score and best_structures."""
+    with multiprocessing.Pool(num_processes) as pool:
+        results = pool.map(evaluate_folding_wrapper, [(sequence, f) for f in foldings])
 
-    with open(f"src/brute_force/all_foldings/{protein_sequence}.csv", 'r') as csvfile:
-        reader = csv.reader(csvfile)
+    for rating, protein in results:
+        if rating < best_score:
+            best_score = rating
+            best_structures = [protein]
 
-        for row in reader:
-            foldings.append([int(x) for x in row])
+        elif rating == best_score:
+            best_structures.append(protein)
 
-    return foldings
-    
+    return best_score, best_structures
+
 def evaluate_folding_wrapper(args: tuple[str, list[int]]) -> tuple[int, Protein]:
     """Wrapper function to unpack arguments for evaluate_folding."""
     sequence, folding = args

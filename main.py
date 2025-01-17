@@ -1,4 +1,4 @@
-from src.brute_force.Brute_Force import brute_force
+from src.brute_force.brute_force import brute_force
 from src.brute_force.generate_all_folding_structures import generate_all_foldings
 from src.algorithms.randomise import Random 
 from src.algorithms.greedy import Greedy
