@@ -67,7 +67,10 @@ def _plot_structure(protein: Protein, algorithm: str, show: bool, save: bool, fi
     plt.legend(loc = 'best')
     plt.axis('off')
     if save:
-        plt.savefig(f"{file_path}/best_{algorithm}_fold.png", dpi = 600)
+        if algorithm == "Brute Force":
+            plt.savefig(f"{file_path}.png", dpi = 600)
+        else:
+            plt.savefig(f"{file_path}/best_{algorithm}_fold.png", dpi = 600)
     if show:
         plt.show()
     else:
