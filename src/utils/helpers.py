@@ -94,7 +94,7 @@ def save_and_visualize_results(
 
     # Plots the progression of Hill Climber/Simulated Annealing algorithm
     if algorithm in ["Hill Visualizer", "Simulated Annealing"]:
-        plot.hill_visualizer(protein_sequence, score_progression, show_plot = show_plot, save_plot = save_plot, file_path = f"{base_path}", algorithm = algorithm)
+        plot.hill_visualizer(protein_sequence, score_progression, show = show_plot, save = save_plot, file_path = f"{base_path}", algorithm = algorithm)
     
     # Plots score distribution for one repeat of algorithm
     plot.histogram(protein_sequence, histogram, iterations = iterations, show = show_plot, save = save_plot, file_path = f"{base_path}", algorithm = algorithm)
