@@ -3,7 +3,7 @@ import csv
 import src.visualisation.plot_functions as plot
 
 from src.classes.protein import Protein
-from src.brute_force.brute_force import _direction_translator
+from src.brute_force.Brute_Force import _direction_translator
 
 class Random():
     """The Random class generates a random sequence for the folding direction"""
