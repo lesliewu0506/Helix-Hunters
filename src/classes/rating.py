@@ -12,32 +12,28 @@ class Rating():
         # Mapping for all neighbouring points
         direction_map = {(1, 0), (-1, 0), (0, 1), (0, -1)}
 
-        for x_current, y_current in self.structure:
+        for (x_current, y_current), (amino_1, order_1) in self.structure.items():
 
-            amino_1 = self.structure[(x_current, y_current)][0]
-            # Check for polar amino acid
-            if amino_1 != 'P':
-                # Find neighbouring coordinates
-                for (dx, dy) in direction_map:
-                    x_next = x_current + dx
-                    y_next = y_current + dy
+            # Skip if polar amino acid
+            if amino_1 == 'P':
+                continue
 
-                    # Check for valid and non sequential points
-                    if (x_next, y_next) in self.structure and not self._check_sequential(x_current, y_current, x_next, y_next):
-                        amino_2 = self.structure[(x_next, y_next)][0]
+            # Find neighbouring coordinates
+            for (dx, dy) in direction_map:
+                x_next = x_current + dx
+                y_next = y_current + dy
 
+                # Search pairs
+                pair = self.structure.get((x_next, y_next))
+                if pair is not None:
+                    amino_2, order_2 = pair
+
+                    # Skip sequential points
+                    if order_2 not in (order_1 - 1, order_1 + 1):
                         self.score += self._check_pair(amino_1, amino_2)
 
         # Prevent double counting
         self.score = self.score // 2
-    
-    def _check_sequential(self, x_old: int, y_old: int, x_new: int, y_new: int) -> bool:
-        """
-        Checks if two amino acids are in a sequential order. 
-        Returns True if sequential, False otherwise.
-        """        
-        i = self.structure[(x_old, y_old)][1]
-        return self.structure[(x_new, y_new)][1] in [(i - 1), (i + 1)]
 
     def _check_pair(self, amino_1: str, amino_2: str) -> int:
         """Checks the pair for possible connections and returns the strength of connection."""
@@ -50,3 +46,4 @@ class Rating():
     def get_rating(self) -> int:
         """Returns rating of the protein."""
         return self.score
+  
