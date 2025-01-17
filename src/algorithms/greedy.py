@@ -1,6 +1,6 @@
 import random as rd
 
-from src.utils.helpers import save_and_visualize_results
+from src.utils.helpers import save_and_visualize_results, direction_translator
 from src.classes.protein import Protein
 
 class Greedy():
@@ -65,21 +65,7 @@ class Greedy():
                 direction = rd.choice(directions)
                 relative_direction_list.append(direction)
 
-        return self._direction_translator(relative_direction_list)
-    
-    def _direction_translator(self, directions: list[int]) -> list[int]:
-        """
-        Helper function for translating the relative paths (0, 1, 2),
-        to absolute paths (-2, -1, 1, 2). Returns list of directions.
-        """
-        direction_map: dict[int, list[int]] = {1: [2, 1, -2], -1: [-2, -1, 2], 2: [-1, 2, 1], -2: [1, -2, -1]}
-        folding_sequence: list[int] = [1]
-
-        for i, direction in enumerate(directions):
-            folding_sequence.append(direction_map[folding_sequence[i]][direction])
-
-        folding_sequence.append(0)
-        return folding_sequence
+        return direction_translator(relative_direction_list)
 
     def _check_greedy(self, direction_list: list[int]) -> int:
         """
@@ -93,7 +79,7 @@ class Greedy():
 
         for direction in [0, 1, 2]:
             new_direction_list = direction_list + [direction]
-            abs_direction = self._direction_translator(new_direction_list)
+            abs_direction = direction_translator(new_direction_list)
             abs_direction.remove(0)
 
             # Create a Protein object and compute its rating

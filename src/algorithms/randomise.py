@@ -1,8 +1,7 @@
 import random as rd
 
-from src.utils.helpers import save_and_visualize_results
+from src.utils.helpers import save_and_visualize_results, direction_translator
 from src.classes.protein import Protein
-from src.brute_force.Brute_Force import _direction_translator
 
 class Random():
     """The Random class generates a random sequence for the folding direction"""
@@ -60,4 +59,4 @@ def random_fold(protein_sequence: str) -> list[int]:
         direction = rd.choice(random_choice)
         relative_direction_list.append(direction)
 
-    return _direction_translator(relative_direction_list)
+    return direction_translator(relative_direction_list)

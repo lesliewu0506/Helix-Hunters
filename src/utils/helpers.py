@@ -61,3 +61,17 @@ def output_histogram_csv(protein_sequence: str, algorithm: str, histogram_data: 
             writer.writerow(histogram)
 
     csvfile.close()
+
+def direction_translator(directions: list[int]) -> list[int]:
+    """
+    Helper function for translating the relative paths (0, 1, 2),
+    to absolute paths (-2, -1, 1, 2). Returns list of directions.
+    """
+    direction_map: dict[int, list[int]] = {1: [2, 1, -2], -1: [-2, -1, 2], 2: [-1, 2, 1], -2: [1, -2, -1]}
+    folding_sequence: list[int] = [1]
+
+    for i, direction in enumerate(directions):
+        folding_sequence.append(direction_map[folding_sequence[i]][direction])
+
+    folding_sequence.append(0)
+    return folding_sequence
