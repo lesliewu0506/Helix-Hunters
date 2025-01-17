@@ -36,7 +36,7 @@ def brute_force(sequence: str, save: bool = False) -> None:
             chunk.append(directions)
 
             # Process chunk when chunk size reached
-            if len(chunk) == 100000:
+            if len(chunk) == 1000000:
                 best_score, best_structures = process_chunk(sequence, chunk, best_score, best_structures, num_processes)
                 chunk = []
 
