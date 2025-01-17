@@ -18,8 +18,11 @@ class Greedy():
             self._greedy_iterated(iterations)
 
         # Save and visualize protein
-        save_and_visualize_results(self.best_protein, algorithm = "Greedy", histogram_data = self.histogram_data, 
-        histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data)
+        if self.best_protein is not None:
+            save_and_visualize_results(self.best_protein, algorithm = "Greedy", histogram_data = self.histogram_data, 
+            histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data)
+        else:
+            print("Error: Did not find a valid protein.")
 
     def _greedy_iterated(self, n: int) -> None:
         """

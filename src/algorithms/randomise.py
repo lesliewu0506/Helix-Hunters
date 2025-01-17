@@ -1,6 +1,4 @@
-import random as rd
-
-from src.utils.helpers import save_and_visualize_results, direction_translator
+from src.utils.helpers import save_and_visualize_results, random_fold
 from src.classes.protein import Protein
 
 class Random():
@@ -18,8 +16,11 @@ class Random():
             self._random_iterated(iterations)
 
         # Save and visualize protein
-        save_and_visualize_results(self.best_protein, algorithm = "Random", histogram_data = self.histogram_data, 
-        histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data)
+        if self.best_protein is not None:
+            save_and_visualize_results(self.best_protein, algorithm = "Random", histogram_data = self.histogram_data, 
+            histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data)
+        else:
+            print("Error: Did not find a valid protein.")
 
     def _random_iterated(self, n: int) -> None:
         """
@@ -43,20 +44,3 @@ class Random():
                 self.best_protein = protein
 
         self.histogram_data.append(score_list)
-
-
-def random_fold(protein_sequence: str) -> list[int]:
-    """
-    Generates a random folding sequence.
-    Uses relative directions (0, 1, 2) and translates them 
-    into absolute directions (-2, -1, 1, 2).
-    Returns the sequence as a list.
-    """
-    relative_direction_list: list[int] = []
-    random_choice = [0, 1, 2]
-
-    for _ in range(len(protein_sequence) - 2):
-        direction = rd.choice(random_choice)
-        relative_direction_list.append(direction)
-
-    return direction_translator(relative_direction_list)

@@ -6,6 +6,7 @@ code readability, and promote reusability.
 Helper functions in this file are not specific to any single module but can be 
 used by various parts of the project wherever needed.
 """
+import random as rd
 import csv
 import src.visualisation.plot_functions as plot
 from src.classes.protein import Protein
@@ -35,6 +36,26 @@ algorithm_folder_map: dict[str, str] = {
 # ===============================================================
 # Utility Functions
 # ===============================================================
+
+def random_fold(protein_sequence: str) -> list[int]:
+    """
+    Generates a random folding sequence using relative direction (0, 1, 2).
+    Translates them into absolute direction (-2, -1, 1, 2).
+
+    Args:
+        protein_sequence (str): The sequence of the protein.
+
+    Returns:
+        A list of absolute direction.
+    """
+    relative_direction_list: list[int] = []
+    random_choice = [0, 1, 2]
+
+    for _ in range(len(protein_sequence) - 2):
+        direction = rd.choice(random_choice)
+        relative_direction_list.append(direction)
+
+    return direction_translator(relative_direction_list)
 
 def direction_translator(directions: list[int]) -> list[int]:
     """
@@ -72,6 +93,7 @@ def save_and_visualize_results(
 ) -> None:
     """
     Saves and visualizes the results of the optimization algorithm.
+
     Args:
         best_protein: The best Protein found.
         algorithm: The name of the algorithm used.

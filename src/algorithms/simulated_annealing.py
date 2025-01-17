@@ -34,8 +34,11 @@ class SimulatedAnnealing(HillClimber):
             self.histogram_data.append(best_score_list)
 
         # Save and visualize protein
-        save_and_visualize_results(self.best_protein, algorithm = "Simulated Annealing", histogram_data = self.histogram_data, 
-        histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data)
+        if self.best_protein is not None:
+            save_and_visualize_results(self.best_protein, algorithm = "Simulated Annealing", histogram_data = self.histogram_data, 
+            histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data)
+        else:
+            print("Error: Did not find a valid protein.")
 
     def check_solution(self, new_rating: int, old_rating: int) -> bool:
         """

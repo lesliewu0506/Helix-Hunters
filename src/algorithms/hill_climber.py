@@ -1,8 +1,7 @@
 import random as rd
 
-from src.utils.helpers import save_and_visualize_results
+from src.utils.helpers import save_and_visualize_results, random_fold
 from src.classes.protein import Protein
-from src.algorithms.randomise import random_fold
 from typing import Callable, Optional
 
 class HillClimber():
@@ -35,8 +34,11 @@ class HillClimber():
             self.histogram_data.append(best_score_list)
 
         # Save and visualize protein
-        save_and_visualize_results(self.best_protein, algorithm = "Hill Climber", histogram_data = self.histogram_data, 
-        histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data)
+        if self.best_protein is not None:
+            save_and_visualize_results(self.best_protein, algorithm = "Hill Climber", histogram_data = self.histogram_data, 
+            histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data)
+        else:
+            print("Error: Did not find a valid protein.")
     
     def _hill_climber(self, check_solution: Optional[Callable[[int, int], bool]] = None) -> tuple[int, Protein, list[int]]:
         score_list: list[int] = []
