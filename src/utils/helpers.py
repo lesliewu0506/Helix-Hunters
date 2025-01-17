@@ -10,6 +10,10 @@ import csv
 import src.visualisation.plot_functions as plot
 from src.classes.protein import Protein
 
+# ===============================================================
+# Global Mappings
+# ===============================================================
+
 protein_sequence_map: dict[str, str] = {
     "HHPHHHPHPHHHPH" : "1",
     "HPHPPHHPHPPHPHHPPHPH" : "2",
@@ -28,9 +32,60 @@ algorithm_folder_map: dict[str, str] = {
     "Plant Propagation" : "propagation",
     "Genetic Algorithm" : "genetic"}
 
-def save_and_visualize_results(best_protein: Protein, algorithm: str, histogram_data: list[list[int]], histogram: list[int], iterations: int, show_plot: bool, 
-                               save_plot: bool, save_data: bool, score_progression: list[int] = []):
-    """Saves and visualizes the results of the optimization algorithm."""
+# ===============================================================
+# Utility Functions
+# ===============================================================
+
+def direction_translator(directions: list[int]) -> list[int]:
+    """
+    Translates relative paths (0, 1, 2) to absolute paths (-2, -1, 1, 2).
+    
+    Args:
+        directions: A list of relative directions.
+
+    Returns:
+        A list of absolute directions.
+    """
+    direction_map: dict[int, list[int]] = {1: [2, 1, -2], -1: [-2, -1, 2], 2: [-1, 2, 1], -2: [1, -2, -1]}
+    folding_sequence: list[int] = [1]
+
+    for i, direction in enumerate(directions):
+        folding_sequence.append(direction_map[folding_sequence[i]][direction])
+
+    folding_sequence.append(0)
+    return folding_sequence
+
+# ===============================================================
+# Visualize Helpers
+# ===============================================================
+
+def save_and_visualize_results(
+    best_protein: Protein,
+    algorithm: str,
+    histogram_data: list[list[int]], 
+    histogram: list[int], 
+    iterations: int, 
+    show_plot: bool, 
+    save_plot: bool, 
+    save_data: bool, 
+    score_progression: list[int] = []
+) -> None:
+    """
+    Saves and visualizes the results of the optimization algorithm.
+    Args:
+        best_protein: The best Protein found.
+        algorithm: The name of the algorithm used.
+        histogram_data: Full histogram data for all runs.
+        histogram: Histogram data for last run.
+        iterations: Number of iterations per run for the algorithm.
+        show_plot: Whether to show the plots.
+        save_plot: Whether to save the plots to files.
+        save_data: Whether to save histogram data to CSV.
+        score_progression: The score progression over iterations (optional).
+
+    Returns:
+        None
+    """
     protein_sequence = best_protein.protein_sequence
 
     # Create correct path for each algorithm and sequence
@@ -51,8 +106,22 @@ def save_and_visualize_results(best_protein: Protein, algorithm: str, histogram_
         output_histogram_csv(protein_sequence, algorithm, histogram_data)
         best_protein.output_csv(f"{base_path}/output")
 
+# ===============================================================
+# File Operations
+# ===============================================================
+
 def output_histogram_csv(protein_sequence: str, algorithm: str, histogram_data: list[list[int]]) -> None:
-    """Saves histogram data into a csv file."""
+    """
+    Saves histogram data into a csv file.
+    
+    Args:
+        protein_sequence: The sequence of the protein.
+        algorithm: The name of the algorithm used.
+        histogram_data: Full histogram data for all runs.
+
+    Returns:
+        None
+    """
     folder = protein_sequence_map[protein_sequence]
     with open(f"data/histogram_data/{folder}/{algorithm}_{protein_sequence}.csv", 'w', newline = '') as csvfile:
         writer = csv.writer(csvfile)
@@ -61,17 +130,3 @@ def output_histogram_csv(protein_sequence: str, algorithm: str, histogram_data: 
             writer.writerow(histogram)
 
     csvfile.close()
-
-def direction_translator(directions: list[int]) -> list[int]:
-    """
-    Helper function for translating the relative paths (0, 1, 2),
-    to absolute paths (-2, -1, 1, 2). Returns list of directions.
-    """
-    direction_map: dict[int, list[int]] = {1: [2, 1, -2], -1: [-2, -1, 2], 2: [-1, 2, 1], -2: [1, -2, -1]}
-    folding_sequence: list[int] = [1]
-
-    for i, direction in enumerate(directions):
-        folding_sequence.append(direction_map[folding_sequence[i]][direction])
-
-    folding_sequence.append(0)
-    return folding_sequence
