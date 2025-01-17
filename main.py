@@ -1,4 +1,4 @@
-from src.brute_force.brute_force import generate_all_foldings, brute_force
+# from src.brute_force.brute_force import generate_all_foldings, brute_force
 from src.algorithms.randomise import Random 
 from src.algorithms.greedy import Greedy
 from src.algorithms.hill_climber import HillClimber
