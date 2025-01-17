@@ -5,6 +5,8 @@ import src.visualisation.plot_functions as plot
 
 from src.classes.protein import Protein
 from src.algorithms.randomise import random_fold
+from typing import Callable, Optional
+
 class HillClimber():
     """
     The Hill Climber class generates a sequence for the folding direction.
@@ -29,7 +31,7 @@ class HillClimber():
                                     "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" : "8"}
         self.folder = self.protein_sequence_map[protein_sequence]
 
-    def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 10000) -> None:
+    def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 1000) -> None:
         """Uses hill climbing algorithm to improve a random generated sequence."""
         for _ in range(repeats):
             best_score_list: list[int] = []
@@ -56,7 +58,7 @@ class HillClimber():
         if save_data:
             self.output_csv()
     
-    def _hill_climber(self) -> tuple[int, Protein, list[int]]:
+    def _hill_climber(self, check_solution: Optional[Callable[[int, int], bool]] = None) -> tuple[int, Protein, list[int]]:
         score_list: list[int] = []
         same_score_index: int = 0
         amino_directions: list[int] = random_fold(self.protein_sequence)
@@ -90,12 +92,20 @@ class HillClimber():
                 same_score_index += 1
             elif candidate_score < best_rating:
                 same_score_index = 0
-
-            # Accept candidate if score becomes lower
-            if candidate_score <= best_rating:
-                best_rating = candidate_score
-                protein = protein_candidate
-                amino_directions = new_amino_directions
+            
+            # Check for simulated annealing
+            if check_solution is None:
+                # Accept candidate if score becomes lower
+                if candidate_score <= best_rating:
+                    best_rating = candidate_score
+                    protein = protein_candidate
+                    amino_directions = new_amino_directions
+            else:
+                # Accept based on probability
+                if check_solution(candidate_score, best_rating):
+                    best_rating = candidate_score
+                    protein = protein_candidate
+                    amino_directions = new_amino_directions
 
             score_list.append(best_rating)
         return best_rating, protein, score_list

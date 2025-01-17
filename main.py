@@ -2,7 +2,7 @@
 from src.algorithms.randomise import Random 
 from src.algorithms.greedy import Greedy
 from src.algorithms.hill_climber import HillClimber
-
+from src.algorithms.simulated_annealing import SimulatedAnnealing
 protein_sequences = ["HHPHHHPHPHHHPH",
                      "HPHPPHHPHPPHPHHPPHPH",
                      "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP",
@@ -24,21 +24,29 @@ if __name__ == "__main__":
     # brute_force(protein_sequences[0], save = True)
 
     # =========================== Random ===============================
-    for protein_sequence in protein_sequences:
-        random = Random(protein_sequence)
-        random.run(save_plot = True, save_data = True, repeats = 10)
+    # for protein_sequence in protein_sequences:
+    #     random = Random(protein_sequence)
+    #     random.run(save_plot = True, save_data = True, repeats = 10)
 
-        print(f"Best score for Random algorithm for protein {protein_sequence}: {random.best_score}")
+    #     print(f"Best score for Random algorithm for protein {protein_sequence}: {random.best_score}")
 
-    # ====================== Random Greedy ==============================
-    for protein_sequence in protein_sequences:
-        greedy = Greedy(protein_sequence)
-        greedy.run(save_plot = True, save_data = True, repeats = 10)
+    # # ====================== Random Greedy ==============================
+    # for protein_sequence in protein_sequences:
+    #     greedy = Greedy(protein_sequence)
+    #     greedy.run(save_plot = True, save_data = True, repeats = 10)
 
-        print(f"Best score for Greedy algorithm for protein {protein_sequence}: {greedy.best_score}")
-    # ====================== Hill Climber ===============================
-    for protein_sequence in protein_sequences:
-        hillclimber = HillClimber(protein_sequence)
-        hillclimber.run(save_plot = True, save_data= True, repeats = 10)
+    #     print(f"Best score for Greedy algorithm for protein {protein_sequence}: {greedy.best_score}")
+    # # ====================== Hill Climber ===============================
+    # for protein_sequence in protein_sequences:
+    #     hillclimber = HillClimber(protein_sequence)
+    #     hillclimber.run(save_plot = True, save_data= True, repeats = 10)
 
-        print(f"Best score for Hill Climber algorithm for protein {protein_sequence}: {hillclimber.best_score}")
+    #     print(f"Best score for Hill Climber algorithm for protein {protein_sequence}: {hillclimber.best_score}")
+    # ====================== Simulated Annealing ========================
+    annealing = SimulatedAnnealing(protein_sequences[0])
+    annealing.run(show_plot= True)
+    # for protein_sequence in protein_sequences:
+    #     annealing = SimulatedAnnealing(protein_sequence)
+    #     annealing.run(save_plot = True, save_data= True, repeats = 10)
+
+    #     print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
