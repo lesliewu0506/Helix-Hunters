@@ -5,13 +5,20 @@ class Grid():
     - keys (x, y): coordinates of an amino acid.
     - values (type, order): type of amino acid and the order in the chain.
     """
+    # Maps direction to a change in x and y
+    direction_map = {
+        0 : (0, 0),
+        1 : (1, 0),
+        -1 : (-1, 0),
+        2: (0, 1),
+        -2: (0, -1)
+    }
 
     def __init__(self, protein_sequence: str, amino_directions: list[int] | None) -> None:
         self.structure: dict[tuple[int, int], tuple[str, int]] = {}
         self.protein_sequence: str = protein_sequence
         self.amino_directions: list[int] | None = amino_directions
-        self.invalid_prefix: list[int] | None = None
-        self.x_current: int = 0 
+        self.x_current: int = 0
         self.y_current: int = 0
 
     def create_structure(self) -> bool:
@@ -22,9 +29,10 @@ class Grid():
         if self.amino_directions is None:
             return False
 
-        for i in range(len(self.protein_sequence)):
-            if not self._add_amino(self.protein_sequence[i], i, self.amino_directions[i]):
-                self.invalid_prefix = self.amino_directions[:i]
+        for i, amino in enumerate(self.protein_sequence):
+            direction = self.amino_directions[i]
+            # Check if amino added gives valid structure
+            if not self._add_amino(amino, i, direction):
                 return False
         return True
     
@@ -34,7 +42,7 @@ class Grid():
         Return True on success, else False.
         """
         # Check if position is empty
-        if not self._check_fold(self.x_current, self.y_current):
+        if (self.x_current, self.y_current) in self.structure:
             return False
         # Adds coordinates as keys with values [type of amino, order in chain]
         self.structure[(self.x_current, self.y_current)] = (amino, i)
@@ -43,19 +51,9 @@ class Grid():
 
     def _update_position(self, direction: int) -> None:
         """Updates x and y based on direction."""
-        # Maps direction to a change in x and y
-        direction_map = {0 : (0, 0), 1 : (1, 0), -1 : (-1, 0), 2: (0, 1), -2: (0, -1)}
-
-        dx, dy = direction_map[direction]
+        dx, dy = self.direction_map[direction]
         self.x_current += dx
         self.y_current += dy
-
-    def _check_fold(self, x_new: int, y_new: int) -> bool:
-        """
-        Checks if the folding structure is valid.
-        Return True on success, else False.
-        """
-        return not (x_new, y_new) in self.structure
 
     def get_structure(self) -> dict[tuple[int, int], tuple[str, int]]:
         """Returns the structure of the protein."""
