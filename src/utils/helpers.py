@@ -67,25 +67,13 @@ def direction_translator(directions: list[int]) -> list[int]:
     Returns:
         A list of absolute directions.
     """
-    # Predefined mapping using a list instead of a dict
-    direction_map = [
-        [2, 1, -2],
-        [-2, -1, 2],
-        [-1, 2, 1],
-        [1, -2, -1]
-    ]
-    
-    # Initialize folding_sequence with a fixed size (directions length + 2 for start and end)
-    folding_sequence = [0] * (len(directions) + 2)
-    folding_sequence[0] = 1  # Start direction is 1
+    direction_map: dict[int, list[int]] = {1: [2, 1, -2], -1: [-2, -1, 2], 2: [-1, 2, 1], -2: [1, -2, -1]}
+    folding_sequence: list[int] = [1]
 
-    # Track current direction and fill folding_sequence
-    current_direction = 1
     for i, direction in enumerate(directions):
-        current_direction = direction_map[current_direction][direction]
-        folding_sequence[i + 1] = current_direction
+        folding_sequence.append(direction_map[folding_sequence[i]][direction])
 
-    folding_sequence[-1] = 0  # End direction is 0
+    folding_sequence.append(0)
     return folding_sequence
 
 # ===============================================================
