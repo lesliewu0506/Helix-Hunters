@@ -1,8 +1,6 @@
 import random as rd
-import csv
-import copy
-import src.visualisation.plot_functions as plot
 
+from src.utils.helpers import save_and_visualize_results
 from src.classes.protein import Protein
 from src.algorithms.randomise import random_fold
 from typing import Callable, Optional
@@ -21,16 +19,6 @@ class HillClimber():
         self.best_protein: Protein | None = None
         self.best_score_list: list[int] = []
 
-        self.protein_sequence_map = {"HHPHHHPHPHHHPH" : "1",
-                                    "HPHPPHHPHPPHPHHPPHPH" : "2",
-                                    "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP" : "3",
-                                    "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH" : "4",
-                                    "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP" : "5",
-                                    "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC" : "6",
-                                    "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH" : "7",
-                                    "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" : "8"}
-        self.folder = self.protein_sequence_map[protein_sequence]
-
     def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 1000) -> None:
         """Uses hill climbing algorithm to improve a random generated sequence."""
         for _ in range(repeats):
@@ -46,17 +34,9 @@ class HillClimber():
             
             self.histogram_data.append(best_score_list)
 
-        # Plot and save best protein structure
-        base_path = "data/protein_hill_folds/"
-
-        if self.best_protein is not None:
-            plot.hill_visualizer(self.protein_sequence, self.best_score_list, show_plot = show_plot, save_plot = save_plot, file_path = f"{base_path}{self.folder}", algorithm = "Simulated Annealing")
-            plot.histogram(self.protein_sequence, self.histogram_data[-1], iterations = iterations, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}", algorithm = "Hill Climber")
-            plot.visualize(self.best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}/best_hill_fold")
-            self.best_protein.output_csv(f"{base_path}{self.folder}/output")
-
-        if save_data:
-            self.output_csv()
+        # Save and visualize protein
+        save_and_visualize_results(self.best_protein, algorithm = "Hill Climber", histogram_data = self.histogram_data, 
+        histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data)
     
     def _hill_climber(self, check_solution: Optional[Callable[[int, int], bool]] = None) -> tuple[int, Protein, list[int]]:
         score_list: list[int] = []
@@ -64,12 +44,6 @@ class HillClimber():
         amino_directions: list[int] = random_fold(self.protein_sequence)
         protein: Protein = Protein(self.protein_sequence, amino_directions)
         protein.build_no_function()
-
-        # Force start with valid sequence
-        while protein.protein_rating == 1:
-            amino_directions = random_fold(self.protein_sequence)
-            protein = Protein(self.protein_sequence, amino_directions)
-            protein.build_no_function()
 
         best_rating: int = protein.protein_rating
 
@@ -79,7 +53,7 @@ class HillClimber():
             new_direction = rd.choice([direction for direction in [-2, -1, 1, 2] if direction != amino_directions[index]])
 
             # Copy amino directions with new direction added
-            new_amino_directions: list[int] = copy.deepcopy(amino_directions)
+            new_amino_directions: list[int] = amino_directions[:]
             new_amino_directions[index] = new_direction
 
             # Create new Protein object and sequence
@@ -109,13 +83,3 @@ class HillClimber():
 
             score_list.append(best_rating)
         return best_rating, protein, score_list
-
-    def output_csv(self) -> None:
-        """Saves histogram data into a csv file."""
-        with open(f"data/histogram_data/{self.folder}/hill_climber_{self.protein_sequence}.csv", 'w', newline = '') as csvfile:
-            writer = csv.writer(csvfile)
-
-            for histogram in self.histogram_data:
-                writer.writerow(histogram)
-
-        csvfile.close()

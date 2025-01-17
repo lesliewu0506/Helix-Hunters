@@ -1,8 +1,7 @@
 import random as rd
-import csv
 import numpy as np
-import src.visualisation.plot_functions as plot
 
+from src.utils.helpers import save_and_visualize_results
 from .hill_climber import HillClimber
 
 class SimulatedAnnealing(HillClimber):
@@ -33,17 +32,10 @@ class SimulatedAnnealing(HillClimber):
                 best_score_list.append(best_score)
             
             self.histogram_data.append(best_score_list)
-        # Plot and save best protein structure
-        base_path = "data/protein_annealing_folds/"
 
-        if self.best_protein is not None:
-            plot.hill_visualizer(self.protein_sequence, self.best_score_list, show_plot = show_plot, save_plot = save_plot, file_path = f"{base_path}{self.folder}", algorithm = "Simulated Annealing")
-            plot.histogram(self.protein_sequence, self.histogram_data[-1], iterations = iterations, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}", algorithm = "Simulated Annealing")
-            plot.visualize(self.best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}/best_annealing_fold")
-            self.best_protein.output_csv(f"{base_path}{self.folder}/output")
-
-        if save_data:
-            self.output_csv()
+        # Save and visualize protein
+        save_and_visualize_results(self.best_protein, algorithm = "Simulated Annealing", histogram_data = self.histogram_data, 
+        histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data)
 
     def check_solution(self, new_rating: int, old_rating: int) -> bool:
         """
@@ -71,13 +63,3 @@ class SimulatedAnnealing(HillClimber):
         """Updates temperature based on exponential decay."""
         alpha: float = 0.999
         self.T = self.T * alpha
-
-    def output_csv(self) -> None:
-        """Saves histogram data into a csv file."""
-        with open(f"data/histogram_data/{self.folder}/annealing_{self.protein_sequence}.csv", 'w', newline = '') as csvfile:
-            writer = csv.writer(csvfile)
-
-            for histogram in self.histogram_data:
-                writer.writerow(histogram)
-
-        csvfile.close()

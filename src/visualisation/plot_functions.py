@@ -7,7 +7,7 @@ from typing import Optional
 # ========================================================================================================
 # Start Visualize protein structure
 # ========================================================================================================
-def visualize(protein: Protein, show: bool = True, save: bool = False, file_path: str = "output") -> None:
+def visualize(protein: Protein, algorithm: str, show: bool = True, save: bool = False, file_path: str = "output") -> None:
     """
     Main function for visualizing the protein structure.
     It uses the Protein class to retrieve a structure.
@@ -19,9 +19,9 @@ def visualize(protein: Protein, show: bool = True, save: bool = False, file_path
     if protein.protein_rating == 1:
         return None
 
-    _plot_structure(protein, show, save, file_path)
+    _plot_structure(protein, algorithm, show, save, file_path)
     
-def _plot_structure(protein: Protein, show: bool, save: bool, file_path: str) -> None:
+def _plot_structure(protein: Protein, algorithm: str, show: bool, save: bool, file_path: str) -> None:
     """
     Plots the entire protein structure with the amino acids,
     sequential connections and polar connections.
@@ -63,11 +63,11 @@ def _plot_structure(protein: Protein, show: bool, save: bool, file_path: str) ->
     # Dummy plot for legend
     _plot_legend(color_map)
 
-    plt.title(f"2D protein plot \nProtein:{protein_sequence}\nscore: {protein.get_rating()}")
+    plt.title(f"2D protein plot\nAlgortihm: {algorithm} \nProtein: {protein_sequence}\nscore: {protein.get_rating()}")
     plt.legend(loc = 'best')
     plt.axis('off')
     if save:
-        plt.savefig(f"{file_path}.png", dpi = 600)
+        plt.savefig(f"{file_path}/best_{algorithm}_fold.png", dpi = 600)
     if show:
         plt.show()
     else:
@@ -196,7 +196,7 @@ def histogram(protein_sequence: str, score: list[int], iterations: int, show: bo
 # ========================================================================================================
 # Start Hill Climber iterations plot
 # ========================================================================================================
-def hill_visualizer(protein_sequence: str, score_list: list[int], show_plot: bool, save_plot: bool, file_path: str, algorithm: str) -> None:
+def hill_visualizer(protein_sequence: str, score_list: list[int], show: bool, save: bool, file_path: str, algorithm: str) -> None:
     """Creates a plot for the evolution of the protein score with the hill climb algorithm."""
     plt.figure(figsize = (10,10))
     plt.plot(list(range(1, len(score_list) + 1)), score_list, label = "Score Progression")
@@ -210,10 +210,10 @@ def hill_visualizer(protein_sequence: str, score_list: list[int], show_plot: boo
 
     plt.tight_layout()
 
-    if save_plot:
+    if save:
         plt.savefig(f"{file_path}/{algorithm}_visualizer.png", dpi = 600)
 
-    if show_plot:
+    if show:
         plt.show()
     else:
         plt.close()

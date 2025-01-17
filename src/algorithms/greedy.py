@@ -1,8 +1,6 @@
 import random as rd
-import csv
 
-import src.visualisation.plot_functions as plot
-
+from src.utils.helpers import save_and_visualize_results
 from src.classes.protein import Protein
 
 class Greedy():
@@ -14,31 +12,14 @@ class Greedy():
         self.best_score: int = 0
         self.best_protein: Protein | None = None
 
-        self.protein_sequence_map = {"HHPHHHPHPHHHPH" : "1",
-                                    "HPHPPHHPHPPHPHHPPHPH" : "2",
-                                    "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP" : "3",
-                                    "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH" : "4",
-                                    "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP" : "5",
-                                    "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC" : "6",
-                                    "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH" : "7",
-                                    "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" : "8"}
-        self.folder = self.protein_sequence_map[protein_sequence]
-
     def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 10000) -> None:
         """Greedily generates sequences for a protein and calculates the scores."""
         for _ in range(repeats):
             self._greedy_iterated(iterations)
 
-        # Plot histogram and visualize protein
-        base_path = "data/protein_greedy_folds/"
-       
-        if self.best_protein is not None:
-            plot.histogram(self.protein_sequence, self.histogram_data[-1], iterations, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}", algorithm = "Greedy")
-            plot.visualize(self.best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}/best_greedy_fold")
-            self.best_protein.output_csv(f"{base_path}{self.folder}/output")
-
-        if save_data:
-            self.output_csv()
+        # Save and visualize protein
+        save_and_visualize_results(self.best_protein, algorithm = "Greedy", histogram_data = self.histogram_data, 
+        histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data)
 
     def _greedy_iterated(self, n: int) -> None:
         """
@@ -130,13 +111,3 @@ class Greedy():
 
         # Randomly choose one of the best directions
         return rd.choice(best_directions)
-
-    def output_csv(self) -> None:
-        """Saves histogram data into a csv file."""
-        with open(f"data/histogram_data/{self.folder}/greedy_{self.protein_sequence}.csv", 'w', newline = '') as csvfile:
-            writer = csv.writer(csvfile)
-
-            for histogram in self.histogram_data:
-                writer.writerow(histogram)
-
-        csvfile.close()
