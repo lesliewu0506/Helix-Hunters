@@ -42,7 +42,7 @@ class Protein():
             self.structure = structure
             self.protein_rating = Rating(self.structure.get_structure()).get_rating()
 
-    def output_csv(self, file_path: Optional[str] = "output") -> None:
+    def output_csv(self, file_path: str = "output") -> None:
         """
         Creates a csv file containing the amino acids and their fold.
         Uses 'file_path' as output directory. 
