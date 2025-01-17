@@ -37,8 +37,8 @@ class SimulatedAnnealing(HillClimber):
         base_path = "data/protein_annealing_folds/"
 
         if self.best_protein is not None:
-            plot.hill_visualizer(self.protein_sequence, self.best_score_list, show_plot = show_plot, save_plot = save_plot, file_path = f"{base_path}{self.folder}")
-            plot.histogram(self.protein_sequence, self.histogram_data[-1], iterations = iterations, show = show_plot, save = save_plot, file_path = f"data/histogram_data/{self.folder}", algorithm = "Simulated Annealing")
+            plot.hill_visualizer(self.protein_sequence, self.best_score_list, show_plot = show_plot, save_plot = save_plot, file_path = f"{base_path}{self.folder}", algorithm = "Simulated Annealing")
+            plot.histogram(self.protein_sequence, self.histogram_data[-1], iterations = iterations, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}", algorithm = "Simulated Annealing")
             plot.visualize(self.best_protein, show = show_plot, save = save_plot, file_path = f"{base_path}{self.folder}/best_annealing_fold")
             self.best_protein.output_csv(f"{base_path}{self.folder}/output")
 
