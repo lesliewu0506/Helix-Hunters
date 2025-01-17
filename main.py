@@ -20,9 +20,9 @@ if __name__ == "__main__":
     # This is only for demonstration purposes.
 
     # Generate all possible folding structures
-    # generate_all_foldings(protein_sequences[0])
+    generate_all_foldings(protein_sequences[0])
     # # Try all possible combinations
-    brute_force(protein_sequences[0], save = True)
+    # brute_force(protein_sequences[0], save = True)
 
     # =========================== Random ===============================
     # for protein_sequence in protein_sequences:

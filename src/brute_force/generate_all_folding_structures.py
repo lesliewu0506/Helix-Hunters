@@ -2,8 +2,16 @@ import itertools
 import csv
 
 from src.utils.helpers import direction_translator
-from src.classes.grid import Grid
 from typing import Optional
+
+# Maps direction to a change in x and y
+direction_map = {
+    0 : (0, 0),
+    1 : (1, 0),
+    -1 : (-1, 0),
+    2: (0, 1),
+    -2: (0, -1)
+}
 
 def generate_all_foldings(protein_sequence: str) -> None:
     """
@@ -33,22 +41,30 @@ def _check_folding(folding: list[int]) -> Optional[list[int]]:
     Returns the list of directions if valid, else None.
     """
     abs_folding: list[int] = direction_translator(folding)
-    invalid_prefix: Optional[list[int]] = _check_valid_folding(abs_folding)
 
-    if invalid_prefix is None:
+    if _check_valid_folding(abs_folding):
         return abs_folding
     return None
 
-def _check_valid_folding(folding: list[int]) -> Optional[list[int]]:
+def _check_valid_folding(folding: list[int]) -> bool:
     """
     Helper function that checks a folding sequence.
-    If folding is not valid, returns [0].
-    Else return None.
+    If folding is not valid, returns False.
+    Else return True.
     """
-    dummy_sequence = 'H' * len(folding)
-    grid = Grid(dummy_sequence, folding)
+    coordinates: set[tuple[int, int]] = set()
+    x_current: int = 0
+    y_current: int = 0
 
-    if grid.create_structure():
-        return None
-
-    return [0]
+    # Add coordinates
+    for direction in folding:
+        if (x_current, y_current) in coordinates:
+            return False
+        else:
+            coordinates.add((x_current, y_current))
+        
+        # Update positions
+        dx, dy = direction_map[direction]
+        x_current += dx
+        y_current += dy
+    return True
