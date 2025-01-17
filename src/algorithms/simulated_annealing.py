@@ -23,11 +23,11 @@ class SimulatedAnnealing(HillClimber):
         for _ in range(repeats):
             best_score_list: list[int] = []
             for _ in range(iterations):
-                best_score, protein, score_list = self._hill_climber(self.check_solution)
+                best_score, protein, score_progression_list = self._hill_climber(self._check_solution)
                 # Save best results
                 if best_score < self.best_score:
                     self.best_protein = protein
-                    self.best_score_list = score_list
+                    self.score_progression_list = score_progression_list
                     self.best_score = best_score
                 best_score_list.append(best_score)
             
@@ -40,7 +40,7 @@ class SimulatedAnnealing(HillClimber):
         else:
             print("Error: Did not find a valid protein.")
 
-    def check_solution(self, new_rating: int, old_rating: int) -> bool:
+    def _check_solution(self, new_rating: int, old_rating: int) -> bool:
         """
         Calculates the acceptance rate of a new change.
         Returns True if accepted, else False.

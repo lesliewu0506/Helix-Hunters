@@ -46,7 +46,7 @@ def random_fold(protein_sequence: str) -> list[int]:
         protein_sequence (str): The sequence of the protein.
 
     Returns:
-        A list of absolute direction.
+        A list of absolute directions.
     """
     relative_direction_list: list[int] = []
     random_choice = [0, 1, 2]

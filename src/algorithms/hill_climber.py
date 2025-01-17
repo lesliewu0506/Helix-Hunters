@@ -16,18 +16,18 @@ class HillClimber():
         self.histogram_data: list[list[int]] = []
         self.best_score: int = 0
         self.best_protein: Protein | None = None
-        self.best_score_list: list[int] = []
+        self.score_progression_list: list[int] = []
 
     def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 1000) -> None:
         """Uses hill climbing algorithm to improve a random generated sequence."""
         for _ in range(repeats):
             best_score_list: list[int] = []
             for _ in range(iterations):
-                best_score, protein, score_list = self._hill_climber()
+                best_score, protein, score_progression_list = self._hill_climber()
                 # Save best results
                 if best_score < self.best_score:
                     self.best_protein = protein
-                    self.best_score_list = score_list
+                    self.score_progression_list = score_progression_list
                     self.best_score = best_score
                 best_score_list.append(best_score)
             
@@ -41,7 +41,7 @@ class HillClimber():
             print("Error: Did not find a valid protein.")
     
     def _hill_climber(self, check_solution: Optional[Callable[[int, int], bool]] = None) -> tuple[int, Protein, list[int]]:
-        score_list: list[int] = []
+        score_progression_list: list[int] = []
         same_score_index: int = 0
         amino_directions: list[int] = random_fold(self.protein_sequence)
         protein: Protein = Protein(self.protein_sequence, amino_directions)
@@ -83,5 +83,5 @@ class HillClimber():
                     protein = protein_candidate
                     amino_directions = new_amino_directions
 
-            score_list.append(best_rating)
-        return best_rating, protein, score_list
+            score_progression_list.append(best_rating)
+        return best_rating, protein, score_progression_list
