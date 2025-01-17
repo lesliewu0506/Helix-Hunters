@@ -1,5 +1,5 @@
-from src.brute_force.brute_force import brute_force
-from src.brute_force.generate_all_folding_structures import generate_all_foldings
+from src.brute_force.Brute_Force import brute_force
+from src.brute_force.generate_all_folding_structures import generate_all_foldings, _check_valid_folding
 from src.algorithms.randomise import Random 
 from src.algorithms.greedy import Greedy
 from src.algorithms.hill_climber import HillClimber
@@ -20,9 +20,9 @@ if __name__ == "__main__":
     # This is only for demonstration purposes.
 
     # Generate all possible folding structures
-    # generate_all_foldings(protein_sequences[1])
+    generate_all_foldings(protein_sequences[0])
     # # Try all possible combinations
-    brute_force(protein_sequences[0], save = True)
+    # brute_force(protein_sequences[0], save = True)
 
     # =========================== Random ===============================
     # for protein_sequence in protein_sequences:

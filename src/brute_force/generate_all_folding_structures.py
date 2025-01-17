@@ -60,8 +60,7 @@ def _check_valid_folding(folding: list[int]) -> bool:
     for direction in folding:
         if (x_current, y_current) in coordinates:
             return False
-        else:
-            coordinates.add((x_current, y_current))
+        coordinates.add((x_current, y_current))
         
         # Update positions
         dx, dy = direction_map[direction]
