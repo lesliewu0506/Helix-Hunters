@@ -21,8 +21,7 @@ def brute_force(sequence: str, save: bool = False) -> None:
     Finally saves the directions into a csv file.
     """
     folder = protein_sequence_map[sequence]
-    # num_processes: int = multiprocessing.cpu_count()
-    num_processes: int = 16
+    num_processes: int = multiprocessing.cpu_count()
     best_score = 0
     best_structures: list[Protein] = []
 
