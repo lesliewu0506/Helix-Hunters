@@ -43,10 +43,38 @@ void generate_all_foldings(const char* protein_sequence)
     {
         total *= 3;
     }
-    printf("%lli\n", total);
 
     // Create buffer to store relative directions
     int* relative_directions = (int*)malloc(sizeof(int) * (length - 2));
+
+    // Turn every value into base 3 to get all relative direction combinations
+    for (unsigned long long int value = 0; value < total; value++)
+    {
+        unsigned long long int temp = value;
+        for (int i = length - 3; i >= 0; i--)
+        {
+            relative_directions[i] = temp % 3;
+            temp /= 3;
+        }
+        // Add first and last amino acid directions
+        relative_directions[0] = 1;
+        relative_directions[-1] = 0;
+        int* result = relative_directions;
+
+        // Write to CSV
+        if (result != NULL)
+        {
+            for (int i = 0; i < length; i++)
+            {
+                fprintf(file, "%i", result[i]);
+                if (i < length - 1)
+                {
+                    fprintf(file, ",");
+                }
+            }
+            fprintf(file, "\n");
+        }
+    }
 
     // Close file and free memory
     fclose(file);
