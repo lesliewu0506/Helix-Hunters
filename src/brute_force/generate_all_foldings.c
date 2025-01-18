@@ -12,11 +12,16 @@ static const int direction_map[4][3] =
     { 1, -2, -1}
 };
 
+static const int DX[5] = {0, 1, -1, 0, 0};
+static const int DY[5] = {0, 0, 0, 1, -1};
+
 // Function prototypes
 void generate_all_foldings(const char* protein_sequence);
 int* check_folding(int* rel_dir, int protein_length);
-void direction_translator(int* rel_dir, int* absolute, int relative_length);
+void direction_translator(const int* rel_dir, int* absolute, int relative_length);
 int direction_to_row(int direction);
+bool check_valid_folding(const int* absolute_directions, int protein_length);
+int direction_to_index(int direction);
 
 // Main
 int main(int argc, char** argv)
@@ -101,11 +106,16 @@ int* check_folding(int* relative_directions, int protein_length)
     int relative_length = protein_length - 2;
     direction_translator(relative_directions, absolute_directions, relative_length);
 
-    return absolute_directions;
+    if (check_valid_folding(absolute_directions, protein_length))
+    {
+        return absolute_directions;
+    }
+
+    return NULL;
 }
 
 // Translates array from relative directions to absolute directions
-void direction_translator(int* relative_directions, int* absolute_directions, int relative_length)
+void direction_translator(const int* relative_directions, int* absolute_directions, int relative_length)
 {
     // Start with first direction
     int current_direction = 1;
@@ -125,7 +135,7 @@ void direction_translator(int* relative_directions, int* absolute_directions, in
     absolute_directions[relative_length + 1] = 0;
 }
 
-// Helper function for translating absolute direction to index row for mapping
+// Helper function for translating absolute direction to row index for mapping
 int direction_to_row(int direction) 
 {
     // Use switch instead of if else statements
@@ -135,5 +145,53 @@ int direction_to_row(int direction)
         case -1: return 1;
         case 2:  return 2;
         case -2: return 3;
+    }
+}
+
+// Check if there are collisions in protein fold
+bool check_valid_folding(const int* absolute_directions, int protein_length)
+{
+    // Use two arrays to save coordinates
+    int x_coordinates[60] = {};
+    int y_coordinates[60] = {};
+
+    int x_current = 0;
+    int y_current = 0;
+    int visited_count = 0;
+
+    for (int i = 0; i < protein_length; i++)
+    {
+        // First check if already visited
+        for (int j = 0; j < visited_count; j++)
+        {
+            if (x_coordinates[j] == x_current && y_coordinates[j] == y_current)
+            {
+                return false;
+            }
+        }
+        // Add coordinates to visited
+        x_coordinates[i] = x_current;
+        y_coordinates[i] = y_current;
+        visited_count++;
+
+        // Update coordinates
+        int direction_index = direction_to_index(absolute_directions[i]);
+        x_current += DX[direction_index];
+        y_current += DY[direction_index];
+    }
+    return true;
+}
+
+// Helper function for translating absolute directions to index for mapping
+int direction_to_index(int direction)
+{    
+    // Use switch instead of if else statements
+    switch(direction) 
+    {
+        case 0:  return 0;
+        case 1:  return 1;
+        case -1: return 2;
+        case 2:  return 3;
+        case -2: return 4;
     }
 }
