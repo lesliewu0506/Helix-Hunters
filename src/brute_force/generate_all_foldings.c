@@ -28,7 +28,7 @@ void generate_all_foldings(const char* protein_sequence)
     // Create CSV file
     char filename[256];
     sprintf(filename, "%s.csv", protein_sequence);
-    FILE * file = fopen(filename, "w");
+    FILE* file = fopen(filename, "w");
 
     // Check for error in opening file
     if (!file)
@@ -37,5 +37,18 @@ void generate_all_foldings(const char* protein_sequence)
         return;
     }
 
+    // Calculate total amount of combinations
+    unsigned long long int total = 1;
+    for (int i = 0; i < length - 2; i++)
+    {
+        total *= 3;
+    }
+    printf("%lli\n", total);
 
+    // Create buffer to store relative directions
+    int* relative_directions = (int*)malloc(sizeof(int) * (length - 2));
+
+    // Close file and free memory
+    fclose(file);
+    free(relative_directions);
 }
