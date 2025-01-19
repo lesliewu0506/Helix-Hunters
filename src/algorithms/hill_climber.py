@@ -36,7 +36,7 @@ class HillClimber():
         # Save and visualize protein
         if self.best_protein is not None:
             save_and_visualize_results(self.best_protein, algorithm = "Hill Climber", histogram_data = self.histogram_data, 
-            histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data)
+            histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data, score_progression = self.score_progression_list)
         else:
             print("Error: Did not find a valid protein.")
     
@@ -47,9 +47,14 @@ class HillClimber():
         protein: Protein = Protein(self.protein_sequence, amino_directions)
         protein.build_no_function()
 
+        # Force valid solution
+        while protein.protein_rating == 1:
+            amino_directions = random_fold(self.protein_sequence)
+            protein: Protein = Protein(self.protein_sequence, amino_directions)
+            protein.build_no_function()
         best_rating: int = protein.protein_rating
 
-        while same_score_index < 300:
+        while same_score_index < 600:
             # Choose random amino acid in sequence and give it new direction
             index = rd.randrange(len(amino_directions))
             new_direction = rd.choice([direction for direction in [-2, -1, 1, 2] if direction != amino_directions[index]])
