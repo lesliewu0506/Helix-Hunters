@@ -11,7 +11,7 @@ class SimulatedAnnealing(HillClimber):
     The algorithm balances exploration and exploitation to find an optimal solution.
     """
 
-    def __init__(self, protein_sequence: str, temperature: int = 3):
+    def __init__(self, protein_sequence: str, temperature: int = 8):
         # Use init from Hill Climber class
         super().__init__(protein_sequence)
 
@@ -36,7 +36,7 @@ class SimulatedAnnealing(HillClimber):
         # Save and visualize protein
         if self.best_protein is not None:
             save_and_visualize_results(self.best_protein, algorithm = "Simulated Annealing", histogram_data = self.histogram_data, 
-            histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data)
+            histogram = self.histogram_data[-1], iterations = iterations, show_plot= show_plot, save_plot= save_plot, save_data= save_data, score_progression = self.score_progression_list)
         else:
             print("Error: Did not find a valid protein.")
 
@@ -64,5 +64,5 @@ class SimulatedAnnealing(HillClimber):
 
     def _update_temperature(self) -> None:
         """Updates temperature based on exponential decay."""
-        alpha: float = 0.999
+        alpha: float = 0.97
         self.T = self.T * alpha

@@ -18,7 +18,7 @@ class HillClimber():
         self.best_protein: Protein | None = None
         self.score_progression_list: list[int] = []
 
-    def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 1000) -> None:
+    def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 10000) -> None:
         """Uses hill climbing algorithm to improve a random generated sequence."""
         for _ in range(repeats):
             best_score_list: list[int] = []

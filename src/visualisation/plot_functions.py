@@ -199,9 +199,9 @@ def histogram(protein_sequence: str, score: list[int], iterations: int, show: bo
 # ========================================================================================================
 # Start Hill Climber iterations plot
 # ========================================================================================================
-def hill_visualizer(protein_sequence: str, score_list: list[int], show: bool, save: bool, file_path: str, algorithm: str) -> None:
+def score_progression(protein_sequence: str, score_list: list[int], show: bool, save: bool, file_path: str, algorithm: str) -> None:
     """Creates a plot for the evolution of the protein score with the hill climb algorithm."""
-    plt.figure(figsize = (10,10))
+    plt.figure(figsize = (12, 7))
     plt.plot(list(range(1, len(score_list) + 1)), score_list, label = "Score Progression")
     
     plt.title(f"{algorithm} Progression\nProtein: {protein_sequence}")
