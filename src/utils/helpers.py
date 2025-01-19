@@ -59,7 +59,8 @@ def random_fold(protein_sequence: str) -> list[int]:
 
 def direction_translator(directions: list[int]) -> list[int]:
     """
-    Translates relative paths (0, 1, 2) to absolute paths (-2, -1, 1, 2).
+    Translates relative paths (0, 1, 2) to absolute paths (-2, -1, 1, 2)
+    Also adds 1 and 0 at start and end respectively for correct format.
     
     Args:
         directions: A list of relative directions.
@@ -115,7 +116,7 @@ def save_and_visualize_results(
     base_path: str = f"data/protein_{algorithm_folder_map[algorithm]}_folds/{folder}"
 
     # Plots the progression of Hill Climber/Simulated Annealing algorithm
-    if algorithm in ["Hill Visualizer", "Simulated Annealing"]:
+    if algorithm in ["Hill Climber", "Simulated Annealing"]:
         plot.hill_visualizer(protein_sequence, score_progression, show = show_plot, save = save_plot, file_path = f"{base_path}", algorithm = algorithm)
     
     # Plots score distribution for one repeat of algorithm
