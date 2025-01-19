@@ -4,6 +4,7 @@ from src.algorithms.randomise import Random
 from src.algorithms.greedy import Greedy
 from src.algorithms.hill_climber import HillClimber
 from src.algorithms.simulated_annealing import SimulatedAnnealing
+
 protein_sequences = ["HHPHHHPHPHHHPH",
                      "HPHPPHHPHPPHPHHPPHPH",
                      "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP",
@@ -27,28 +28,28 @@ if __name__ == "__main__":
     # ======================================================================
     # Experiment
     # ======================================================================
-    # for protein_sequence in protein_sequences:
+    for protein_sequence in protein_sequences:
 
-    #     random = Random(protein_sequence)
-    #     random.run(save_plot = True, save_data = True, repeats = 100)
-    #     print(f"Best score for Random algorithm for protein {protein_sequence}: {random.best_score}")
+        random = Random(protein_sequence)
+        random.run(save_plot = True, save_data = True, repeats = 100)
+        print(f"Best score for Random algorithm for protein {protein_sequence}: {random.best_score}")
 
-    #     greedy = Greedy(protein_sequence)
-    #     greedy.run(save_plot = True, save_data = True, repeats = 100)
-    #     print(f"Best score for Greedy algorithm for protein {protein_sequence}: {greedy.best_score}")
+        greedy = Greedy(protein_sequence)
+        greedy.run(save_plot = True, save_data = True, repeats = 100)
+        print(f"Best score for Greedy algorithm for protein {protein_sequence}: {greedy.best_score}")
 
-    #     hillclimber = HillClimber(protein_sequence)
-    #     hillclimber.run(save_plot = True, save_data= True, repeats = 100)
-    #     print(f"Best score for Hill Climber algorithm for protein {protein_sequence}: {hillclimber.best_score}")
+        hillclimber = HillClimber(protein_sequence)
+        hillclimber.run(save_plot = True, save_data= True, repeats = 100)
+        print(f"Best score for Hill Climber algorithm for protein {protein_sequence}: {hillclimber.best_score}")
 
-    #     annealing = SimulatedAnnealing(protein_sequence)
-    #     annealing.run(save_plot = True, save_data= True, repeats = 100)
-    #     print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
+        annealing = SimulatedAnnealing(protein_sequence)
+        annealing.run(save_plot = True, save_data= True, repeats = 100)
+        print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
 
     # =========================== Random ===============================
     # for protein_sequence in protein_sequences:
     #     random = Random(protein_sequence)
-    #     random.run(save_plot = True, save_data = True, repeats = 1)
+    #     random.run(save_plot = True, save_data = True, repeats = 10)
 
     #     print(f"Best score for Random algorithm for protein {protein_sequence}: {random.best_score}")
 
@@ -67,9 +68,7 @@ if __name__ == "__main__":
     # ====================== Simulated Annealing ========================
     # for protein_sequence in protein_sequences:
     #     annealing = SimulatedAnnealing(protein_sequence)
-    #     annealing.run(save_plot = True, save_data= True, repeats = 1)
+    #     annealing.run(save_plot = True, save_data= True, repeats = 10)
 
     #     print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
-    annealing = SimulatedAnnealing(protein_sequences[-1])
-    annealing.run(show_plot = True, repeats = 1)
     pass

@@ -18,7 +18,7 @@ class SimulatedAnnealing(HillClimber):
         # Initiate current temperature
         self.T: float = temperature
     
-    def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 1000) -> None:
+    def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 10000) -> None:
         """Use hill climber algorithm with temperature to improve the sequence."""
         for _ in range(repeats):
             best_score_list: list[int] = []
