@@ -93,7 +93,7 @@ def _plot_structure(
     # Dummy plot for legend
     _plot_legend(color_map)
 
-    plt.title(f"2D protein plot\nAlgortihm: {algorithm} \nProtein: {protein_sequence}\nscore: {protein.get_rating()}")
+    plt.title(f"2D protein plot\nAlgortihm: {algorithm} \nProtein: {protein_sequence}\nscore: {protein.get_rating()}", fontsize = 12, fontweight = "bold")
     plt.legend(loc = "best")
     plt.axis("off")
 
