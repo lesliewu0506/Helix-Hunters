@@ -91,7 +91,7 @@ def save_and_visualize_results(
     save_plot: bool, 
     save_data: bool, 
     score_progression: list[int] = []
-) -> None:
+    ) -> None:
     """
     Saves and visualizes the results of the optimization algorithm.
 
@@ -123,7 +123,7 @@ def save_and_visualize_results(
     plot.histogram(protein_sequence, histogram, iterations = iterations, show = show_plot, save = save_plot, file_path = f"{base_path}", algorithm = algorithm)
 
     # Plots the best protein structure for one repeat of algorithm
-    plot.visualize(best_protein, algorithm, show = show_plot, save = save_plot, file_path = f"{base_path}")
+    plot.visualize_protein(best_protein, algorithm, show = show_plot, save = save_plot, file_path = f"{base_path}")
 
     if save_data:
         output_histogram_csv(protein_sequence, algorithm, histogram_data)
