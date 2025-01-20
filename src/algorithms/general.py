@@ -1,7 +1,6 @@
 from src.classes.protein import Protein
 from src.utils.helpers import save_and_visualize_results
-from typing import Optional, Callable, Union
-input_type = Union[int, Callable[[Optional[Callable[[int, int], bool]]], tuple[int, Protein, list[int]]]]
+from typing import Optional
 
 class General():
 
@@ -20,15 +19,16 @@ class General():
         save_data: bool,
         repeats: int, 
         iterations: int,
-        algorithm_function: Callable[[input_type], None],
-        check_solution_function: Optional[Callable[[int, int], bool]] = None
+        algorithm_function,
+        check_solution_function,
+        temperature: float = 1
         ) -> None:
 
         for _ in range(repeats):
             if algorithm in ["Hill Climber", "Simulated Annealing"]:
                 best_score_list: list[int] = []
                 for _ in range(iterations):
-                    best_score, protein, score_progression_list = algorithm_function(check_solution_function)
+                    best_score, protein, score_progression_list = algorithm_function(temperature, check_solution_function)
                     # Save best results
                     if best_score < self.best_score:
                         self.best_protein = protein

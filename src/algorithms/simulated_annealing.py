@@ -10,13 +10,13 @@ class SimulatedAnnealing(HillClimber):
     The algorithm balances exploration and exploitation to find an optimal solution.
     """
 
-    def __init__(self, protein_sequence: str, temperature: int = 8) -> None:
+    def __init__(self, protein_sequence: str, temperature: int = 2) -> None:
         # Use init from General Class
         super().__init__(protein_sequence)
 
         # Initiate current temperature
         self.T: float = temperature
-    
+
     def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 1000) -> None:
         """Use hill climber algorithm with temperature to improve the sequence."""
         self.run_algorithm(
@@ -27,9 +27,10 @@ class SimulatedAnnealing(HillClimber):
             repeats = repeats,
             iterations = iterations,
             algorithm_function = self._hill_climber,
-            check_solution_function = self._check_solution)
+            check_solution_function = self._check_solution,
+            temperature= self.T)
 
-    def _check_solution(self, new_rating: int, old_rating: int) -> bool:
+    def _check_solution(self, new_rating: int, old_rating: int, temperature: float) -> tuple[bool, float]:
         """
         Calculates the acceptance rate of a new change.
         Returns True if accepted, else False.
@@ -38,20 +39,20 @@ class SimulatedAnnealing(HillClimber):
 
         if delta <= 0:
             # Update temperature
-            self._update_temperature()
-            return True
+            temperature = self._update_temperature(temperature)
+            return True, temperature
         
-        probability: float = np.exp(-delta / self.T)
+        probability: float = np.exp(-delta / temperature)
 
         # Update temperature
-        self._update_temperature()
+        temperature = self._update_temperature(temperature)
         # Return if accepted new rating
         if rd.random() < probability:
-            return True
+            return True, temperature
         else: 
-            return False
+            return False, temperature
 
-    def _update_temperature(self) -> None:
+    def _update_temperature(self, temperature) -> float:
         """Updates temperature based on exponential decay."""
-        alpha: float = 0.97
-        self.T = self.T * alpha
+        temperature = temperature * 0.99
+        return temperature
