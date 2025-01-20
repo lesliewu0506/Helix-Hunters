@@ -15,7 +15,7 @@ class HillClimber(General):
     def __init__(self, protein_sequence: str) -> None:
         super().__init__(protein_sequence)
 
-    def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 10000) -> None:
+    def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 1000) -> None:
         """Uses hill climbing algorithm to improve a random generated sequence."""
         self.run_algorithm(
             algorithm = "Hill Climber",
@@ -36,8 +36,9 @@ class HillClimber(General):
         # Force valid solution
         while protein.protein_rating == 1:
             amino_directions = random_fold(self.protein_sequence)
-            protein: Protein = Protein(self.protein_sequence, amino_directions)
+            protein = Protein(self.protein_sequence, amino_directions)
             protein.build_no_function()
+
         best_rating: int = protein.protein_rating
 
         while same_score_index < 600:
