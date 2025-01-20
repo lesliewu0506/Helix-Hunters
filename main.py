@@ -66,9 +66,9 @@ if __name__ == "__main__":
 
     #     print(f"Best score for Hill Climber algorithm for protein {protein_sequence}: {hillclimber.best_score}")
     # ====================== Simulated Annealing ========================
-    for protein_sequence in protein_sequences:
-        annealing = SimulatedAnnealing(protein_sequence)
-        annealing.run(save_plot = True, save_data= True, repeats = 1)
+    # for protein_sequence in protein_sequences:
+    #     annealing = SimulatedAnnealing(protein_sequence)
+    #     annealing.run(save_plot = True, save_data= True, repeats = 1)
 
-        print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
+    #     print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
     pass
