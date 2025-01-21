@@ -1,7 +1,7 @@
 import random as rd
 import numpy as np
 
-from .hill_climber import HillClimber
+from . import HillClimber
 
 class SimulatedAnnealing(HillClimber):
     """

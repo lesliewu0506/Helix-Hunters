@@ -1,16 +1,12 @@
 # Import Brute Forcing Scripts
-from src.brute_force.Brute_Force import brute_force
-from src.brute_force.generate_all_folding_structures import generate_all_foldings
+from src.brute_force import brute_force, generate_all_foldings
 
 # Import Algorithms
-from src.algorithms.randomise import Random 
-from src.algorithms.greedy import Greedy
-from src.algorithms.hill_climber import HillClimber
-from src.algorithms.simulated_annealing import SimulatedAnnealing
+from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing
 
 # Import Helpers 
-from src.utils.experiment import run, view
-from src.utils.helpers import protein_sequences
+from src.utils import run, view
+from src.utils.constants import protein_sequences
 
 if __name__ == "__main__":
     # =========================== Brute Force ==========================
@@ -63,4 +59,6 @@ if __name__ == "__main__":
     #     annealing.run(save_plot = True, save_data= True, repeats = 1)
 
     #     print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
+    annealing = SimulatedAnnealing(protein_sequences[0])
+    annealing.run(show_plot= True, repeats = 1)
     pass

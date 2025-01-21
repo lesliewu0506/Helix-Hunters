@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from src.classes.protein import Protein
+from src.classes import Protein
 from typing import Optional
 
 # ====================================================================================================

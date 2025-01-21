@@ -1,9 +1,6 @@
-from src.algorithms.randomise import Random 
-from src.algorithms.greedy import Greedy
-from src.algorithms.hill_climber import HillClimber
-from src.algorithms.simulated_annealing import SimulatedAnnealing
-from src.visualisation.analyse_data import boxplot
-from src.utils.helpers import protein_sequence_map, protein_sequences
+from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing
+from src.visualisation import boxplot
+from src.utils.constants import protein_sequence_map, protein_sequences
 
 def run(repeats: int = 1, iterations: int = 10000) -> None:
     """Helper function for collecting data for all algorithms."""

@@ -1,8 +1,8 @@
 import random as rd
 
-from src.utils.helpers import direction_translator
-from src.classes.protein import Protein
-from .general import General
+from src.utils import direction_translator
+from src.classes import Protein
+from . import General
 
 class Greedy(General):
     """The Greedy random class generates a sequence for the folding direction."""

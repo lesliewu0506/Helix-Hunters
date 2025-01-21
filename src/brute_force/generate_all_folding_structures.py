@@ -1,7 +1,7 @@
 import itertools
 import csv
 
-from src.utils.helpers import direction_translator
+from src.utils import direction_translator
 from typing import Optional
 
 # Maps direction to a change in x and y

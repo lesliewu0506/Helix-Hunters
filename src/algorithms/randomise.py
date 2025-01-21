@@ -1,6 +1,6 @@
-from src.utils.helpers import random_fold
-from src.classes.protein import Protein
-from .general import General
+from . import General
+from src.utils import random_fold
+from src.classes import Protein
 
 class Random(General):
     """The Random class generates a random sequence for the folding direction"""

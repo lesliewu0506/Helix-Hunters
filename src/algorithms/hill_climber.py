@@ -1,9 +1,9 @@
 import random as rd
 
-from src.utils.helpers import random_fold
-from src.classes.protein import Protein
+from . import General
+from src.utils import random_fold
+from src.classes import Protein
 from typing import Callable, Optional
-from .general import General
 
 class HillClimber(General):
     """

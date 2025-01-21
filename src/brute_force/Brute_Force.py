@@ -1,8 +1,8 @@
 import multiprocessing
 import csv
 
-import src.visualisation.plot_functions as plot
-from src.classes.protein import Protein
+from src.visualisation import plot
+from src.classes import Protein
 
 protein_sequence_map: dict[str, str] = {
     "HHPHHHPHPHHHPH" : "1",
