@@ -125,7 +125,7 @@ def output_histogram_csv(protein_sequence: str, algorithm: str, histogram_data: 
         None
     """
     folder = protein_sequence_map[protein_sequence]
-    with open(f"data/histogram_data/{folder}/{algorithm}_{protein_sequence}.csv", 'w', newline = '') as csvfile:
+    with open(f"data/histogram_data/{folder}/{algorithm.title()}_{protein_sequence}.csv", 'w', newline = '') as csvfile:
         writer = csv.writer(csvfile)
 
         for histogram in histogram_data:
