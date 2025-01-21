@@ -3,16 +3,7 @@ from src.algorithms.greedy import Greedy
 from src.algorithms.hill_climber import HillClimber
 from src.algorithms.simulated_annealing import SimulatedAnnealing
 from src.visualisation.analyse_data import boxplot
-from src.utils.helpers import protein_sequence_map
-
-protein_sequences = ["HHPHHHPHPHHHPH",
-                     "HPHPPHHPHPPHPHHPPHPH",
-                     "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP",
-                     "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH",
-                     "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP",
-                     "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC",
-                     "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH",
-                     "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"]
+from src.utils.helpers import protein_sequence_map, protein_sequences
 
 def run(repeats: int = 1, iterations: int = 10000) -> None:
     """Helper function for collecting data for all algorithms."""
@@ -35,6 +26,14 @@ def run(repeats: int = 1, iterations: int = 10000) -> None:
         print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
 
     
-def view():
-    for protein_sequence in protein_sequences:
+def view(protein_sequence: str = "all") -> None:
+    """
+    Shows the boxplots for the different algorithms and saves the boxplots.
+    Takes in a protein sequence as argument and plots the corresponding boxplot.
+    If no argument is given, plots all boxplots.
+    """
+    if protein_sequence == "all":
+        for sequence in protein_sequences:
+            boxplot(sequence, protein_sequence_map[sequence])
+    else:
         boxplot(protein_sequence, protein_sequence_map[protein_sequence])

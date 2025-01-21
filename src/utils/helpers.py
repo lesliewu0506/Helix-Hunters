@@ -12,6 +12,20 @@ import src.visualisation.plot_functions as plot
 from src.classes.protein import Protein
 
 # ===============================================================
+# Protein Sequences
+# ===============================================================
+
+protein_sequences: list[str] = [
+    "HHPHHHPHPHHHPH",
+    "HPHPPHHPHPPHPHHPPHPH",
+    "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP",
+    "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH",
+    "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP",
+    "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC",
+    "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH",
+    "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"]
+
+# ===============================================================
 # Global Mappings
 # ===============================================================
 
