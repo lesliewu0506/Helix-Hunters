@@ -27,6 +27,7 @@ def boxplot(protein_sequence: str, folder: str):
     ax.grid(axis = "y", linestyle = "--", alpha = 0.85)
 
     plt.tight_layout()
+    plt.savefig(f"data/results/Distributions For {protein_sequence}.png", dpi = 600)
     plt.show()
 
 def import_data(protein_sequence: str, algorithm: str, folder: str) -> list[int]:

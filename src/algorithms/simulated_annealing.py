@@ -54,5 +54,5 @@ class SimulatedAnnealing(HillClimber):
 
     def _update_temperature(self, temperature) -> float:
         """Updates temperature based on exponential decay."""
-        temperature = temperature * 0.99
+        temperature = temperature * 0.6
         return temperature
