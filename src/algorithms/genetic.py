@@ -37,3 +37,6 @@ class Genetic():
                 writer.writerow(histogram)
 
         csvfile.close()
+
+
+
