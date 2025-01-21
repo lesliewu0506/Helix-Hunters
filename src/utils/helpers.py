@@ -8,7 +8,8 @@ used by various parts of the project wherever needed.
 """
 import random as rd
 import csv
-from src.visualisation import plot
+
+import src.visualisation.plot_functions as plot
 from src.classes import Protein
 from src.utils.constants import protein_sequence_map, algorithm_folder_map
 
@@ -21,11 +22,20 @@ def random_fold(protein_sequence: str) -> list[int]:
     Generates a random folding sequence using relative direction (0, 1, 2).
     Translates them into absolute direction (-2, -1, 1, 2).
 
-    Args:
-        protein_sequence (str): The sequence of the protein.
+    Parameter
+    ----------
+    protein_sequence : str
+        Protein sequence (for example `HHHPPPHPCCP`).
 
-    Returns:
+    Returns
+    -------
+    list[`int`]
         A list of absolute directions.
+
+    Notes
+    -----
+    This function does not check if the sequence collides with itself.
+    A seperate function is needed to check this.
     """
     relative_direction_list: list[int] = []
     random_choice = [0, 1, 2]
@@ -41,10 +51,14 @@ def direction_translator(directions: list[int]) -> list[int]:
     Translates relative paths (0, 1, 2) to absolute paths (-2, -1, 1, 2)
     Also adds 1 and 0 at start and end respectively for correct format.
     
-    Args:
-        directions: A list of relative directions.
+    Parameter
+    ---------
+    directions : list[`int`]
+        A list of relative directions.
 
-    Returns:
+    Returns
+    -------
+    list[`int`]
         A list of absolute directions.
     """
     direction_map: dict[int, list[int]] = {1: [2, 1, -2], -1: [-2, -1, 2], 2: [-1, 2, 1], -2: [1, -2, -1]}
@@ -72,21 +86,42 @@ def save_and_visualize_results(
     score_progression: list[int] = []
     ) -> None:
     """
-    Saves and visualizes the results of the optimization algorithm.
+    Main function for visualizing and saving the results of the optimization algorithm.
+    It plots the histogram for the distribution of scores of an algorithm for a protein sequence.
+    It also plots the best protein structure found from that particular algorithm.
+    Its structure is then written into a `CSV` file with a specific format.
+    If the algorithm is either `Hill Climber` or `Simulated Annealing`, it will also plot
+    and save the score progression plot.
+    It can also write the distribution of scores to a `CSV` file.
 
-    Args:
-        best_protein: The best Protein found.
-        algorithm: The name of the algorithm used.
-        histogram_data: Full histogram data for all runs.
-        histogram: Histogram data for last run.
-        iterations: Number of iterations per run for the algorithm.
-        show_plot: Whether to show the plots.
-        save_plot: Whether to save the plots to files.
-        save_data: Whether to save histogram data to CSV.
-        score_progression: The score progression over iterations (optional).
+    Parameters
+    ----------
+    best_protein : `Protein` object
+        Best protein object containing the sequence and folding structure.
 
-    Returns:
-        None
+    algorithm : str
+        The name of the algorithm used (for example `Hill Climber`).
+
+    histogram_data : list[list[`int`]]
+        List containing all the scores for multiple runs.
+
+    histogram : list[int]
+        Histogram data for last run.
+
+    iterations : int
+        Amount of iterations for the run.
+
+    show_plot : bool
+        Whether to show the plots.
+
+    save_plot : bool
+        Whether to save the plots.
+
+    save_data : bool
+        Whether to save histogram data to a `CSV` file.
+
+    score_progression: list[`int`], optional
+        The score progression over iterations. Default is empty list `[]`.
     """
     protein_sequence = best_protein.protein_sequence
 
@@ -112,17 +147,25 @@ def save_and_visualize_results(
 # File Operations
 # ===============================================================
 
-def output_histogram_csv(protein_sequence: str, algorithm: str, histogram_data: list[list[int]]) -> None:
+def output_histogram_csv(
+    protein_sequence: str,
+    algorithm: str,
+    histogram_data: list[list[int]]
+    ) -> None:
     """
-    Saves histogram data into a csv file.
+    Main function for saving the histogram data into a `CSV` file.
+    It writes the data into a designated location.
     
-    Args:
-        protein_sequence: The sequence of the protein.
-        algorithm: The name of the algorithm used.
-        histogram_data: Full histogram data for all runs.
+    Parameters
+    ----------
+    protein_sequence : str
+        Protein sequence (for example `HHHPPPHPCCP`).
 
-    Returns:
-        None
+    algorithm : str
+        The name of the algorithm used (for example `Hill Climber`).
+
+    histogram_data : list[list[`int`]]
+        List containing all the scores for multiple runs.
     """
     folder = protein_sequence_map[protein_sequence]
     with open(f"data/histogram_data/{folder}/{algorithm.title()}_{protein_sequence}.csv", 'w', newline = '') as csvfile:

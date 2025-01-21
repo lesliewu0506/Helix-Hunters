@@ -1,12 +1,12 @@
 # Import Brute Forcing Scripts
-from src.brute_force import brute_force, generate_all_foldings
+# from src.brute_force import brute_force, generate_all_foldings
 
 # Import Algorithms
 from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing
 
 # Import Helpers 
-from src.utils import run, view
-from src.utils.constants import protein_sequences
+from src.utils.experiment import view
+# from src.utils.constants import protein_sequences
 
 if __name__ == "__main__":
     # =========================== Brute Force ==========================
@@ -25,7 +25,7 @@ if __name__ == "__main__":
     # This will collect data for different algorithms.
     # # Repeats is how many times one algorithm should run.
     # # Per run there are then iterations amount of iterations.
-    run(repeats = 1, iterations = 10000)
+    # run(repeats = 10, iterations = 10000)
     # # View the boxplots for the different distributions
     # view()
 
@@ -55,8 +55,8 @@ if __name__ == "__main__":
 
     # ====================== Simulated Annealing ========================
     # for protein_sequence in protein_sequences:
-    #     annealing = SimulatedAnnealing(protein_sequence)
-    #     annealing.run(save_plot = True, save_data= True, repeats = 1)
+        # annealing = SimulatedAnnealing(protein_sequence)
+        # annealing.run(save_plot = True, save_data= True, repeats = 1)
 
     #     print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
     pass

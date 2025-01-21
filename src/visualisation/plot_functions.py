@@ -30,7 +30,7 @@ def visualize_protein(
     algorithm : str
         The name of the algorithm used (for example `Hill Climber`).
     
-    file_path: str
+    file_path : str
         Path to save the plots.
 
     show : bool, optional

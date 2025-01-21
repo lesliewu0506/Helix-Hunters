@@ -1,22 +1,57 @@
 import random as rd
 
 from . import General
-from src.utils import random_fold
+from src.utils.helpers import random_fold
 from src.classes import Protein
 from typing import Callable, Optional
 
 class HillClimber(General):
     """
-    The Hill Climber class generates a sequence for the folding direction.
-    Randomly changes a valid value. 
+    The Hill Climber class optimizes a protein structure.
+    It randomly changes a valid value in the protein structure. 
     Each improvement or equivalent solution is kept for the next iteration.
+
+    Parameter
+    ----------
+    protein_sequence : str
+        Protein sequence (for example `HHHPPPHPCCP`).
+
+    Notes
+    -----
+    This algorithm has built in support for Simulated Annealing.
     """
 
     def __init__(self, protein_sequence: str) -> None:
         super().__init__(protein_sequence)
 
-    def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 1000) -> None:
-        """Uses hill climbing algorithm to improve a random generated sequence."""
+    def run(
+        self,
+        show_plot: bool = False,
+        save_plot: bool = False,
+        save_data: bool = False,
+        repeats: int = 1,
+        iterations: int = 1000
+        ) -> None:
+        """
+        Runs the Hill Climber algorithm to optimize the protein structure.
+
+        Parameters
+        ----------
+        show_plot : bool, optional
+            If `True` show the plot. Default is `False`.
+
+        save_plot : bool, optional
+            If `True` save the plot. Default is `False`.
+
+        save_data : bool, optional
+            If `True`, saves the optimization results to a file. Default is `False`.
+
+        repeats : int, optional
+            The number of independent runs to perform. Default is `1`.
+
+        iterations : int, optional
+            The number of iterations per run. Default is `1000`.
+        """
         self.run_algorithm(
             algorithm = "Hill Climber",
             show_plot = show_plot,
@@ -26,7 +61,25 @@ class HillClimber(General):
             iterations = iterations,
             algorithm_function = self._hill_climber)
     
-    def _hill_climber(self, temperature: float, check_solution: Optional[Callable[[int, int, float], tuple[bool, float]]]) -> tuple[int, Protein, list[int]]:
+    def _hill_climber(
+        self,
+        temperature: float,
+        check_solution: Optional[Callable[[int, int, float], tuple[bool, float]]]
+        ) -> tuple[int, Protein, list[int]]:
+        """
+        Helper function that iteratively changes the protein structure and evaluated the results.
+        It accepts a change if the score of the protein improved or stayed the same.
+        The iterations stop when the score has not changed over 600 iterations.
+        It has optional arguments for Simulated Annealing.
+        It returns the best score, the `Protein` object and the list for scores for a score progression plot.
+
+        Notes
+        -----
+        There is a restriction on the first protein structure generated.
+        It forces to be a valid sequence.
+        Without this restriction most structures would still be invalid,
+        even after the algorithm.
+        """
         score_progression_list: list[int] = []
         same_score_index: int = 0
         amino_directions: list[int] = random_fold(self.protein_sequence)

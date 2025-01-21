@@ -1,9 +1,25 @@
 from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing
-from src.visualisation import boxplot
-from src.utils.constants import protein_sequence_map, protein_sequences
+from src.visualisation.boxplot import boxplot
+from src.utils.constants import protein_sequences
 
 def run(repeats: int = 1, iterations: int = 10000) -> None:
-    """Helper function for collecting data for all algorithms."""
+    """
+    Main function for running the experiment.
+    It will run every algorithm on every protein sequence, save the data and print the best score.
+    
+    Parameters
+    ----------
+    repeats : int, optional
+        The number of independent runs to perform. Default is `1`, due to run time.
+        
+    iterations : int, optional
+        The number of iterations per run. Default is `1000`, due to run time.
+    
+    Notes
+    -----
+    `Hill Climber` and `Simulated Annealing` have default `iterations = 1000`.
+    This is because their run time is extremely long for `10000` iterations.
+    """
     for protein_sequence in protein_sequences:
 
         random = Random(protein_sequence)
@@ -27,10 +43,15 @@ def view(protein_sequence: str = "all") -> None:
     """
     Shows the boxplots for the different algorithms and saves the boxplots.
     Takes in a protein sequence as argument and plots the corresponding boxplot.
-    If no argument is given, plots all boxplots.
+    If no argument is given, it will plot all boxplots.
+
+    Parameter
+    ---------
+    protein_sequence : str, optional
+        Protein sequence (for example `HHHPPPHPCCP`). Default is `"all"`
     """
     if protein_sequence == "all":
         for sequence in protein_sequences:
-            boxplot(sequence, protein_sequence_map[sequence])
+            boxplot(sequence)
     else:
-        boxplot(protein_sequence, protein_sequence_map[protein_sequence])
+        boxplot(protein_sequence)

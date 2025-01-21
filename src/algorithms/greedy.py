@@ -1,17 +1,51 @@
 import random as rd
 
-from src.utils import direction_translator
+from src.utils.helpers import direction_translator
 from src.classes import Protein
 from . import General
 
 class Greedy(General):
-    """The Greedy random class generates a sequence for the folding direction."""
+    """
+    The Greedy random class generates a sequence for the folding direction.
+    It uses a greedy algorithm every 5 iterations to try and improve the score.
+    
+    Parameter
+    ----------
+    protein_sequence : str
+        Protein sequence (for example `HHHPPPHPCCP`).
+    """
 
     def __init__(self, protein_sequence: str) -> None:
         super().__init__(protein_sequence)
 
-    def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 10000) -> None:
-        """Greedily generates sequences for a protein and calculates the scores."""
+    def run(
+        self,
+        show_plot: bool = False,
+        save_plot: bool = False,
+        save_data: bool = False,
+        repeats: int = 1,
+        iterations: int = 10000
+        ) -> None:
+        """
+        Runs the Greedily algorithm to generate a protein structure.
+
+        Parameters
+        ----------
+        show_plot : bool, optional
+            If `True` show the plot. Default is `False`.
+
+        save_plot : bool, optional
+            If `True` save the plot. Default is `False`.
+
+        save_data : bool, optional
+            If `True`, saves the optimization results to a file. Default is `False`.
+
+        repeats : int, optional
+            The number of independent runs to perform. Default is `1`.
+
+        iterations : int, optional
+            The number of iterations per run. Default is `10000`.
+        """
         self.run_algorithm(
             algorithm = "Greedy",
             show_plot = show_plot,
@@ -23,9 +57,16 @@ class Greedy(General):
 
     def _greedy_iterated(self, n: int) -> None:
         """
-        Iterates over multiple random generated folding sequences for a given protein string.
-        Plots the distribution of the scores in a histogram.
-        Shows the best structure that the random algorithm has generated.
+        Helper function that generates multiple protein structures for a given protein sequence.
+        For each iteration, it will use a mix of random and greedy algorithm to create the structure.
+        It saves the best protein and the distributions of scores.
+
+        Notes
+        -----
+        There is a restriction on the first protein structure generated.
+        It forces to be a valid sequence.
+        Without this restriction most structures would still be invalid,
+        even after the algorithm.
         """
         score_list: list[int] = []
 
@@ -47,10 +88,18 @@ class Greedy(General):
 
     def _greedy_fold(self, protein_sequence: str) -> list[int]:
         """
-        Generates a random folding sequence.
+        Helper function that generates a random folding sequence.
+        Every 5 iterations it will make a greedy decision.
         Uses relative directions (0, 1, 2) and translates them 
         into absolute directions (-2, -1, 1, 2).
         Returns the sequence as a list.
+
+        Notes
+        -----
+        Not implementing greedy decision on every iteration.
+        This would cause the function to check every possible direction.
+        The total run time would be enormous. That is why every fifth
+        iteration a greedy decision is made.
         """
         relative_direction_list: list[int] = []
         directions = [0, 1, 2]
@@ -69,8 +118,9 @@ class Greedy(General):
 
     def _check_greedy(self, direction_list: list[int]) -> int:
         """
-        Implements a greedy algorithm to find the best possible next direction.
-        Evaluates all possible continuations and selecting lowest score directions randomly if there are ties.
+        Helper function that implements a greedy algorithm to find the best possible next direction.
+        Evaluates all possible continuations and
+        selecting lowest score directions randomly if there are ties.
         """
         # Evaluate all possible next directions (0, 1, 2) and collect scores
         protein_scores = []

@@ -33,3 +33,9 @@ algorithm_folder_map: dict[str, str] = {
     "Simulated Annealing" : "annealing",
     "Plant Propagation" : "propagation",
     "Genetic Algorithm" : "genetic"}
+
+# ===============================================================
+# Algorithms
+# ===============================================================
+
+algorithms: list[str] = ["Random", "Greedy", "Hill Climber", "Simulated Annealing"]

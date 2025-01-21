@@ -1,24 +1,25 @@
 import multiprocessing
 import csv
 
-from src.visualisation import plot
+import src.visualisation.plot_functions as plot
 from src.classes import Protein
-
-protein_sequence_map: dict[str, str] = {
-    "HHPHHHPHPHHHPH" : "1",
-    "HPHPPHHPHPPHPHHPPHPH" : "2",
-    "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP" : "3",
-    "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH" : "4",
-    "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP" : "5",
-    "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC" : "6",
-    "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH" : "7",
-    "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" : "8"}
+from src.utils.constants import protein_sequence_map
 
 def brute_force(sequence: str, save: bool = False) -> None:
     """
-    Function that brute forces every possible combination.
-    Plots the best structure and prints the rating of the best structure.
-    Finally saves the directions into a csv file.
+    Main function that evaluates every possible protein structure.
+    It reads all the structures from a `CSV` file.
+    Using the `multiprocessing` module, it evaluates every structure with helper functions.
+    Plots and saves the best structure and prints the rating of the best structure.
+    Finally saves the directions into a `CSV` file.
+
+    Parameters
+    ----------
+    sequence : str
+        Protein sequence (for example `HHHPPPHPCCP`).
+
+    save : bool, optional
+        Whether to save the plots. Default is `False`.
     """
     folder = protein_sequence_map[sequence]
     num_processes: int = multiprocessing.cpu_count()
@@ -36,12 +37,12 @@ def brute_force(sequence: str, save: bool = False) -> None:
 
             # Process chunk when chunk size reached
             if len(chunk) == 1000000:
-                best_score, best_structures = process_chunk(sequence, chunk, best_score, best_structures, num_processes)
+                best_score, best_structures = _process_chunk(sequence, chunk, best_score, best_structures, num_processes)
                 chunk = []
 
         # Process final chunk
         if chunk:
-            best_score, best_structures = process_chunk(sequence, chunk, best_score, best_structures, num_processes)
+            best_score, best_structures = _process_chunk(sequence, chunk, best_score, best_structures, num_processes)
 
     csvfile.close()
 
@@ -52,8 +53,14 @@ def brute_force(sequence: str, save: bool = False) -> None:
 
     print(f"Best rating: {best_score}")
 
-def process_chunk(sequence: str, foldings: list[list[int]], best_score: int, best_structures: list[Protein], num_processes: int) -> tuple[int, list[Protein]]:
-    """Processes chunk in parallel and updates best_score and best_structures."""
+def _process_chunk(
+    sequence: str,
+    foldings: list[list[int]],
+    best_score: int,
+    best_structures: list[Protein],
+    num_processes: int
+    ) -> tuple[int, list[Protein]]:
+    """Helper function that processes chunks in parallel and updates best_score and best_structures."""
     with multiprocessing.Pool(num_processes) as pool:
         results = pool.map(evaluate_folding_wrapper, [(sequence, f) for f in foldings])
 
