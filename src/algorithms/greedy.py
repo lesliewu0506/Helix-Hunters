@@ -1,6 +1,6 @@
 import random as rd
 
-from src.utils.helpers import direction_translator
+from src.utils import direction_translator
 from src.classes import Protein
 from . import General
 

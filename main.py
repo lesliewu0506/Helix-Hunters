@@ -1,12 +1,12 @@
 # Import Brute Forcing Scripts
-# from src.brute_force import brute_force, generate_all_foldings
+from src.brute_force import brute_force, generate_all_foldings
 
 # Import Algorithms
 from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing
 
 # Import Helpers 
-from src.utils.experiment import view
-# from src.utils.constants import protein_sequences
+from src.utils import run, view
+from src.utils.constants import protein_sequences
 
 if __name__ == "__main__":
     # =========================== Brute Force ==========================
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # # Per run there are then iterations amount of iterations.
     # run(repeats = 10, iterations = 10000)
     # # View the boxplots for the different distributions
-    # view()
+    view(protein_sequences[-1])
 
     # ==================================================================
     # The following functions generate data for each algorithm seperately

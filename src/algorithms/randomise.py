@@ -1,5 +1,5 @@
 from . import General
-from src.utils.helpers import random_fold
+from src.utils import random_fold
 from src.classes import Protein
 
 class Random(General):

@@ -1,5 +1,5 @@
 from src.classes import Protein
-from src.utils.helpers import save_and_visualize_results
+from src.utils import save_and_visualize_results
 from typing import Optional
 
 class General():

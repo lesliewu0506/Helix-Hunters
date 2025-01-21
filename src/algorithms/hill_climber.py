@@ -1,7 +1,7 @@
 import random as rd
 
 from . import General
-from src.utils.helpers import random_fold
+from src.utils import random_fold
 from src.classes import Protein
 from typing import Callable, Optional
 
