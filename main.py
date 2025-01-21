@@ -4,7 +4,7 @@ from src.algorithms.randomise import Random
 from src.algorithms.greedy import Greedy
 from src.algorithms.hill_climber import HillClimber
 from src.algorithms.simulated_annealing import SimulatedAnnealing
-from src.visualisation.analyse_data import import_data
+from src.visualisation.analyse_data import import_data, histogram_3d
 
 protein_sequences = ["HHPHHHPHPHHHPH",
                      "HPHPPHHPHPPHPHHPPHPH",
@@ -72,5 +72,5 @@ if __name__ == "__main__":
     #     annealing.run(save_plot = True, save_data= True, repeats = 1)
 
     #     print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
-    print(import_data(protein_sequences[0], "Hill Climber", "1"))
+    histogram_3d(protein_sequences[-1], "8")
     pass
