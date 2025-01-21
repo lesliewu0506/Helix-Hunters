@@ -20,7 +20,7 @@ class General():
         repeats: int, 
         iterations: int,
         algorithm_function,
-        check_solution_function,
+        check_solution_function = None,
         temperature: float = 1
         ) -> None:
 

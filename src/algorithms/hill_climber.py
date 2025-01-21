@@ -26,7 +26,7 @@ class HillClimber(General):
             iterations = iterations,
             algorithm_function = self._hill_climber)
     
-    def _hill_climber(self, temperature: float = 1, check_solution: Optional[Callable[[int, int, float], tuple[bool, float]]] = None) -> tuple[int, Protein, list[int]]:
+    def _hill_climber(self, temperature: float, check_solution: Optional[Callable[[int, int, float], tuple[bool, float]]]) -> tuple[int, Protein, list[int]]:
         score_progression_list: list[int] = []
         same_score_index: int = 0
         amino_directions: list[int] = random_fold(self.protein_sequence)

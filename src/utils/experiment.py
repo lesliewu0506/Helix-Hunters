@@ -15,11 +15,11 @@ def run(repeats: int = 1, iterations: int = 10000) -> None:
         print(f"Best score for Greedy algorithm for protein {protein_sequence}: {greedy.best_score}")
 
         hillclimber = HillClimber(protein_sequence)
-        hillclimber.run(save_plot = True, save_data= True, repeats = repeats, iterations = iterations / 10)
+        hillclimber.run(save_plot = True, save_data= True, repeats = repeats, iterations = iterations // 10)
         print(f"Best score for Hill Climber algorithm for protein {protein_sequence}: {hillclimber.best_score}")
 
         annealing = SimulatedAnnealing(protein_sequence)
-        annealing.run(save_plot = True, save_data= True, repeats = repeats, iterations = iterations / 10)
+        annealing.run(save_plot = True, save_data= True, repeats = repeats, iterations = iterations // 10)
         print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
 
     

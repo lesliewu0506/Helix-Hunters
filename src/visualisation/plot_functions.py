@@ -101,7 +101,7 @@ def _plot_structure(
         if algorithm == "Brute Force":
             plt.savefig(f"{file_path}.png", dpi = 600)
         else:
-            plt.savefig(f"{file_path}/best_{algorithm}_fold.png", dpi = 600)
+            plt.savefig(f"{file_path}/{algorithm} Best Fold.png", dpi = 600)
     if show:
         plt.show()
 
@@ -264,7 +264,7 @@ def histogram(
     plt.tight_layout()
 
     if save:
-        string = f"Protein_score_distribution_{algorithm}"
+        string = f"Protein Score Distribution {algorithm}"
         plt.savefig(f"{file_path}/{string}.png", dpi = 600)
 
     if show:
@@ -330,7 +330,7 @@ def score_progression(
     plt.tight_layout()
 
     if save:
-        plt.savefig(f"{file_path}/{algorithm}_score_progression.png", dpi = 600)
+        plt.savefig(f"{file_path}/{algorithm} Score Progression.png", dpi = 600)
 
     if show:
         plt.show()

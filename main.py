@@ -25,7 +25,7 @@ if __name__ == "__main__":
     # This will collect data for different algorithms.
     # # Repeats is how many times one algorithm should run.
     # # Per run there are then iterations amount of iterations.
-    # run(repeats = 1, iterations = 10000)
+    run(repeats = 1, iterations = 10000)
     # # View the boxplots for the different distributions
     # view()
 

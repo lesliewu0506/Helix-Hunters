@@ -2,7 +2,7 @@ import csv
 import matplotlib.pyplot as plt
 import numpy as np
 
-algorithms: list[str] = ["random", "greedy", "Hill Climber", "Simulated Annealing"]
+algorithms: list[str] = ["Random", "Greedy", "Hill Climber", "Simulated Annealing"]
 
 def boxplot(protein_sequence: str, folder: str):
     data_structure: dict[str, list[int]] = create_data_structure(protein_sequence, folder)
