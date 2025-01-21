@@ -4,42 +4,28 @@ import numpy as np
 
 algorithms: list[str] = ["random", "greedy", "Hill Climber", "Simulated Annealing"]
 
-def histogram_3d(protein_sequence: str, folder: str):
-    data: dict[str, list[list[int]]] = create_data_structure(protein_sequence, folder)
-    min_score: int = get_min(data)
-
-    bins = np.arange(min_score - 0.5, 1.5, 1)
-
-    frequency_data: list[int] = []
-    for algorithm in algorithms:
-        # weights = np.ones_like(data[algorithm]) / len(data[algorithm])
-        histogram, _ = np.histogram(data[algorithm], bins = bins, density = True)
-        frequency_data.append(histogram)
-
-    frequency_data = np.array(frequency_data)
-
-    fig = plt.figure(figsize = (12, 7))
-    ax = fig.add_subplot(111, projection = "3d")
-
-    xpos, ypos = np.meshgrid(bins[:-1], range(len(algorithms)))
-    xpos = xpos.flatten()
-    ypos = ypos.flatten()
-    zpos = np.zeros_like(xpos)
+def boxplot(protein_sequence: str, folder: str):
+    data_structure: dict[str, list[int]] = create_data_structure(protein_sequence, folder)
+    algorithm_list: list[str] = list(data_structure.keys())
+    data_list: list[list[int]] = [data for data in data_structure.values()]
+    min_score: int = get_min(data_structure)
     
-    dx = dy = 0.5
-    dz = frequency_data.flatten()
+    fig, ax = plt.subplots(figsize = (12, 7))
+    box = ax.boxplot(data_list, patch_artist = True, labels = algorithm_list)
 
-    colors = plt.cm.plasma(np.linspace(0, 1, len(algorithms)))
-    bar_colors = np.repeat(colors, len(bins) - 1, axis=0)
-    
-    ax.bar3d(xpos, ypos, zpos, dx, dy, dz, color = bar_colors, alpha = 0.85, edgecolor='k')
+    # Customize boxplot appearance
+    colors = plt.cm.viridis(np.linspace(0, 1, len(algorithms)))
+    for patch, color in zip(box['boxes'], colors):
+        patch.set_facecolor(color)
+        patch.set_alpha(0.85)
 
-    ax.set_xlabel("Scores", fontsize = 12)
-    ax.set_ylabel("Algorithms", fontsize = 12)
-    ax.set_yticks(range(len(algorithms)))
-    ax.set_yticklabels(algorithms, fontsize = 10)
-    ax.set_zlabel("Normalized Frequency", fontsize = 12)
-    plt.title("3D Histogram of Normalized Score Distribution by Algorithm", fontsize = 14)
+    ax.set_title(f"Protein Score Distribution for Different Algorithms\nProtein Sequence: {protein_sequence}", fontsize = 14, fontweight = "bold")
+    ax.set_xlabel("Algorithm", fontsize = 12)
+    ax.set_ylabel("Score", fontsize = 12)
+
+    ax.set_ylim(min_score - 1 , 2)
+    ax.grid(axis = "y", linestyle = "--", alpha = 0.85)
+
     plt.tight_layout()
     plt.show()
 

@@ -4,7 +4,7 @@ from src.algorithms.randomise import Random
 from src.algorithms.greedy import Greedy
 from src.algorithms.hill_climber import HillClimber
 from src.algorithms.simulated_annealing import SimulatedAnnealing
-from src.visualisation.analyse_data import histogram_3d
+from src.visualisation.analyse_data import boxplot
 from src.utils.experiment import run
 
 protein_sequences = ["HHPHHHPHPHHHPH",
@@ -33,7 +33,7 @@ if __name__ == "__main__":
     # This will collect data for different algorithms.
     # Repeats is how many times one algorithm should run.
     # Per run there are then iterations amount of iterations.
-    run(repeats = 1, iterations = 10000)
+    # run(repeats = 1, iterations = 10000)
 
     # =========================== Random ===============================
     # for protein_sequence in protein_sequences:
@@ -60,5 +60,5 @@ if __name__ == "__main__":
     #     annealing.run(save_plot = True, save_data= True, repeats = 1)
 
     #     print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
-    histogram_3d(protein_sequences[-1], "8")
+    boxplot(protein_sequences[0], "1")
     pass
