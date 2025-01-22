@@ -34,6 +34,8 @@ algorithm_folder_map: dict[str, str] = {
     "Plant Propagation" : "propagation",
     "Genetic Algorithm" : "genetic"}
 
+color_map = {"H" : "red", "P" : "blue", "C" : "green"}
+
 # ===============================================================
 # Algorithms
 # ===============================================================
