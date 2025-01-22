@@ -9,14 +9,17 @@ class Greedy(General):
     The Greedy random class generates a sequence for the folding direction.
     It uses a greedy algorithm every 5 iterations to try and improve the score.
     
-    Parameter
+    Parameters
     ----------
+    dimension : int
+        The dimension in which the folding takes place (`2` or `3`).
+
     protein_sequence : str
         Protein sequence (for example `HHHPPPHPCCP`).
     """
 
-    def __init__(self, protein_sequence: str) -> None:
-        super().__init__(protein_sequence)
+    def __init__(self, protein_sequence: str, dimension: int) -> None:
+        super().__init__(protein_sequence, dimension)
 
     def run(
         self,

@@ -2,13 +2,16 @@ from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing
 from src.visualisation.boxplot import boxplot
 from src.utils.constants import protein_sequences
 
-def run(repeats: int = 1, iterations: int = 10000) -> None:
+def run(dimension: int = 2, repeats: int = 1, iterations: int = 10000) -> None:
     """
     Main function for running the experiment.
     It will run every algorithm on every protein sequence, save the data and print the best score.
     
     Parameters
     ----------
+    dimension : int, optional
+        The dimension in which the folding takes place (`2` or `3`). Default is `3`.
+
     repeats : int, optional
         The number of independent runs to perform. Default is `1`, due to run time.
         
@@ -22,19 +25,19 @@ def run(repeats: int = 1, iterations: int = 10000) -> None:
     """
     for protein_sequence in protein_sequences:
 
-        random = Random(protein_sequence)
+        random = Random(protein_sequence, dimension)
         random.run(save_plot = True, save_data = True, repeats = repeats, iterations = iterations)
         print(f"Best score for Random algorithm for protein {protein_sequence}: {random.best_score}")
 
-        greedy = Greedy(protein_sequence)
+        greedy = Greedy(protein_sequence, dimension)
         greedy.run(save_plot = True, save_data = True, repeats = repeats, iterations = iterations)
         print(f"Best score for Greedy algorithm for protein {protein_sequence}: {greedy.best_score}")
 
-        hillclimber = HillClimber(protein_sequence)
+        hillclimber = HillClimber(protein_sequence, dimension)
         hillclimber.run(save_plot = True, save_data= True, repeats = repeats, iterations = iterations // 10)
         print(f"Best score for Hill Climber algorithm for protein {protein_sequence}: {hillclimber.best_score}")
 
-        annealing = SimulatedAnnealing(protein_sequence)
+        annealing = SimulatedAnnealing(protein_sequence, dimension)
         annealing.run(save_plot = True, save_data= True, repeats = repeats, iterations = iterations // 10)
         print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
 

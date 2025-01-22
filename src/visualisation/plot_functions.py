@@ -26,6 +26,9 @@ def visualize_protein(
 
     Parameters
     ----------
+    dimension : int
+        The dimension in which the folding takes place (`2` or `3`).
+
     protein : `Protein` object
         Protein object containing the sequence and folding structure.
 
@@ -230,6 +233,9 @@ def histogram(
     
     Parameters
     ----------
+    dimension : int
+        The dimension in which the folding takes place (`2` or `3`).
+
     protein_sequence : str
         Protein sequence (for example `HHHPPPHPCCP`).
 
@@ -309,6 +315,9 @@ def score_progression(
     
     Parameters
     ----------
+    dimension : int
+        The dimension in which the folding takes place (`2` or `3`).
+
     protein_sequence : str
         Protein sequence (for example `HHHPPPHPCCP`).
 

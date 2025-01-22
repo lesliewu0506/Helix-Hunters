@@ -6,13 +6,16 @@ class Random(General):
     """
     The Random class generates a random sequences for a protein structure.
 
-    Parameter
+    Parameters
     ----------
+    dimension : int
+        The dimension in which the folding takes place (`2` or `3`).
+
     protein_sequence : str
         Protein sequence (for example `HHHPPPHPCCP`).
     """
-    def __init__(self, protein_sequence: str) -> None:
-        super().__init__(protein_sequence)
+    def __init__(self, protein_sequence: str, dimension: int) -> None:
+        super().__init__(protein_sequence, dimension)
 
     def run(
         self,
@@ -66,10 +69,10 @@ class Random(General):
 
         for _ in range(n):
             protein = Protein(self.protein_sequence)
-            protein.build_structure(random_fold)
+            protein.build_structure(random_fold, self.dimension)
             # Constraint to make sure a valid sequence is created
             while protein.protein_rating == 1:
-                protein.build_structure(random_fold)
+                protein.build_structure(random_fold, self.dimension)
 
             score_list.append(protein.protein_rating)
 

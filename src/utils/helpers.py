@@ -17,13 +17,16 @@ from src.utils.constants import protein_sequence_map, algorithm_folder_map
 # Utility Functions
 # ===============================================================
 
-def random_fold(protein_sequence: str) -> list[int]:
+def random_fold(protein_sequence: str, dimension: int) -> list[int]:
     """
-    Generates a random folding sequence using relative direction (0, 1, 2).
-    Translates them into absolute direction (-2, -1, 1, 2).
+    Generates a random folding sequence using relative direction (0, 1, 2, 3, 4).
+    Translates them into absolute direction (-3, -2, -1, 1, 2, 3).
 
-    Parameter
+    Parameters
     ----------
+    dimension : int
+        The dimension in which the folding takes place (`2` or `3`).
+
     protein_sequence : str
         Protein sequence (for example `HHHPPPHPCCP`).
 
@@ -38,21 +41,29 @@ def random_fold(protein_sequence: str) -> list[int]:
     A seperate function is needed to check this.
     """
     relative_direction_list: list[int] = []
-    random_choice = [0, 1, 2]
+
+    if dimension == 2:
+        random_choices = [0, 1, 2]
+
+    elif dimension == 3:
+        random_choices = [0, 1, 2, 3, 4]
 
     for _ in range(len(protein_sequence) - 2):
-        direction = rd.choice(random_choice)
+        direction = rd.choice(random_choices)
         relative_direction_list.append(direction)
 
-    return direction_translator(relative_direction_list)
+    return direction_translator(relative_direction_list, dimension)
 
-def direction_translator(directions: list[int]) -> list[int]:
+def direction_translator(directions: list[int], dimension: int) -> list[int]:
     """
-    Translates relative paths (0, 1, 2) to absolute paths (-2, -1, 1, 2)
+    Translates relative paths (0, 1, 2, 3, 4) to absolute paths (-3, -2, -1, 1, 2, 3)
     Also adds 1 and 0 at start and end respectively for correct format.
     
-    Parameter
+    Parameters
     ---------
+    dimension : int
+        The dimension in which the folding takes place (`2` or `3`).
+
     directions : list[`int`]
         A list of relative directions.
 
@@ -61,7 +72,12 @@ def direction_translator(directions: list[int]) -> list[int]:
     list[`int`]
         A list of absolute directions.
     """
-    direction_map: dict[int, list[int]] = {1: [2, 1, -2], -1: [-2, -1, 2], 2: [-1, 2, 1], -2: [1, -2, -1]}
+    if dimension == 2:
+        direction_map: dict[int, list[int]] = {1: [2, 1, -2], -1: [-2, -1, 2], 2: [-1, 2, 1], -2: [1, -2, -1]}
+
+    elif dimension == 3:
+        direction_map: dict[int, list[int]] = {1: [2, 1, -2, 3, -3], -1: [-2, -1, 2, -3, 3], 2: [-1, 2, 1, 3, -3], -2: [1, -2, -1, -3, 3], 3: [1, 3, -1, 2, -2], -3: [-1, -3, 1, -2, 2]}
+
     folding_sequence: list[int] = [1]
 
     for i, direction in enumerate(directions):
