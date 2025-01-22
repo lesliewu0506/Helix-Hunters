@@ -2,12 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from src.classes import Protein
+from src.utils.constants import color_map
 from typing import Optional
 
 # ====================================================================================================
 # Start Visualize protein structure
 # ====================================================================================================
 def visualize_protein(
+    dimension: int,
     protein: Protein,
     algorithm: str,
     file_path: str,
@@ -39,33 +41,27 @@ def visualize_protein(
     save : bool, optional
         If `True` save the plots. Default is `False`
     """
+
     if protein.protein_rating == 1:
         print("Error: did not get a valid protein for the plot.")
         return None
 
-    _plot_structure(protein, algorithm, show, save, file_path)
-    
-def _plot_structure(
-    protein: Protein, 
+    if dimension == 2:
+        _plot_2d(protein, algorithm, show, save, file_path)
+
+def _plot_2d(
+    protein: Protein,
     algorithm: str, 
     show: bool, 
     save: bool, 
     file_path: str
     ) -> None:
-    """
-    Helper function for plotting the entire protein structure with the amino acids,
-    sequential connections and polar connections.
-    """
+    """Helper function for plotting the structure in 2D."""
     protein_sequence: str = protein.protein_sequence
+    protein_structure: dict[tuple[int, int, int], tuple[str, int]] = {}
+
     if protein.structure is not None:
-        protein_structure: dict[tuple[int, int], tuple[str, int]] = protein.structure.get_structure()
-    else:
-        print("Error: Did not get a valid protein structure.")
-        return None
-
-    plt.figure(figsize = (12, 7))
-
-    color_map = {"H" : "red", "P" : "blue", "C" : "green"}
+        protein_structure = protein.structure.get_structure()
 
     x_coords = [p[0] for p in protein_structure]
     y_coords = [p[1] for p in protein_structure]
@@ -73,6 +69,7 @@ def _plot_structure(
     x_min, x_max = min(x_coords), max(x_coords)
     y_min, y_max = min(y_coords), max(y_coords)
 
+    plt.figure(figsize = (12, 12))
     # Set limits and distance between amino acids
     plt.xlim(x_min + 5, x_max + 5)
     plt.ylim(y_min + 5, y_max + 5)
@@ -80,18 +77,18 @@ def _plot_structure(
     plt.yticks(np.arange(y_min - 5, y_max + 5, 1))
 
     # Plot amino acids as dots
-    for i, (x, y) in enumerate(protein_structure):
+    for i, (x, y, _) in enumerate(protein_structure):
         amino_type = protein_sequence[i]
         plt.scatter(x, y, color = color_map[amino_type], s = 100, zorder = 3)
 
     # Plot sequential connections
-    _plot_sequential_connections(protein_structure)
+    _plot_sequential_connections(protein_structure, 2)
 
     # Plot polar bonds
-    _plot_polar_connections(protein_structure)
+    _plot_polar_connections(protein_structure, 2)
         
     # Dummy plot for legend
-    _plot_legend(color_map)
+    _plot_legend(color_map, 2)
 
     plt.title(f"2D protein plot\nAlgortihm: {algorithm} \nProtein: {protein_sequence}\nscore: {protein.get_rating()}", fontsize = 12, fontweight = "bold")
     plt.legend(loc = "best")
@@ -101,26 +98,31 @@ def _plot_structure(
         if algorithm == "Brute Force":
             plt.savefig(f"{file_path}.png", dpi = 600)
         else:
-            plt.savefig(f"{file_path}/{algorithm} Best Fold.png", dpi = 600)
+            plt.savefig(f"{file_path}/2D {algorithm} Best Fold.png", dpi = 600)
     if show:
         plt.show()
 
     plt.close()
 
 def _plot_sequential_connections(
-    protein_structure: dict[tuple[int, int], tuple[str, int]]
+    protein_structure: dict[tuple[int, int, int], tuple[str, int]],
+    dimension: int
     ) -> None:
     """Helper function for plotting the sequential connections of the protein with a black line."""
-    x_prev, y_prev = 0, 0 
-    for i, (x, y) in enumerate(protein_structure):
-        if i == 0:
-            x_prev, y_prev = x, y
-        else:
-            plt.plot([x_prev, x], [y_prev, y], color = "black", linestyle = "-", linewidth = 2, zorder= 2)
-            x_prev, y_prev = x, y
+    if dimension == 2:
+        x_prev, y_prev = 0, 0 
+        for i, (x, y, _) in enumerate(protein_structure):
+            if i == 0:
+                x_prev, y_prev = x, y
+            else:
+                plt.plot([x_prev, x], [y_prev, y], color = "black", linestyle = "-", linewidth = 2, zorder= 2)
+                x_prev, y_prev = x, y
+    elif dimension == 3:
+        pass
 
 def _plot_polar_connections(
-    protein_structure: dict[tuple[int, int], tuple[str, int]]
+    protein_structure: dict[tuple[int, int, int], tuple[str, int]],
+    dimension: int
     ) -> None:
     """
     Helper function for plotting the polar connections of the protein.
@@ -128,28 +130,33 @@ def _plot_polar_connections(
     lime green: H-H connection and C-H connection
     darkorange: C-C connection
     """
-    # Mapping for all neighbouring points
-    direction_map = {(1, 0) , (-1, 0), (0, 1), (0, -1)}
+    if dimension == 2:
+        # Mapping for all neighbouring points
+        direction_map_2d = {(1, 0) , (-1, 0), (0, 1), (0, -1)}
+        for x_current, y_current, _ in protein_structure:
 
-    for x_current, y_current in protein_structure:
+            amino_1 = protein_structure[(x_current, y_current, 0)][0]
+            # Check for polar amino acid
+            if amino_1 != "P":
+                # Find neighbouring coordinates
+                for (dx, dy) in direction_map_2d:
+                    x_next = x_current + dx
+                    y_next = y_current + dy
 
-        amino_1 = protein_structure[(x_current, y_current)][0]
-        # Check for polar amino acid
-        if amino_1 != "P":
-            # Find neighbouring coordinates
-            for (dx, dy) in direction_map:
-                x_next = x_current + dx
-                y_next = y_current + dy
+                    # Check for valid and non sequential points
+                    if (x_next, y_next, _) in protein_structure and not _check_sequential(dimension, protein_structure, x_current, y_current, x_next, y_next):
+                        amino_2 = protein_structure[(x_next, y_next, 0)][0]
 
-                # Check for valid and non sequential points
-                if (x_next, y_next) in protein_structure and not _check_sequential(protein_structure, x_current, y_current, x_next, y_next):
-                    amino_2 = protein_structure[(x_next, y_next)][0]
+                        color = _check_connection_type(amino_1, amino_2)
+                        if color is not None:
+                            plt.plot([x_current, x_next], [y_current, y_next], color = color, linestyle = "--", linewidth = 2, zorder = 1)
 
-                    color = _check_connection_type(amino_1, amino_2)
-                    if color is not None:
-                        plt.plot([x_current, x_next], [y_current, y_next], color = color, linestyle = "--", linewidth = 2, zorder = 1)
+    elif dimension == 3:
+        pass
+
 
 def _check_sequential(
+    dimension: int,
     protein_structure: dict[tuple[int, int], tuple[str, int]], 
     x_old: int, 
     y_old: int, 
@@ -159,9 +166,13 @@ def _check_sequential(
     """
     Helper function for checking if two amino acids are in a sequential order. 
     Returns True if sequential, False otherwise.
-    """        
-    i = protein_structure[(x_old, y_old)][1]
-    return protein_structure[(x_new, y_new)][1] in [(i - 1), (i + 1)]
+    """
+    if dimension == 2:    
+        i = protein_structure[(x_old, y_old, 0)][1]
+        return protein_structure[(x_new, y_new, 0)][1] in [(i - 1), (i + 1)]
+
+    elif dimension == 3:
+        pass
 
 def _check_connection_type(
     amino_1: str,
@@ -178,20 +189,25 @@ def _check_connection_type(
     return None
 
 def _plot_legend(
-    color_map: dict[str, str]
+    color_map: dict[str, str],
+    dimension: int
     ) -> None:
     """
     Helper function for plotting the legend manually with dummy plots.
     It adds the labels for the colored amino acids.
     It also adds the type of connections between polar amino acids.
     """
-    # Label polar connections with dashed colored lines
-    plt.plot([], [], color = "lime", linestyle = "--", label = "H-H Connection")
-    plt.plot([], [], color = "lime", linestyle = "--", label = "H-C Connection")
-    plt.plot([], [], color = "darkorange", linestyle = "--", label = "C-C Connection")
+    if dimension == 2:
+        # Label polar connections with dashed colored lines
+        plt.plot([], [], color = "lime", linestyle = "--", label = "H-H Connection")
+        plt.plot([], [], color = "lime", linestyle = "--", label = "H-C Connection")
+        plt.plot([], [], color = "darkorange", linestyle = "--", label = "C-C Connection")
 
-    for amino_type, colour in color_map.items():
-        plt.scatter([], [], color=colour, label = amino_type)
+        for amino_type, colour in color_map.items():
+            plt.scatter([], [], color=colour, label = amino_type)
+    elif dimension == 3:
+        pass
+
 # ========================================================================================================
 # End Visualize protein structure
 # ========================================================================================================
@@ -200,6 +216,7 @@ def _plot_legend(
 # Start Histogram protein distribution for specific algorithm
 # ========================================================================================================
 def histogram(
+    dimension: int,
     protein_sequence: str,
     score_list: list[int],
     iterations: int,
@@ -248,7 +265,7 @@ def histogram(
     for patch, value in zip(patches, n):
         patch.set_facecolor(cmap(value / max(n)))
     
-    plt.title(f"Protein Score Distribution\nProtein sequence: {protein_sequence}\nAlgorithm: {algorithm}, {iterations} iterations", fontsize = 14, fontweight = "bold")
+    plt.title(f"{dimension}D Protein Score Distribution\nProtein sequence: {protein_sequence}\nAlgorithm: {algorithm}, {iterations} iterations", fontsize = 14, fontweight = "bold")
     plt.xlabel("Protein Score", fontsize = 12)
     plt.ylabel("Frequency", fontsize = 12)
 
@@ -264,7 +281,7 @@ def histogram(
     plt.tight_layout()
 
     if save:
-        string = f"Protein Score Distribution {algorithm}"
+        string = f"{dimension}D Protein Score Distribution {algorithm}"
         plt.savefig(f"{file_path}/{string}.png", dpi = 600)
 
     if show:
@@ -279,6 +296,7 @@ def histogram(
 # Start Hill Climber/Simulated Annealing score progression plot
 # ========================================================================================================
 def score_progression(
+    dimension: int,
     protein_sequence: str, 
     score_list: list[int],
     algorithm: str,
@@ -312,7 +330,7 @@ def score_progression(
     plt.figure(figsize = (12, 7))
     plt.plot(np.arange(1, len(score_list) + 1), score_list, label = "Score Progression", linewidth = 2)
     
-    plt.title(f"{algorithm} Progression\nProtein: {protein_sequence}", fontsize = 14, fontweight = "bold")
+    plt.title(f"{dimension}D {algorithm} Progression\nProtein: {protein_sequence}", fontsize = 14, fontweight = "bold")
     plt.xlabel("Iterations", fontsize = 12)
     plt.ylabel("Score", fontsize = 12)
 
@@ -330,7 +348,7 @@ def score_progression(
     plt.tight_layout()
 
     if save:
-        plt.savefig(f"{file_path}/{algorithm} Score Progression.png", dpi = 600)
+        plt.savefig(f"{file_path}/{dimension}D {algorithm} Score Progression.png", dpi = 600)
 
     if show:
         plt.show()

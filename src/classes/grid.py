@@ -2,7 +2,7 @@ class Grid():
     """
     A class to represent a structure of a protein sequence.
     It contains self.structure, a dict with:
-    - keys (x, y): coordinates of an amino acid.
+    - keys (x, y, z): coordinates of an amino acid.
     - values (type, order): type of amino acid and the order in the chain.
     """
     # Maps direction to a change in x, y and z
@@ -54,12 +54,12 @@ class Grid():
         return True
 
     def _update_position(self, direction: int) -> None:
-        """Updates x, y  and z based on direction."""
+        """Updates x, y and z based on direction."""
         dx, dy, dz = self.direction_map[direction]
         self.x_current += dx
         self.y_current += dy
         self.z_current += dz
     
-    def get_structure(self) -> dict[tuple[int, int], tuple[str, int]]:
+    def get_structure(self) -> dict[tuple[int, int, int], tuple[str, int]]:
         """Returns the structure of the protein."""
         return self.structure

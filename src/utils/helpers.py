@@ -75,6 +75,7 @@ def direction_translator(directions: list[int]) -> list[int]:
 # ===============================================================
 
 def save_and_visualize_results(
+    dimension: int,
     best_protein: Protein,
     algorithm: str,
     histogram_data: list[list[int]], 
@@ -96,6 +97,9 @@ def save_and_visualize_results(
 
     Parameters
     ----------
+    dimension : int
+        The dimension in which the folding takes place (`2` or `3`).
+
     best_protein : `Protein` object
         Best protein object containing the sequence and folding structure.
 
@@ -131,16 +135,16 @@ def save_and_visualize_results(
 
     # Plots the progression of Hill Climber/Simulated Annealing algorithm
     if algorithm in ["Hill Climber", "Simulated Annealing"]:
-        plot.score_progression(protein_sequence, score_progression, show = show_plot, save = save_plot, file_path = f"{base_path}", algorithm = algorithm)
+        plot.score_progression(dimension, protein_sequence, score_progression, show = show_plot, save = save_plot, file_path = f"{base_path}", algorithm = algorithm)
     
     # Plots score distribution for one repeat of algorithm
-    plot.histogram(protein_sequence, histogram, iterations = iterations, show = show_plot, save = save_plot, file_path = f"{base_path}", algorithm = algorithm)
+    plot.histogram(dimension, protein_sequence, histogram, iterations = iterations, show = show_plot, save = save_plot, file_path = f"{base_path}", algorithm = algorithm)
 
     # Plots the best protein structure for one repeat of algorithm
-    plot.visualize_protein(best_protein, algorithm, show = show_plot, save = save_plot, file_path = f"{base_path}")
+    plot.visualize_protein(dimension, best_protein, algorithm, show = show_plot, save = save_plot, file_path = f"{base_path}")
 
     if save_data:
-        output_histogram_csv(protein_sequence, algorithm, histogram_data)
+        output_histogram_csv(dimension, protein_sequence, algorithm, histogram_data)
         best_protein.output_csv(f"{base_path}/output")
 
 # ===============================================================
@@ -148,6 +152,7 @@ def save_and_visualize_results(
 # ===============================================================
 
 def output_histogram_csv(
+    dimension: int,
     protein_sequence: str,
     algorithm: str,
     histogram_data: list[list[int]]
@@ -168,7 +173,7 @@ def output_histogram_csv(
         List containing all the scores for multiple runs.
     """
     folder = protein_sequence_map[protein_sequence]
-    with open(f"data/histogram_data/{folder}/{algorithm.title()}_{protein_sequence}.csv", 'w', newline = '') as csvfile:
+    with open(f"data/histogram_data/{folder}/{dimension}D_{algorithm.title()}_{protein_sequence}.csv", 'w', newline = '') as csvfile:
         writer = csv.writer(csvfile)
 
         for histogram in histogram_data:

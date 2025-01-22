@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # # Per run there are then iterations amount of iterations.
     # run(repeats = 10, iterations = 10000)
     # # View the boxplots for the different distributions
-    view(protein_sequences[-1])
+    # view(protein_sequences[-1])
 
     # ==================================================================
     # The following functions generate data for each algorithm seperately
@@ -59,4 +59,6 @@ if __name__ == "__main__":
         # annealing.run(save_plot = True, save_data= True, repeats = 1)
 
     #     print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
+    annealing = SimulatedAnnealing(protein_sequences[0], 2)
+    annealing.run(show_plot=True, repeats = 1)
     pass

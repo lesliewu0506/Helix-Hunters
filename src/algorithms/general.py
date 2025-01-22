@@ -9,17 +9,20 @@ class General():
     Every class that inherits `General` should implement their own `algorithm function`
     and then call `run_algorithm`.
 
-    Parameter
+    Parameters
     ---------
     protein_sequence : str
         Protein sequence (for example `HHHPPPHPCCP`).
     
+    dimension : int
+        The dimension in which the folding takes place (`2` or `3`).
+
     Notes
     -----
     This class is not intended to be used directly.
     """
 
-    def __init__(self, protein_sequence: str) -> None:
+    def __init__(self, protein_sequence: str, dimension: int) -> None:
         """
         Attributes
         ----------
@@ -38,6 +41,7 @@ class General():
         `score_progression_list` : list[`int`]
             The score progression over iterations.
         """
+        self.dimension: int = dimension
         self.protein_sequence: str = protein_sequence
         self.histogram_data: list[list[int]] = []
         self.best_score: int = 0
@@ -45,7 +49,7 @@ class General():
         self.score_progression_list: list[int] = []
 
     def run_algorithm(
-        self, 
+        self,
         algorithm: str, 
         show_plot: bool, 
         save_plot: bool, 
@@ -111,14 +115,15 @@ class General():
         # Save and visualize protein
         if self.best_protein is not None:
             save_and_visualize_results(
+                dimension = self.dimension,
                 best_protein = self.best_protein,
                 algorithm = algorithm,
                 histogram_data = self.histogram_data, 
                 histogram = self.histogram_data[-1],
                 iterations = iterations,
-                show_plot= show_plot,
-                save_plot= save_plot,
-                save_data= save_data,
+                show_plot = show_plot,
+                save_plot = save_plot,
+                save_data = save_data,
                 score_progression = self.score_progression_list)
         else:
             print("Error: Did not find a valid protein.")

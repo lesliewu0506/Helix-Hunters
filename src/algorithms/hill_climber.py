@@ -11,18 +11,21 @@ class HillClimber(General):
     It randomly changes a valid value in the protein structure. 
     Each improvement or equivalent solution is kept for the next iteration.
 
-    Parameter
+    Parameters
     ----------
     protein_sequence : str
         Protein sequence (for example `HHHPPPHPCCP`).
+
+    dimension : int
+        The dimension in which the folding takes place (`2` or `3`).
 
     Notes
     -----
     This algorithm has built in support for Simulated Annealing.
     """
 
-    def __init__(self, protein_sequence: str) -> None:
-        super().__init__(protein_sequence)
+    def __init__(self, protein_sequence: str, dimension: int) -> None:
+        super().__init__(protein_sequence, dimension)
 
     def run(
         self,
