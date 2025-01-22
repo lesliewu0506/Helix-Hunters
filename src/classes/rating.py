@@ -1,8 +1,8 @@
 class Rating():
     """A class to represent the rating of a protein structure based on its sequence and structure."""
 
-    def __init__(self, structure: dict[tuple[int, int], tuple[str, int]]) -> None:
-        self.structure: dict[tuple[int, int], tuple[str, int]] = structure
+    def __init__(self, structure: dict[tuple[int, int, int], tuple[str, int]]) -> None:
+        self.structure: dict[tuple[int, int, int], tuple[str, int]] = structure
         self.score: int = 0
 
         self._count_adjacent()
@@ -10,21 +10,22 @@ class Rating():
     def _count_adjacent(self) -> None:
         """Calculates the strength of the protein based on adjacent amino acids."""
         # Mapping for all neighbouring points
-        direction_map = {(1, 0), (-1, 0), (0, 1), (0, -1)}
+        direction_map = {(1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)}
 
-        for (x_current, y_current), (amino_1, order_1) in self.structure.items():
+        for (x_current, y_current, z_current), (amino_1, order_1) in self.structure.items():
 
             # Skip if polar amino acid
             if amino_1 == 'P':
                 continue
 
             # Find neighbouring coordinates
-            for (dx, dy) in direction_map:
+            for (dx, dy, dz) in direction_map:
                 x_next = x_current + dx
                 y_next = y_current + dy
+                z_next = z_current + dz
 
                 # Search pairs
-                pair = self.structure.get((x_next, y_next))
+                pair = self.structure.get((x_next, y_next, z_next))
                 if pair is not None:
                     amino_2, order_2 = pair
 
