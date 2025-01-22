@@ -97,9 +97,9 @@ class SimulatedAnnealing(HillClimber):
 
         Notes
         -----
-        This decay function drops extremely fast. This is due to the fact that
-        higher values (0.7, 0.8, 0.9) causes many invalid protein structures.
-        By trial and error, the value of 0.6 has been found for this project.
+        This decay function drops fast.
+        By trial and error, the value of 0.99 has been found and used for this project.
+        This ensures that the annealing is stopped around 500 iterations.
         """
-        temperature = temperature * 0.6
+        temperature = temperature * 0.99
         return temperature
