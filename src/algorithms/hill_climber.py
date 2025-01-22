@@ -85,13 +85,13 @@ class HillClimber(General):
         """
         score_progression_list: list[int] = []
         same_score_index: int = 0
-        amino_directions: list[int] = random_fold(self.protein_sequence)
+        amino_directions: list[int] = random_fold(self.protein_sequence, self.dimension)
         protein: Protein = Protein(self.protein_sequence, amino_directions)
         protein.build_no_function()
 
         # Force valid solution
         while protein.protein_rating == 1:
-            amino_directions = random_fold(self.protein_sequence)
+            amino_directions = random_fold(self.protein_sequence, self.dimension)
             protein = Protein(self.protein_sequence, amino_directions)
             protein.build_no_function()
 
@@ -100,7 +100,12 @@ class HillClimber(General):
         while same_score_index < 600:
             # Choose random amino acid in sequence and give it new direction
             index = rd.randrange(len(amino_directions))
-            new_direction = rd.choice([direction for direction in [-2, -1, 1, 2] if direction != amino_directions[index]])
+
+            if self.dimension == 2:
+                new_direction = rd.choice([direction for direction in [-2, -1, 1, 2] if direction != amino_directions[index]])
+
+            elif self.dimension == 3:
+                new_direction = rd.choice([direction for direction in [-3, -2, -1, 1, 2, 3] if direction != amino_directions[index]])
 
             # Copy amino directions with new direction added
             new_amino_directions: list[int] = amino_directions[:]
@@ -126,11 +131,12 @@ class HillClimber(General):
                     amino_directions = new_amino_directions
             else:
                 # Accept based on probability
-                (accepted, temperature) = check_solution(candidate_score, best_rating, temperature)
-                if accepted:
-                    best_rating = candidate_score
-                    protein = protein_candidate
-                    amino_directions = new_amino_directions
+                if candidate_score != 1:
+                    (accepted, temperature) = check_solution(candidate_score, best_rating, temperature)
+                    if accepted:
+                        best_rating = candidate_score
+                        protein = protein_candidate
+                        amino_directions = new_amino_directions
 
             score_progression_list.append(best_rating)
         return best_rating, protein, score_progression_list

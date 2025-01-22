@@ -63,4 +63,7 @@ if __name__ == "__main__":
     # random.run(show_plot = True)
     # annealing = SimulatedAnnealing(protein_sequences[0], 2)
     # annealing.run(show_plot=True, repeats = 1)
+    # hill = HillClimber(protein_sequences[0], 3)
+    # hill.run(show_plot=True)
+    # print(hill.best_protein.amino_directions)
     pass
