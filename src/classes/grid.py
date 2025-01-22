@@ -5,21 +5,25 @@ class Grid():
     - keys (x, y): coordinates of an amino acid.
     - values (type, order): type of amino acid and the order in the chain.
     """
-    # Maps direction to a change in x and y
-    direction_map = {
-        0 : (0, 0),
-        1 : (1, 0),
-        -1 : (-1, 0),
-        2: (0, 1),
-        -2: (0, -1)
+    # Maps direction to a change in x, y and z
+    direction_map: dict[int, tuple[int, int, int]] = {
+        0 : (0, 0, 0),
+        1 : (1, 0, 0),
+        -1 : (-1, 0, 0),
+        2 : (0, 1, 0),
+        -2 : (0, -1, 0),
+        3 : (0, 0, 1),
+        -3 : (0, 0, -1)
     }
 
     def __init__(self, protein_sequence: str, amino_directions: list[int] | None) -> None:
-        self.structure: dict[tuple[int, int], tuple[str, int]] = {}
+        self.structure: dict[tuple[int, int, int], tuple[str, int]] = {}
         self.protein_sequence: str = protein_sequence
         self.amino_directions: list[int] | None = amino_directions
+
         self.x_current: int = 0
         self.y_current: int = 0
+        self.z_current: int = 0
 
     def create_structure(self) -> bool:
         """
@@ -42,19 +46,20 @@ class Grid():
         Return True on success, else False.
         """
         # Check if position is empty
-        if (self.x_current, self.y_current) in self.structure:
+        if (self.x_current, self.y_current, self.z_current) in self.structure:
             return False
         # Adds coordinates as keys with values [type of amino, order in chain]
-        self.structure[(self.x_current, self.y_current)] = (amino, i)
+        self.structure[(self.x_current, self.y_current, self.z_current)] = (amino, i)
         self._update_position(direction)
         return True
 
     def _update_position(self, direction: int) -> None:
-        """Updates x and y based on direction."""
-        dx, dy = self.direction_map[direction]
+        """Updates x, y  and z based on direction."""
+        dx, dy, dz = self.direction_map[direction]
         self.x_current += dx
         self.y_current += dy
-
+        self.z_current += dz
+    
     def get_structure(self) -> dict[tuple[int, int], tuple[str, int]]:
         """Returns the structure of the protein."""
         return self.structure
