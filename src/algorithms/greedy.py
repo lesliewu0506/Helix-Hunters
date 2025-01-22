@@ -75,11 +75,11 @@ class Greedy(General):
 
         for _ in range(n):
             protein = Protein(self.protein_sequence)
-            protein.build_structure(self._greedy_fold)
+            protein.build_structure(self._greedy_fold, self.dimension)
             # Constraint to make sure a valid sequence is created
             while protein.protein_rating == 1:
                 protein = Protein(self.protein_sequence)
-                protein.build_structure(self._greedy_fold)
+                protein.build_structure(self._greedy_fold, self.dimension)
 
             score_list.append(protein.protein_rating)
 
@@ -89,12 +89,12 @@ class Greedy(General):
 
         self.histogram_data.append(score_list)
 
-    def _greedy_fold(self, protein_sequence: str) -> list[int]:
+    def _greedy_fold(self, protein_sequence: str, dimension: int) -> list[int]:
         """
         Helper function that generates a random folding sequence.
         Every 5 iterations it will make a greedy decision.
-        Uses relative directions (0, 1, 2) and translates them 
-        into absolute directions (-2, -1, 1, 2).
+        Uses relative directions (0, 1, 2, 3, 4) and translates them 
+        into absolute directions (-3, -2, -1, 1, 2, 3).
         Returns the sequence as a list.
 
         Notes
@@ -105,34 +105,42 @@ class Greedy(General):
         iteration a greedy decision is made.
         """
         relative_direction_list: list[int] = []
-        directions = [0, 1, 2]
+
+        if dimension == 2:
+            directions = [0, 1, 2]
+
+        elif dimension == 3:
+            directions = [0, 1, 2, 3, 4]
 
         for i in range(len(protein_sequence) - 2):
             
             if i % 5 == 0:
-                direction = self._check_greedy(relative_direction_list)
+                direction = self._check_greedy(relative_direction_list, dimension)
                 relative_direction_list.append(direction)
 
             else:
                 direction = rd.choice(directions)
                 relative_direction_list.append(direction)
 
-        return direction_translator(relative_direction_list)
+        return direction_translator(relative_direction_list, dimension)
 
-    def _check_greedy(self, direction_list: list[int]) -> int:
+    def _check_greedy(self, direction_list: list[int], dimension: int) -> int:
         """
         Helper function that implements a greedy algorithm to find the best possible next direction.
         Evaluates all possible continuations and
         selecting lowest score directions randomly if there are ties.
         """
-        # Evaluate all possible next directions (0, 1, 2) and collect scores
+        # Evaluate all possible next directions (0, 1, 2, 3, 4) and collect scores
         protein_scores = []
         best_directions = []
         minimum_score = 1
 
-        for direction in [0, 1, 2]:
+        for direction in [0, 1, 2, 3, 4]:
+            if dimension == 2 and direction in [3, 4]:
+                continue
+
             new_direction_list = direction_list + [direction]
-            abs_direction = direction_translator(new_direction_list)
+            abs_direction = direction_translator(new_direction_list, dimension)
             abs_direction.remove(0)
 
             # Create a Protein object and compute its rating
