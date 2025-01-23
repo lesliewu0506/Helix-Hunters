@@ -1,5 +1,5 @@
 from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing
-from src.visualisation.boxplot import boxplot
+from src.visualisation import boxplot
 from src.utils.constants import protein_sequences
 
 def run(dimension: int = 3, repeats: int = 1, iterations: int = 10000) -> None:

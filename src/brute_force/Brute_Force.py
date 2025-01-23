@@ -1,7 +1,7 @@
 import multiprocessing
 import csv
 
-import src.visualisation.plot_functions as plot
+from src.visualisation import visualize_protein
 from src.classes import Protein
 from src.utils.constants import protein_sequence_map
 
@@ -48,7 +48,7 @@ def brute_force(sequence: str, save: bool = False) -> None:
 
     # Plot best structure and save data
     for i, protein in enumerate(best_structures):
-        plot.visualize_protein(protein, "Brute Force", show = False, save = save, file_path = f"src/brute_force/protein_structures/{folder}/{sequence}_{i}")
+        visualize_protein(protein, "Brute Force", show = False, save = save, file_path = f"src/brute_force/protein_structures/{folder}/{sequence}_{i}")
         protein.output_csv(file_path = f"src/brute_force/best_folding/{folder}/{sequence}_{i}")
 
     print(f"Best rating: {best_score}")

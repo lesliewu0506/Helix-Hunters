@@ -3,12 +3,17 @@ import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 
 from src.classes import Protein
-from src.utils.constants import neighbour_map, color_map, polar_lines
 from typing import Optional
 
-# ====================================================================================================
-# Start Visualize protein structure
-# ====================================================================================================
+color_map: dict[str, str] = {"H" : "red", "P" : "blue", "C" : "green"}
+
+polar_lines: list[dict[str, str]] = [
+    {"color" : "lime", "label" : "H-H Connection"},
+    {"color" : "lime", "label" : "H-C Connection"},
+    {"color" : "darkorange", "label" : "C-C Connection"}]
+
+neighbour_map: set[tuple[int, int, int]] = {(1, 0, 0) , (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)}
+
 def visualize_protein(
     dimension: int,
     protein: Protein,
@@ -282,156 +287,3 @@ def _plot_legend(ax: Optional[Axes] = None) -> None:
             ax.plot([], [], [], color=line["color"], linestyle = "--", label = line["label"], linewidth = 2)
         else:
             plt.plot([], [], color = line["color"], linestyle = "--", label = line["label"], linewidth = 2)
-
-# ========================================================================================================
-# End Visualize protein structure
-# ========================================================================================================
-
-# ========================================================================================================
-# Start Histogram protein distribution for specific algorithm
-# ========================================================================================================
-def histogram(
-    dimension: int,
-    protein_sequence: str,
-    score_list: list[int],
-    iterations: int,
-    algorithm: str,
-    file_path: str,
-    show: bool,
-    save: bool
-    ) -> None:
-    """
-    Creates a stylish histogram with gradient color for the score distribution of an algorithm.
-    
-    Parameters
-    ----------
-    dimension : int
-        The dimension in which the folding takes place (`2` or `3`).
-
-    protein_sequence : str
-        Protein sequence (for example `HHHPPPHPCCP`).
-
-    score_list : list[int]
-        List of the scores during the run.
-
-    iterations : int
-        Amount of iterations for the run.
-
-    algorithm : str
-        The name of the algorithm used (for example `Hill Climber`).
-
-    file_path : str
-        Path to save the plots.
-
-    show : bool
-        If `True` show the plot.
-
-    save : bool
-        If `True` save the plot.
-    """
-    plt.figure(figsize = (12, 7))
-
-    min_score = min(score_list)
-    max_score = max(score_list)
-    # Center bars on each x-tick
-    bins = np.arange(min_score - 0.5, max_score + 1.5, 1)
-
-    n, bins, patches = plt.hist(score_list, bins = bins, edgecolor = "black", alpha = 0.85, linewidth = 1.5)
-
-    # Set different color for bars
-    cmap = plt.get_cmap("plasma")
-    for patch, value in zip(patches, n):
-        patch.set_facecolor(cmap(value / max(n)))
-    
-    plt.title(f"{dimension}D Protein Score Distribution\nProtein sequence: {protein_sequence}\nAlgorithm: {algorithm}, {iterations} iterations", fontsize = 14, fontweight = "bold")
-    plt.xlabel("Protein Score", fontsize = 12)
-    plt.ylabel("Frequency", fontsize = 12)
-
-    plt.xticks(np.arange(min_score, max_score + 1, 1))
-
-    # Adjust y limit to round value
-    multiple = iterations / 100
-    y_max = np.ceil(max(n) / multiple) * multiple
-    plt.ylim(top = y_max)
-
-    plt.grid(axis = "y", linestyle = "--", alpha = 0.85)
-    
-    plt.tight_layout()
-
-    if save:
-        string = f"{dimension}D Protein Score Distribution {algorithm}"
-        plt.savefig(f"{file_path}/{string}.png", dpi = 600)
-
-    if show:
-        plt.show()
-    
-    plt.close()
-# ========================================================================================================
-# End Histogram protein distribution for specific algorithm
-# ========================================================================================================
-
-# ========================================================================================================
-# Start Hill Climber/Simulated Annealing score progression plot
-# ========================================================================================================
-def score_progression(
-    dimension: int,
-    protein_sequence: str, 
-    score_list: list[int],
-    algorithm: str,
-    file_path: str,
-    show: bool,
-    save: bool
-    ) -> None:
-    """
-    Creates a plot for the evolution of the protein score with the Hill Climber/Simulated Annealing algorithm.
-    
-    Parameters
-    ----------
-    dimension : int
-        The dimension in which the folding takes place (`2` or `3`).
-
-    protein_sequence : str
-        Protein sequence (for example `HHHPPPHPCCP`).
-
-    score_list : list[int]
-        List of the scores during a run.
-
-    algorithm : str
-        The name of the algorithm used (either `Hill Climber` or `Simulated Annealing`).
-
-    file_path : str
-        Path to save the plots.
-    
-    show : bool
-        If `True` show the plot.
-
-    save : bool
-        If `True` save the plot.
-    """
-    plt.figure(figsize = (12, 7))
-    plt.plot(np.arange(1, len(score_list) + 1), score_list, label = "Score Progression", linewidth = 2)
-    
-    plt.title(f"{dimension}D {algorithm} Progression\nProtein: {protein_sequence}", fontsize = 14, fontweight = "bold")
-    plt.xlabel("Iterations", fontsize = 12)
-    plt.ylabel("Score", fontsize = 12)
-
-    # Set axis attributes
-    ymin = min(score_list)
-    ymax = max(score_list)
-
-    plt.xlim(0, len(score_list))
-    plt.ylim(ymin - 1, ymax + 1)
-    plt.yticks(np.arange(ymin, ymax + 1, 1))
-
-    plt.grid(axis = "y", linestyle = "--", alpha = 0.85)
-    plt.legend(loc = "best")
-
-    plt.tight_layout()
-
-    if save:
-        plt.savefig(f"{file_path}/{dimension}D {algorithm} Score Progression.png", dpi = 600)
-
-    if show:
-        plt.show()
-
-    plt.close()

@@ -9,7 +9,7 @@ used by various parts of the project wherever needed.
 import random as rd
 import csv
 
-import src.visualisation.plot_functions as plot
+from src.visualisation import visualize_protein, visualize_score_progression, visualize_histogram
 from src.classes import Protein
 from src.utils.constants import protein_sequence_map, algorithm_folder_map, direction_map_2d, direction_map_3d
 
@@ -159,7 +159,7 @@ def save_and_visualize_results(
 
     # Plots the progression of Hill Climber/Simulated Annealing algorithm
     if algorithm in ["Hill Climber", "Simulated Annealing"]:
-        plot.score_progression(
+        visualize_score_progression(
             dimension,
             protein_sequence,
             score_progression,
@@ -169,7 +169,7 @@ def save_and_visualize_results(
             algorithm = algorithm)
     
     # Plots score distribution for one repeat of algorithm
-    plot.histogram(
+    visualize_histogram(
         dimension,
         protein_sequence,
         histogram,
@@ -180,7 +180,7 @@ def save_and_visualize_results(
         algorithm = algorithm)
 
     # Plots the best protein structure for one repeat of algorithm
-    plot.visualize_protein(
+    visualize_protein(
         dimension,
         best_protein,
         algorithm,
