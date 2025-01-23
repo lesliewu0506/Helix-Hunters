@@ -57,7 +57,7 @@ def view(protein_sequence: str = "all", dimension: int = 3) -> None:
     Parameter
     ---------
     protein_sequence : str, optional
-        Protein sequence (for example `HHHPPPHPCCP`). Default is `"all"`.
+        Protein sequence (for example `HHPHHHPH`). Default is `"all"`.
 
     dimension : int, optional
         The dimension in which the folding takes place (`2` or `3`). Default is `3`.

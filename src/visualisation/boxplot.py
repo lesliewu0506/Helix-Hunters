@@ -1,5 +1,6 @@
 import csv
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
 import numpy as np
 
 from src.utils.constants import algorithms, protein_sequence_map
@@ -16,7 +17,7 @@ def boxplot(protein_sequence: str, dimension: int) -> None:
     Parameters
     ----------
     protein_sequence : str
-        Protein sequence (for example `HHHPPPHPCCP`).
+        Protein sequence (for example `HHPHHHPH`).
 
     dimension : int
         The dimension in which the folding takes place (`2` or `3`).
@@ -25,6 +26,7 @@ def boxplot(protein_sequence: str, dimension: int) -> None:
     data_structure: dict[str, list[int]] = _create_data_structure(protein_sequence, folder, dimension)
     data_list: list[list[int]] = [data for data in data_structure.values()]
     min_score: int = _get_minimum_score(data_structure)
+    ax: Axes
 
     fig, ax = plt.subplots(figsize = (12, 7))
     box = ax.boxplot(data_list, patch_artist = True, labels = algorithms)
@@ -50,25 +52,23 @@ def _create_data_structure(protein_sequence: str, folder: str, dimension: int) -
     """
     Helper function that creates a dictionary
     with algorithm names as keys and the boxplot data as values.
-    It returns the dictionary.
+    It returns the data structure as a dictionary.
     """
-    data: dict[str, list[int]] = {}
+    data_structure: dict[str, list[int]] = {}
     for algorithm in algorithms:
-        data[algorithm] = _import_data(protein_sequence, algorithm, folder, dimension)
-    return data
+        data_structure[algorithm] = _import_data(protein_sequence, algorithm, folder, dimension)
+    return data_structure
 
 def _import_data(protein_sequence: str, algorithm: str, folder: str, dimension: int) -> list[int]:
     """
     Helper function that imports the scores from a CSV file.
     It returns a list of the scores.
     """
-    histogram_data: list[int] = []
-
     with open(f"data/histogram_data/{folder}/{dimension}D_{algorithm}_{protein_sequence}.csv", "r") as csvfile:
 
         reader = csv.reader(csvfile)
 
-        [[histogram_data.append(int(value)) for value in row] for row in reader]
+        histogram_data: list[int] = [[(int(value)) for value in row] for row in reader]
 
     csvfile.close()
 
@@ -79,7 +79,4 @@ def _get_minimum_score(data: dict[str, list[int]]) -> int:
     Helper function that calculates the lowest score of a given data structure.
     It returns the lowest score.
     """
-    minimum_list: list[int] = []
-    for histogram_data in data.values():
-        minimum_list.append(min(histogram_data))
-    return min(minimum_list)
+    return min([min(histogram_data) for histogram_data in data.values()])
