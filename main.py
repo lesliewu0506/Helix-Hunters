@@ -10,60 +10,52 @@ from src.utils.constants import protein_sequences
 
 if __name__ == "__main__":
     # =========================== Brute Force ==========================
-    # NOTE: This function is good only for the first protein sequence.
+    # NOTE: This function is good only for the first three protein sequences.
     # Running it for the others results in huge data files (>5GB). 
     # This is only for demonstration purposes.
 
     # # Generate all possible folding structures
-    # generate_all_foldings(protein_sequences[0])
-    # # Try all possible combinations
-    # brute_force(protein_sequences[0], save = True)
+    # for protein_sequence in protein_sequences[:3]:
+    #     generate_all_foldings(protein_sequence)
+    #     # Try all possible combinations
+    #     brute_force(protein_sequence, save = True)
 
     # ==================================================================
     # Experiment
     # ==================================================================
-    # This will collect data for different algorithms.
-    # # Repeats is how many times one algorithm should run.
-    # # Per run there are then iterations amount of iterations.
-    # run(repeats = 10, iterations = 10000)
+    # # This will collect data for different algorithms.
+    # run(dimension = 3, repeats = 1, iterations = 10000)
     # # View the boxplots for the different distributions
-    # view(protein_sequences[-1])
+    # view(dimension = 2, protein_sequence = "all")
 
     # ==================================================================
-    # The following functions generate data for each algorithm seperately
+    # The following sections generate data for each algorithm seperately
 
-    # =========================== Random ===============================
+    # # =========================== Random ===============================
     # for protein_sequence in protein_sequences:
-    #     random = Random(protein_sequence)
-    #     random.run(save_plot = True, save_data = True, repeats = 10)
+    #     random = Random(protein_sequence, dimension = 3)
+    #     random.run(show_plot = False, save_plot = True, save_data = True, repeats = 1, iterations = 10000)
 
     #     print(f"Best score for Random algorithm for protein {protein_sequence}: {random.best_score}")
 
-    # ====================== Random Greedy ==============================
+    # # ====================== Random Greedy ==============================
     # for protein_sequence in protein_sequences:
-    #     greedy = Greedy(protein_sequence)
-    #     greedy.run(save_plot = True, save_data = True, repeats = 10)
+    #     greedy = Greedy(protein_sequence, dimension = 3)
+    #     greedy.run(show_plot = False, save_plot = True, save_data = True, repeats = 1, iterations = 10000)
 
     #     print(f"Best score for Greedy algorithm for protein {protein_sequence}: {greedy.best_score}")
 
-    # ====================== Hill Climber ===============================
+    # # ====================== Hill Climber ===============================
     # for protein_sequence in protein_sequences:
-    #     hillclimber = HillClimber(protein_sequence)
-    #     hillclimber.run(save_plot = True, save_data= True, repeats = 10)
+    #     hillclimber = HillClimber(protein_sequence, dimension = 3)
+    #     hillclimber.run(show_plot = False, save_plot = True, save_data= True, repeats = 1, iterations = 1000)
 
     #     print(f"Best score for Hill Climber algorithm for protein {protein_sequence}: {hillclimber.best_score}")
 
-    # ====================== Simulated Annealing ========================
+    # # ====================== Simulated Annealing ========================
     # for protein_sequence in protein_sequences:
-        # annealing = SimulatedAnnealing(protein_sequence)
-        # annealing.run(save_plot = True, save_data= True, repeats = 1)
+    #     annealing = SimulatedAnnealing(protein_sequence, dimension = 3)
+    #     annealing.run(show_plot = False, save_plot = True, save_data= True, repeats = 1, iterations = 1000)
 
     #     print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
-    random = Random(protein_sequences[0], 2)
-    random.run(show_plot = True)
-    # annealing = SimulatedAnnealing(protein_sequences[0], 2)
-    # annealing.run(show_plot=True, repeats = 1, iterations = 1)
-    # hill = HillClimber(protein_sequences[0], 3)
-    # hill.run(show_plot=True)
-    # print(hill.best_protein.amino_directions)
     pass

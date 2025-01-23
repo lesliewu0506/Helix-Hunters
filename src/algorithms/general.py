@@ -12,7 +12,7 @@ class General():
     Parameters
     ---------
     protein_sequence : str
-        Protein sequence (for example `HHHPPPHPCCP`).
+        Protein sequence (for example `HHPHHHPH`).
     
     dimension : int
         The dimension in which the folding takes place (`2` or `3`).
@@ -26,8 +26,11 @@ class General():
         """
         Attributes
         ----------
+        `dimension` : int
+            The dimension in which the folding takes place (`2` or `3`).
+
         `protein_squence` : str
-            Protein sequence (for example `HHHPPPHPCCP`).
+            Protein sequence (for example `HHPHHHPH`).
 
         `histogram_data` : list[list[`int`]]
             List containing all the scores for multiple runs.
@@ -68,20 +71,20 @@ class General():
         algorithm : str
             The name of the algorithm used (for example `Hill Climber`).
         
-        show_plot : bool, optional
-            If `True` show the plot. Default is `False`.
+        show_plot : bool
+            If `True` show the plot.
 
-        save_plot : bool, optional
-            If `True` save the plot. Default is `False`.
+        save_plot : bool
+            If `True` save the plot.
 
-        save_data : bool, optional
-            If `True`, saves the optimization results to a file. Default is `False`.
+        save_data : bool
+            If `True`, saves the optimization results to a file.
 
-        repeats : int, optional
-            The number of independent runs to perform. Default is `1`.
+        repeats : int
+            The number of independent runs to perform.
 
-        iterations : int, optional
-            The number of iterations per run. Default is `1000`.
+        iterations : int
+            The number of iterations per run.
         
         algortihm_function : Callable
             The main function for implementing the optimization algorithm.
@@ -90,11 +93,10 @@ class General():
         
         check_solution_function: Callable, optional
             A function for that determines whether a new solution is accepted based on an acceptance probability.
-            Default is None.
+            Default is `None`.
         
         temperature : int
             The initial temperature for annealing algorithm. Default is `2`.
-        
         """
         for _ in range(repeats):
             if algorithm in ["Hill Climber", "Simulated Annealing"]:
