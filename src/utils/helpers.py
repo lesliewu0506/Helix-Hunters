@@ -225,7 +225,8 @@ def output_histogram_csv(
         List containing all the scores for multiple runs.
     """
     folder = protein_sequence_map[protein_sequence]
-    with open(f"data/histogram_data/{folder}/{dimension}D_{algorithm.title()}_{protein_sequence}.csv", 'w', newline = '') as csvfile:
+    file_path: str = f"data/histogram_data/{folder}/{dimension}D_{algorithm}_{protein_sequence}.csv"
+    with open(file_path, 'w', newline = '') as csvfile:
         writer = csv.writer(csvfile)
 
         for histogram in histogram_data:

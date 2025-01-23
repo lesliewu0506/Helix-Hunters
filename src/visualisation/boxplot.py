@@ -34,7 +34,7 @@ def boxplot(protein_sequence: str, dimension: int, show_plot: bool, save_plot: b
     min_score: int = _get_minimum_score(data_structure)
     ax: Axes
 
-    fig, ax = plt.subplots(figsize = (12, 7))
+    _ , ax = plt.subplots(figsize = (12, 7))
     box = ax.boxplot(data_list, patch_artist = True, labels = algorithms)
 
     # Customize boxplot appearance
@@ -43,7 +43,8 @@ def boxplot(protein_sequence: str, dimension: int, show_plot: bool, save_plot: b
         patch.set_facecolor(color)
         patch.set_alpha(0.85)
 
-    ax.set_title(f"{dimension}D Protein Score Distribution for Different Algorithms\nProtein Sequence: {protein_sequence}", fontsize = 14, fontweight = "bold")
+    title: str = f"{dimension}D Protein Score Distribution for Different Algorithms\nProtein Sequence: {protein_sequence}"
+    ax.set_title(title, fontsize = 14, fontweight = "bold")
     ax.set_xlabel("Algorithm", fontsize = 12)
     ax.set_ylabel("Score", fontsize = 12)
 

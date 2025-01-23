@@ -60,6 +60,12 @@ direction_map_3d: dict[int, list[int]] = {
 
 color_map: dict[str, str] = {"H" : "red", "P" : "blue", "C" : "green"}
 
+polar_lines: list[dict[str, str]] = [
+    {"color" : "lime", "label" : "H-H Connection"},
+    {"color" : "lime", "label" : "H-C Connection"},
+    {"color" : "darkorange", "label" : "C-C Connection"}]
+
+neighbour_map: set[tuple[int, int, int]] = {(1, 0, 0) , (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)}
 # ===============================================================
 # Algorithms
 # ===============================================================

@@ -1,7 +1,7 @@
 import random as rd
 import csv
 
-import src.visualisation.plot_functions as plot
+import src.visualisation.visualize_protein as plot
 
 from src.classes.protein import Protein
 
