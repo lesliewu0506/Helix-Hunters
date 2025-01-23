@@ -64,11 +64,13 @@ def _import_data(protein_sequence: str, algorithm: str, folder: str, dimension: 
     Helper function that imports the scores from a CSV file.
     It returns a list of the scores.
     """
+    histogram_data: list[int] = []
+
     with open(f"data/histogram_data/{folder}/{dimension}D_{algorithm}_{protein_sequence}.csv", "r") as csvfile:
 
         reader = csv.reader(csvfile)
 
-        histogram_data: list[int] = [[(int(value)) for value in row] for row in reader]
+        [[histogram_data.append(int(value)) for value in row] for row in reader]
 
     csvfile.close()
 
@@ -79,4 +81,7 @@ def _get_minimum_score(data: dict[str, list[int]]) -> int:
     Helper function that calculates the lowest score of a given data structure.
     It returns the lowest score.
     """
-    return min([min(histogram_data) for histogram_data in data.values()])
+    minimum_list: list[int] = []
+    for histogram_data in data.values():
+        minimum_list.append(min(histogram_data))
+    return min(minimum_list)

@@ -3,6 +3,7 @@
 # ===============================================================
 
 protein_sequences: list[str] = [
+    "HHPHHHPH",
     "HHPHHHPHPHHHPH",
     "HPHPPHHPHPPHPHHPPHPH",
     "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP",
@@ -17,6 +18,7 @@ protein_sequences: list[str] = [
 # ===============================================================
 
 protein_sequence_map: dict[str, str] = {
+    "HHPHHHPH" : "0",
     "HHPHHHPHPHHHPH" : "1",
     "HPHPPHHPHPPHPHHPPHPH" : "2",
     "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP" : "3",
