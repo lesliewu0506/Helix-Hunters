@@ -91,7 +91,7 @@ class SimulatedAnnealing(HillClimber):
         else: 
             return False, temperature
 
-    def _update_temperature(self, temperature) -> float:
+    def _update_temperature(self, temperature: float) -> float:
         """
         Updates the current temperature using an exponential decay formula.
 

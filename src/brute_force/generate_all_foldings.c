@@ -179,20 +179,6 @@ bool check_valid_folding(const int* absolute_directions, int protein_length)
         x_current += DX[direction_index];
         y_current += DY[direction_index];
     }
-
-    // Check if last positions is also valid
-    // printf("Last\n");
-    // printf("%i, %i\n", x_current, y_current);
-    for (int j = 0; j < visited_count - 1; j++)
-    {
-        // printf("%i, %i\n", x_coordinates[j],y_coordinates[j]);
-        if (x_coordinates[j] == x_current && y_coordinates[j] == y_current)
-        {
-            // printf("False\n");
-            return false; 
-        }
-    }
-    return true;
 }
 
 // Helper function for translating absolute directions to index for mapping

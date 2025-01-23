@@ -76,6 +76,6 @@ def view(protein_sequence: str = "all", dimension: int = 3, show_plot: bool = Tr
 
     if protein_sequence == "all":
         for sequence in protein_sequences:
-            vis.view_boxplot(sequence, dimension, show_plot, save_plot)
+            vis.boxplot(sequence, dimension, show_plot, save_plot)
     else:
-        vis.view_boxplot(protein_sequence, dimension, show_plot, save_plot)
+        vis.boxplot(protein_sequence, dimension, show_plot, save_plot)

@@ -77,7 +77,7 @@ class Random(General):
             score_list.append(protein.protein_rating)
 
             if protein.protein_rating < self.best_score:
-                self.best_score = protein.protein_rating
+                self.best_score: int = protein.protein_rating
                 self.best_protein = protein
 
         self.histogram_data.append(score_list)

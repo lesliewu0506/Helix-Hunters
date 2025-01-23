@@ -84,7 +84,7 @@ def direction_translator(directions: list[int], dimension: int) -> list[int]:
         direction_map: dict[int, list[int]] = direction_map_2d
 
     elif dimension == 3:
-        direction_map: dict[int, list[int]] = direction_map_3d
+        direction_map = direction_map_3d
 
     folding_sequence: list[int] = [1]
 

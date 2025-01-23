@@ -17,7 +17,7 @@ class Protein():
         self.structure: Optional[Grid] = None
         self.protein_rating: int = 1
 
-    def build_structure(self, function: Callable[[str], list[int]], dimension: int) -> None:
+    def build_structure(self, function: Callable[[str, int], list[int]], dimension: int) -> None:
         """Creates the attributes for the protein with specific folding function."""
         self.amino_directions = function(self.protein_sequence, dimension)
         structure = Grid(self.protein_sequence, self.amino_directions)

@@ -40,7 +40,7 @@ def _check_folding(folding: list[int]) -> Optional[list[int]]:
     Translates the folding list first into absolute directions.
     Returns the list of directions if valid, else None.
     """
-    abs_folding: list[int] = direction_translator(folding)
+    abs_folding: list[int] = direction_translator(folding, 2)
 
     if _check_valid_folding(abs_folding):
         return abs_folding
