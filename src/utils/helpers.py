@@ -11,7 +11,7 @@ import csv
 
 import src.visualisation.plot_functions as plot
 from src.classes import Protein
-from src.utils.constants import protein_sequence_map, algorithm_folder_map
+from src.utils.constants import protein_sequence_map, algorithm_folder_map, direction_map_2d, direction_map_3d
 
 # ===============================================================
 # Utility Functions
@@ -24,15 +24,15 @@ def random_fold(protein_sequence: str, dimension: int) -> list[int]:
 
     Parameters
     ----------
-    dimension : int
-        The dimension in which the folding takes place (`2` or `3`).
-
     protein_sequence : str
         Protein sequence (for example `HHHPPPHPCCP`).
 
+    dimension : int
+        The dimension in which the folding takes place (`2` or `3`).
+
     Returns
     -------
-    list[`int`]
+    `list[int]`
         A list of absolute directions.
 
     Notes
@@ -61,22 +61,22 @@ def direction_translator(directions: list[int], dimension: int) -> list[int]:
     
     Parameters
     ---------
+    directions : `list[int]`
+        A list of relative directions.
+
     dimension : int
         The dimension in which the folding takes place (`2` or `3`).
 
-    directions : list[`int`]
-        A list of relative directions.
-
     Returns
     -------
-    list[`int`]
+    `list[int]`
         A list of absolute directions.
     """
     if dimension == 2:
-        direction_map: dict[int, list[int]] = {1: [2, 1, -2], -1: [-2, -1, 2], 2: [-1, 2, 1], -2: [1, -2, -1]}
+        direction_map: dict[int, list[int]] = direction_map_2d
 
     elif dimension == 3:
-        direction_map: dict[int, list[int]] = {1: [2, 1, -2, 3, -3], -1: [-2, -1, 2, -3, 3], 2: [-1, 2, 1, 3, -3], -2: [1, -2, -1, -3, 3], 3: [1, 3, -1, 2, -2], -3: [-1, -3, 1, -2, 2]}
+        direction_map: dict[int, list[int]] = direction_map_3d
 
     folding_sequence: list[int] = [1]
 
@@ -122,10 +122,10 @@ def save_and_visualize_results(
     algorithm : str
         The name of the algorithm used (for example `Hill Climber`).
 
-    histogram_data : list[list[`int`]]
+    histogram_data : `list[list[int]]`
         List containing all the scores for multiple runs.
 
-    histogram : list[int]
+    histogram : `list[int]`
         Histogram data for last run.
 
     iterations : int
@@ -140,14 +140,14 @@ def save_and_visualize_results(
     save_data : bool
         Whether to save histogram data to a `CSV` file.
 
-    score_progression: list[`int`], optional
+    score_progression: `list[int]`, optional
         The score progression over iterations. Default is empty list `[]`.
     """
     protein_sequence = best_protein.protein_sequence
 
     # Create correct path for each algorithm and sequence
     folder = protein_sequence_map[protein_sequence]
-    base_path: str = f"data/protein_{algorithm_folder_map[algorithm]}_folds/{folder}"
+    base_path: str = f"results/protein_{algorithm_folder_map[algorithm]}_folds/{folder}"
 
     # Plots the progression of Hill Climber/Simulated Annealing algorithm
     if algorithm in ["Hill Climber", "Simulated Annealing"]:
@@ -179,13 +179,16 @@ def output_histogram_csv(
     
     Parameters
     ----------
+    dimension : int
+        The dimension in which the folding takes place (`2` or `3`).
+
     protein_sequence : str
         Protein sequence (for example `HHHPPPHPCCP`).
 
     algorithm : str
         The name of the algorithm used (for example `Hill Climber`).
 
-    histogram_data : list[list[`int`]]
+    histogram_data : `list[list[int]]`
         List containing all the scores for multiple runs.
     """
     folder = protein_sequence_map[protein_sequence]

@@ -13,8 +13,8 @@ def visualize_protein(
     protein: Protein,
     algorithm: str,
     file_path: str,
-    show: bool = False,
-    save: bool = False,
+    show: bool,
+    save: bool
     ) -> None:
     """
     Main function for visualizing the protein structure.
@@ -38,11 +38,11 @@ def visualize_protein(
     file_path : str
         Path to save the plots.
 
-    show : bool, optional
-        If `True` show the plots. Default is `False`
+    show : bool
+        If `True` show the plots.
 
-    save : bool, optional
-        If `True` save the plots. Default is `False`
+    save : bool
+        If `True` save the plots.
     """
 
     if protein.protein_rating == 1:
@@ -93,7 +93,7 @@ def _plot_2d(
     _plot_polar_connections(protein_structure)
         
     # Dummy plot for legend
-    _plot_legend(color_map)
+    _plot_legend()
 
     plt.title(f"2D protein plot\nAlgortihm: {algorithm} \nProtein: {protein_sequence}\nscore: {protein.get_rating()}", fontsize = 12, fontweight = "bold")
     plt.legend(loc = "best")
@@ -140,13 +140,13 @@ def _plot_3d(
     ax.set_ylim(y_min - 2, y_max + 2)
     ax.set_zlim(z_min - 2, z_max + 2)
 
-    ax.set_xlabel('')
-    ax.set_ylabel('')
-    ax.set_zlabel('')
+    ax.set_xlabel("")
+    ax.set_ylabel("")
+    ax.set_zlabel("")
 
-    ax.xaxis.set_tick_params(which='both', labelbottom=False, bottom=False)
-    ax.yaxis.set_tick_params(which='both', labelleft=False, left=False)
-    ax.zaxis.set_tick_params(which='both', labelleft=False, left=False)
+    ax.xaxis.set_tick_params(which = "both", labelbottom = False, bottom = False)
+    ax.yaxis.set_tick_params(which = "both", labelleft = False, left = False)
+    ax.zaxis.set_tick_params(which = "both", labelleft = False, left = False)
 
     ax.grid(True, color = "grey", linestyle = "--", alpha = 0.85)
 
@@ -262,6 +262,7 @@ def _check_sequential(
     """
     i = protein_structure[(x_old, y_old, z_old)][1]
     return protein_structure[(x_new, y_new, z_new)][1] in [(i - 1), (i + 1)]
+
 def _check_connection_type(
     amino_1: str,
     amino_2: str
@@ -276,9 +277,7 @@ def _check_connection_type(
         return "darkorange"
     return None
 
-def _plot_legend(
-    color_map: dict[str, str],
-    ) -> None:
+def _plot_legend() -> None:
     """
     Helper function for plotting the legend manually with dummy plots.
     It adds the labels for the colored amino acids.
@@ -306,8 +305,8 @@ def histogram(
     iterations: int,
     algorithm: str,
     file_path: str,
-    show: bool = False,
-    save: bool = False
+    show: bool,
+    save: bool
     ) -> None:
     """
     Creates a stylish histogram with gradient color for the score distribution of an algorithm.
@@ -332,11 +331,11 @@ def histogram(
     file_path : str
         Path to save the plots.
 
-    show : bool, optional
-        If `True` show the plot. Default is `False`.
+    show : bool
+        If `True` show the plot.
 
-    save : bool, optional
-        If `True` save the plot. Default is `False`.
+    save : bool
+        If `True` save the plot.
     """
     plt.figure(figsize = (12, 7))
 
@@ -388,8 +387,8 @@ def score_progression(
     score_list: list[int],
     algorithm: str,
     file_path: str,
-    show: bool = False,
-    save: bool = False
+    show: bool,
+    save: bool
     ) -> None:
     """
     Creates a plot for the evolution of the protein score with the Hill Climber/Simulated Annealing algorithm.
@@ -411,11 +410,11 @@ def score_progression(
     file_path : str
         Path to save the plots.
     
-    show : bool, optional
-        If `True` show the plot. Default is `False`.
+    show : bool
+        If `True` show the plot.
 
-    save : bool, optional
-        If `True` save the plot. Default is `False`.
+    save : bool
+        If `True` save the plot.
     """
     plt.figure(figsize = (12, 7))
     plt.plot(np.arange(1, len(score_list) + 1), score_list, label = "Score Progression", linewidth = 2)

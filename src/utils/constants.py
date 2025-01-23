@@ -34,7 +34,21 @@ algorithm_folder_map: dict[str, str] = {
     "Plant Propagation" : "propagation",
     "Genetic Algorithm" : "genetic"}
 
-color_map = {"H" : "red", "P" : "blue", "C" : "green"}
+direction_map_2d: dict[int, list[int]] = {
+    1 : [2, 1, -2],
+    -1 : [-2, -1, 2],
+    2 : [-1, 2, 1],
+    -2 : [1, -2, -1]}
+
+direction_map_3d: dict[int, list[int]] = {
+    1 : [2, 1, -2, 3, -3],
+    -1 : [-2, -1, 2, -3, 3],
+    2 : [-1, 2, 1, 3, -3],
+    -2 : [1, -2, -1, -3, 3],
+    3 : [1, 3, -1, 2, -2],
+    -3 : [-1, -3, 1, -2, 2]}
+
+color_map: dict[str, str] = {"H" : "red", "P" : "blue", "C" : "green"}
 
 # ===============================================================
 # Algorithms
