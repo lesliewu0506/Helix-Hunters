@@ -1,6 +1,8 @@
 from src.classes import Protein
 from src.utils import save_and_visualize_results
-from typing import Optional
+from typing import Optional, Callable
+input_type_1 = Callable[[int], None]
+input_type_2 = Callable[[float, Optional[Callable[[int, int, float], tuple[bool, float]]]], tuple[int, Protein, list[int]]]
 
 class General():
     """
@@ -59,8 +61,8 @@ class General():
         save_data: bool,
         repeats: int, 
         iterations: int,
-        algorithm_function,
-        check_solution_function = None,
+        algorithm_function: input_type_1 | input_type_2,
+        check_solution_function: Optional[Callable[[int, int, float], tuple[bool, float]]] = None,
         temperature: float = 2
         ) -> None:
         """
