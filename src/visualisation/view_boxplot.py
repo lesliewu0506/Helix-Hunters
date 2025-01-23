@@ -1,20 +1,9 @@
 import csv
+import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
-import numpy as np
 
-algorithms: list[str] = ["Random", "Greedy", "Hill Climber", "Simulated Annealing"]
-
-protein_sequence_map: dict[str, str] = {
-    "HHPHHHPH" : "0",
-    "HHPHHHPHPHHHPH" : "1",
-    "HPHPPHHPHPPHPHHPPHPH" : "2",
-    "PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP" : "3",
-    "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH" : "4",
-    "PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP" : "5",
-    "CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC" : "6",
-    "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH" : "7",
-    "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" : "8"}
+from src.utils import algorithms, protein_sequence_map
 
 def boxplot(protein_sequence: str, dimension: int, show_plot: bool, save_plot: bool) -> None:
     """

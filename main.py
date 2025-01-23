@@ -5,8 +5,7 @@ from src.brute_force import brute_force, generate_all_foldings
 from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing
 
 # Import Helpers 
-from src.utils import run, view
-from src.utils.constants import protein_sequences
+from src.utils import run, view, protein_sequences
 
 if __name__ == "__main__":
     # =========================== Brute Force ==========================

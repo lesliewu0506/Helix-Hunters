@@ -8,10 +8,10 @@ used by various parts of the project wherever needed.
 """
 import random as rd
 import csv
+import src.visualisation as vis
 
-from src.visualisation import visualize_protein, visualize_score_progression, visualize_histogram
 from src.classes import Protein
-from src.utils.constants import protein_sequence_map, algorithm_folder_map, direction_map_2d, direction_map_3d
+from src.utils import protein_sequence_map, algorithm_folder_map, direction_map_2d, direction_map_3d
 
 # ===============================================================
 # Utility Functions
@@ -159,7 +159,7 @@ def save_and_visualize_results(
 
     # Plots the progression of Hill Climber/Simulated Annealing algorithm
     if algorithm in ["Hill Climber", "Simulated Annealing"]:
-        visualize_score_progression(
+        vis.visualize_score_progression(
             dimension,
             protein_sequence,
             score_progression,
@@ -169,7 +169,7 @@ def save_and_visualize_results(
             algorithm = algorithm)
     
     # Plots score distribution for one repeat of algorithm
-    visualize_histogram(
+    vis.visualize_histogram(
         dimension,
         protein_sequence,
         histogram,
@@ -180,7 +180,7 @@ def save_and_visualize_results(
         algorithm = algorithm)
 
     # Plots the best protein structure for one repeat of algorithm
-    visualize_protein(
+    vis.visualize_protein(
         dimension,
         best_protein,
         algorithm,

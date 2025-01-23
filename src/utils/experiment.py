@@ -1,6 +1,6 @@
+import src.visualisation as vis
 from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing
-from src.visualisation import boxplot
-from src.utils.constants import protein_sequences
+from src.utils import protein_sequences
 
 def run(dimension: int = 3, repeats: int = 1, iterations: int = 10000) -> None:
     """
@@ -76,6 +76,6 @@ def view(protein_sequence: str = "all", dimension: int = 3, show_plot: bool = Tr
 
     if protein_sequence == "all":
         for sequence in protein_sequences:
-            boxplot(sequence, dimension, show_plot, save_plot)
+            vis.view_boxplot(sequence, dimension, show_plot, save_plot)
     else:
-        boxplot(protein_sequence, dimension, show_plot, save_plot)
+        vis.view_boxplot(protein_sequence, dimension, show_plot, save_plot)
