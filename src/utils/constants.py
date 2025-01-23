@@ -1,3 +1,11 @@
+"""
+This module contains general-purpose constants that can be used
+across the project. These constant are designed to simplify repetitive tasks, improve 
+code readability, and promote reusability.
+
+Constants in this file are not specific to any single module but can be 
+used by various parts of the project wherever needed.
+"""
 # ===============================================================
 # Protein Sequences
 # ===============================================================

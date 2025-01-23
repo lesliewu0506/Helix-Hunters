@@ -5,7 +5,7 @@ import numpy as np
 
 from src.utils.constants import algorithms, protein_sequence_map
 
-def boxplot(protein_sequence: str, dimension: int) -> None:
+def boxplot(protein_sequence: str, dimension: int, show_plot: bool, save_plot: bool) -> None:
     """
     Main function for plotting a boxplot of the score distributions
     of different algorithms of a protein sequence.
@@ -21,6 +21,12 @@ def boxplot(protein_sequence: str, dimension: int) -> None:
 
     dimension : int
         The dimension in which the folding takes place (`2` or `3`).
+
+    show_plot : bool
+        If `True` show the plot.
+
+    save_plot : bool
+        If `True` save the plot.
     """
     folder: str = protein_sequence_map[protein_sequence]
     data_structure: dict[str, list[int]] = _create_data_structure(protein_sequence, folder, dimension)
@@ -45,8 +51,13 @@ def boxplot(protein_sequence: str, dimension: int) -> None:
     ax.grid(axis = "y", linestyle = "--", alpha = 0.85)
 
     plt.tight_layout()
-    plt.savefig(f"results/boxplots/{dimension}D Distributions For {protein_sequence}.png", dpi = 600)
-    plt.show()
+
+    if save_plot:
+        plt.savefig(f"results/boxplots/{dimension}D Distributions For {protein_sequence}.png", dpi = 600)
+    if show_plot:
+        plt.show()
+
+    plt.close()
 
 def _create_data_structure(protein_sequence: str, folder: str, dimension: int) -> dict[str, list[int]]:
     """
