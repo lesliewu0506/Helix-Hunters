@@ -6,7 +6,7 @@ def run(dimension: int = 3, repeats: int = 1, iterations: int = 10000) -> None:
     """
     Main function for running the experiment.
     It will run every algorithm on every protein sequence, save the data and print the best score.
-    
+
     Parameters
     ----------
     dimension : int, optional
@@ -23,6 +23,12 @@ def run(dimension: int = 3, repeats: int = 1, iterations: int = 10000) -> None:
     `Hill Climber` and `Simulated Annealing` have default `iterations = 1000`.
     This is because their run time is extremely long for `10000` iterations.
     """
+    # Check arguments given
+    if dimension not in [2, 3]:
+        raise ValueError("Invalid dimension given. Choose from [2, 3].")
+    if repeats < 1:
+        raise ValueError("Invalid repeats given. Use repeats >= 1.")
+
     for protein_sequence in protein_sequences:
 
         random = Random(protein_sequence, dimension)
@@ -51,11 +57,17 @@ def view(protein_sequence: str = "all", dimension: int = 3) -> None:
     Parameter
     ---------
     protein_sequence : str, optional
-        Protein sequence (for example `HHHPPPHPCCP`). Default is `"all"`
+        Protein sequence (for example `HHHPPPHPCCP`). Default is `"all"`.
 
     dimension : int, optional
         The dimension in which the folding takes place (`2` or `3`). Default is `3`.
     """
+    # Check arguments given
+    if protein_sequence != "all" and protein_sequence not in protein_sequences:
+        raise ValueError(f"Enter a valid protein sequence. Choose from:\n{protein_sequences}")
+    if dimension not in [2, 3]:
+        raise ValueError("Invalid dimension given. Choose from [2, 3].")
+
     if protein_sequence == "all":
         for sequence in protein_sequences:
             boxplot(sequence, dimension)
