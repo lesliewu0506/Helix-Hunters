@@ -4,7 +4,7 @@ import numpy as np
 
 from src.utils.constants import algorithms, protein_sequence_map
 
-def boxplot(protein_sequence: str) -> None:
+def boxplot(protein_sequence: str, dimension: int) -> None:
     """
     Main function for plotting a boxplot of the score distributions
     of different algorithms of a protein sequence.
@@ -17,9 +17,12 @@ def boxplot(protein_sequence: str) -> None:
     ----------
     protein_sequence : str
         Protein sequence (for example `HHHPPPHPCCP`).
+
+    dimension : int
+        The dimension in which the folding takes place (`2` or `3`).
     """
     folder: str = protein_sequence_map[protein_sequence]
-    data_structure: dict[str, list[int]] = _create_data_structure(protein_sequence, folder)
+    data_structure: dict[str, list[int]] = _create_data_structure(protein_sequence, folder, dimension)
     data_list: list[list[int]] = [data for data in data_structure.values()]
     min_score: int = _get_minimum_score(data_structure)
 
@@ -32,7 +35,7 @@ def boxplot(protein_sequence: str) -> None:
         patch.set_facecolor(color)
         patch.set_alpha(0.85)
 
-    ax.set_title(f"Protein Score Distribution for Different Algorithms\nProtein Sequence: {protein_sequence}", fontsize = 14, fontweight = "bold")
+    ax.set_title(f"{dimension}D Protein Score Distribution for Different Algorithms\nProtein Sequence: {protein_sequence}", fontsize = 14, fontweight = "bold")
     ax.set_xlabel("Algorithm", fontsize = 12)
     ax.set_ylabel("Score", fontsize = 12)
 
@@ -40,10 +43,10 @@ def boxplot(protein_sequence: str) -> None:
     ax.grid(axis = "y", linestyle = "--", alpha = 0.85)
 
     plt.tight_layout()
-    plt.savefig(f"data/results/Distributions For {protein_sequence}.png", dpi = 600)
+    plt.savefig(f"results/boxplots/{dimension}D Distributions For {protein_sequence}.png", dpi = 600)
     plt.show()
 
-def _create_data_structure(protein_sequence: str, folder: str) -> dict[str, list[int]]:
+def _create_data_structure(protein_sequence: str, folder: str, dimension: int) -> dict[str, list[int]]:
     """
     Helper function that creates a dictionary
     with algorithm names as keys and the boxplot data as values.
@@ -51,17 +54,17 @@ def _create_data_structure(protein_sequence: str, folder: str) -> dict[str, list
     """
     data: dict[str, list[int]] = {}
     for algorithm in algorithms:
-        data[algorithm] = _import_data(protein_sequence, algorithm, folder)
+        data[algorithm] = _import_data(protein_sequence, algorithm, folder, dimension)
     return data
 
-def _import_data(protein_sequence: str, algorithm: str, folder: str) -> list[int]:
+def _import_data(protein_sequence: str, algorithm: str, folder: str, dimension: int) -> list[int]:
     """
     Helper function that imports the scores from a CSV file.
     It returns a list of the scores.
     """
     histogram_data: list[int] = []
 
-    with open(f"data/histogram_data/{folder}/{algorithm}_{protein_sequence}.csv", "r") as csvfile:
+    with open(f"data/histogram_data/{folder}/{dimension}D_{algorithm}_{protein_sequence}.csv", "r") as csvfile:
 
         reader = csv.reader(csvfile)
 

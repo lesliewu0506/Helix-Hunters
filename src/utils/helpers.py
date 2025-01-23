@@ -161,7 +161,7 @@ def save_and_visualize_results(
 
     if save_data:
         output_histogram_csv(dimension, protein_sequence, algorithm, histogram_data)
-        best_protein.output_csv(f"{base_path}/output")
+        best_protein.output_csv(f"{base_path}/{dimension}D output")
 
 # ===============================================================
 # File Operations

@@ -2,7 +2,7 @@ from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing
 from src.visualisation.boxplot import boxplot
 from src.utils.constants import protein_sequences
 
-def run(dimension: int = 2, repeats: int = 1, iterations: int = 10000) -> None:
+def run(dimension: int = 3, repeats: int = 1, iterations: int = 10000) -> None:
     """
     Main function for running the experiment.
     It will run every algorithm on every protein sequence, save the data and print the best score.
@@ -42,19 +42,22 @@ def run(dimension: int = 2, repeats: int = 1, iterations: int = 10000) -> None:
         print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
 
     
-def view(protein_sequence: str = "all") -> None:
+def view(protein_sequence: str = "all", dimension: int = 3) -> None:
     """
     Shows the boxplots for the different algorithms and saves the boxplots.
-    Takes in a protein sequence as argument and plots the corresponding boxplot.
-    If no argument is given, it will plot all boxplots.
+    Takes in protein sequence and dimension as arguments and plots the corresponding boxplot.
+    If no argument is given, it will plot all boxplots in 3D.
 
     Parameter
     ---------
     protein_sequence : str, optional
         Protein sequence (for example `HHHPPPHPCCP`). Default is `"all"`
+
+    dimension : int, optional
+        The dimension in which the folding takes place (`2` or `3`). Default is `3`.
     """
     if protein_sequence == "all":
         for sequence in protein_sequences:
-            boxplot(sequence)
+            boxplot(sequence, dimension)
     else:
-        boxplot(protein_sequence)
+        boxplot(protein_sequence, dimension)
