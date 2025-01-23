@@ -5,15 +5,6 @@ from matplotlib.axes import Axes
 from src.classes import Protein
 from typing import Optional
 
-color_map: dict[str, str] = {"H" : "red", "P" : "blue", "C" : "green"}
-
-polar_lines: list[dict[str, str]] = [
-    {"color" : "lime", "label" : "H-H Connection"},
-    {"color" : "lime", "label" : "H-C Connection"},
-    {"color" : "darkorange", "label" : "C-C Connection"}]
-
-neighbour_map: set[tuple[int, int, int]] = {(1, 0, 0) , (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)}
-
 def visualize_protein(
     dimension: int,
     protein: Protein,
@@ -171,6 +162,8 @@ def _plot_amino_acids(
     ax: Optional[Axes] = None
     ) -> None:
     """Helper function for plotting the amino acids."""
+    color_map: dict[str, str] = {"H" : "red", "P" : "blue", "C" : "green"}
+
     for (x, y, z), (amino_type, _) in protein_structure.items():
         if ax:
             ax.scatter(x, y, z, color = color_map[amino_type], s = 100, zorder = 3)
@@ -202,6 +195,8 @@ def _plot_polar_connections(
     lime green: H-H connection and C-H connection
     darkorange: C-C connection
     """
+    neighbour_map: set[tuple[int, int, int]] = {(1, 0, 0) , (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)}
+
     for x_current, y_current, z_current in protein_structure:
 
         amino_1 = protein_structure[(x_current, y_current, z_current)][0]
@@ -274,6 +269,13 @@ def _plot_legend(ax: Optional[Axes] = None) -> None:
     It adds the labels for the colored amino acids.
     It also adds the type of connections between polar amino acids.
     """
+    color_map: dict[str, str] = {"H" : "red", "P" : "blue", "C" : "green"}
+
+    polar_lines: list[dict[str, str]] = [
+    {"color" : "lime", "label" : "H-H Connection"},
+    {"color" : "lime", "label" : "H-C Connection"},
+    {"color" : "darkorange", "label" : "C-C Connection"}]
+
     # Amino colors
     for amino_type, color in color_map.items():
         if ax:
