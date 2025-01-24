@@ -62,12 +62,27 @@ class HillClimber(General):
             save_data = save_data,
             repeats = repeats,
             iterations = iterations,
-            algorithm_function = self._hill_climber)
-    
-    def _hill_climber(
+            algorithm_function = self._hill_climber,
+            accept_function = self._accept_function)
+
+    def _hill_climber(self, iterations: int, accept_function: Callable, temperature: float) -> None:
+        """Main function for running the Hill Climber algorithm."""
+        best_score_list: list[int] = []
+        for _ in range(iterations):
+            best_score, protein, score_progression_list = self._hill_climber_helper(temperature, accept_function)
+            # Save best results
+            if best_score < self.best_score:
+                self.best_protein = protein
+                self.score_progression_list = score_progression_list
+                self.best_score = best_score
+            best_score_list.append(best_score)
+            
+        self.histogram_data.append(best_score_list)
+
+    def _hill_climber_helper(
         self,
         temperature: float,
-        check_solution: Optional[Callable[[int, int, float], tuple[bool, float]]]
+        accept_solution: Callable[[int, int, float], tuple[bool, float]],
         ) -> tuple[int, Protein, list[int]]:
         """
         Helper function that iteratively changes the protein structure and evaluated the results.
@@ -122,21 +137,18 @@ class HillClimber(General):
             elif candidate_score < best_rating:
                 same_score_index = 0
             
-            # Check for simulated annealing
-            if check_solution is None:
-                # Accept candidate if score becomes lower
-                if candidate_score <= best_rating:
-                    best_rating = candidate_score
-                    protein = protein_candidate
-                    amino_directions = new_amino_directions
-            else:
-                # Accept based on probability
-                if candidate_score != 1:
-                    (accepted, temperature) = check_solution(candidate_score, best_rating, temperature)
-                    if accepted:
-                        best_rating = candidate_score
-                        protein = protein_candidate
-                        amino_directions = new_amino_directions
+            # Accept solution functions
+            (accepted, temperature) = accept_solution(candidate_score, best_rating, temperature)
+            if accepted:
+                best_rating = candidate_score
+                protein = protein_candidate
+                amino_directions = new_amino_directions
 
             score_progression_list.append(best_rating)
         return best_rating, protein, score_progression_list
+    
+    def _accept_function(self, candidate_score: int, best_rating: int, temperature: float) -> tuple[bool, float]:
+        """Helper function for accepting the new rating. Returns `True` if smaller or equal."""
+        if candidate_score <= best_rating:
+            return True, temperature
+        return False, temperature

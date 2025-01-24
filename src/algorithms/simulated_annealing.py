@@ -24,11 +24,7 @@ class SimulatedAnnealing(HillClimber):
     This class inherits most of the `HillClimber` class functions. 
     """
 
-    def __init__(self, protein_sequence: str, dimension: int, temperature: int = 2) -> None:
-        """
-        `T` : float, optional
-            The temperature for simulated Annealing. Default is `2`.
-        """
+    def __init__(self, protein_sequence: str, dimension: int, temperature: float = 2) -> None:
         super().__init__(protein_sequence, dimension)
 
         self.T: float = temperature
@@ -69,15 +65,20 @@ class SimulatedAnnealing(HillClimber):
             repeats = repeats,
             iterations = iterations,
             algorithm_function = self._hill_climber,
-            check_solution_function = self._check_solution,
-            temperature= self.T)
+            accept_function = self._accept_function,
+            temperature = self.T)
 
-    def _check_solution(self, new_rating: int, old_rating: int, temperature: float) -> tuple[bool, float]:
+    def _accept_function(self, new_rating: int, old_rating: int, temperature: float) -> tuple[bool, float]:
         """
-        Helper function that determines whether a new solution is accepted based on the acceptance probability.
+        Helper function that determines whether a new structure is accepted based on the acceptance probability.
         The acceptance probability is calculated using the Metropolis criterion, where 
         worse solutions are accepted with a probability that decreases as the temperature lowers.
         """
+        if new_rating == 1:
+            # Update temperature
+            temperature = self._update_temperature(temperature)
+            return False, temperature
+
         delta: int = new_rating - old_rating
 
         if delta <= 0:

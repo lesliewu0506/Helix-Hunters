@@ -57,7 +57,7 @@ class Random(General):
             iterations = iterations,
             algorithm_function = self._random_iterated)
 
-    def _random_iterated(self, n: int) -> None:
+    def _random_iterated(self, n: int, dummy_1: None, dummy_2: float) -> None:
         """
         Helper function that generates multiple random generated folding sequences for a given protein string.
         Plots the distribution of the scores in a histogram.

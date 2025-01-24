@@ -61,9 +61,9 @@ class General():
         save_data: bool,
         repeats: int, 
         iterations: int,
-        algorithm_function: input_type_1 | input_type_2,
-        check_solution_function: Optional[Callable[[int, int, float], tuple[bool, float]]] = None,
-        temperature: float = 2
+        algorithm_function,
+        accept_function: Optional[Callable[[int, int, float], tuple[bool, float]]] = None,
+        temperature: float = 1
         ) -> None:
         """
         Runs a protein optimization algorithm. Can show and save the data created with arguments.
@@ -98,23 +98,10 @@ class General():
             Default is `None`.
         
         temperature : int
-            The initial temperature for annealing algorithm. Default is `2`.
+            The initial temperature for annealing algorithm. Default is `1`.
         """
         for _ in range(repeats):
-            if algorithm in ["Hill Climber", "Simulated Annealing"]:
-                best_score_list: list[int] = []
-                for _ in range(iterations):
-                    best_score, protein, score_progression_list = algorithm_function(temperature, check_solution_function)
-                    # Save best results
-                    if best_score < self.best_score:
-                        self.best_protein = protein
-                        self.score_progression_list = score_progression_list
-                        self.best_score = best_score
-                    best_score_list.append(best_score)
-                
-                self.histogram_data.append(best_score_list)
-            else:
-                algorithm_function(iterations)
+            algorithm_function(iterations, accept_function, temperature)
         
         # Save and visualize protein
         if self.best_protein is not None:

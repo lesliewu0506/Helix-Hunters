@@ -58,7 +58,7 @@ class Greedy(General):
             iterations = iterations,
             algorithm_function = self._greedy_iterated)
 
-    def _greedy_iterated(self, n: int) -> None:
+    def _greedy_iterated(self, n: int, dummy_1: None, dummy_2: float) -> None:
         """
         Helper function that generates multiple protein structures for a given protein sequence.
         For each iteration, it will use a mix of random and greedy algorithm to create the structure.
