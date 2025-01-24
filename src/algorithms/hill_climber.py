@@ -1,9 +1,9 @@
 import random as rd
 
 from . import General
-from src.utils import random_fold
 from src.classes import Protein
-from typing import Callable, Optional
+from src.utils import random_fold, MAX_UNCHANGED_ITERATIONS, DIRECTION_CHOICES_2D, DIRECTION_CHOICES_3D
+from typing import Callable
 
 class HillClimber(General):
     """
@@ -22,9 +22,23 @@ class HillClimber(General):
     Notes
     -----
     This algorithm has built in support for Simulated Annealing.
+
+    Raises
+    ------
+    ValueError
+        If the dimension is not 2 or 3.
+
+    Example
+    -------
+    >>> hill_climber = HillClimber("HHPHHHPH", 2)
+    >>> hill_climber.run(show_plot = True, repeats = 5, iterations = 1000)
+
     """
 
     def __init__(self, protein_sequence: str, dimension: int) -> None:
+        if dimension not in [2, 3]:
+            raise ValueError("Invalid dimension given. Choose from:\n[2, 3].")
+
         super().__init__(protein_sequence, dimension)
 
     def run(
@@ -54,7 +68,15 @@ class HillClimber(General):
 
         iterations : int, optional
             The number of iterations per run. Default is `1000`.
+        
+        Raises
+        ------
+        ValueError
+            If repeats or iterations has an invalid value (<1).
         """
+        if repeats < 1 or iterations < 1:
+            raise ValueError("Both repeats and iterations must be at least 1.")
+
         self.run_algorithm(
             algorithm = "Hill Climber",
             show_plot = show_plot,
@@ -112,15 +134,15 @@ class HillClimber(General):
 
         best_rating: int = protein.protein_rating
 
-        while same_score_index < 600:
+        while same_score_index < MAX_UNCHANGED_ITERATIONS:
             # Choose random amino acid in sequence and give it new direction
             index = rd.randrange(len(amino_directions))
 
             if self.dimension == 2:
-                new_direction = rd.choice([direction for direction in [-2, -1, 1, 2] if direction != amino_directions[index]])
+                new_direction = rd.choice([direction for direction in DIRECTION_CHOICES_2D if direction != amino_directions[index]])
 
             elif self.dimension == 3:
-                new_direction = rd.choice([direction for direction in [-3, -2, -1, 1, 2, 3] if direction != amino_directions[index]])
+                new_direction = rd.choice([direction for direction in DIRECTION_CHOICES_3D if direction != amino_directions[index]])
 
             # Copy amino directions with new direction added
             new_amino_directions: list[int] = amino_directions[:]

@@ -7,6 +7,34 @@ Constants in this file are not specific to any single module but can be
 used by various parts of the project wherever needed.
 """
 # ===============================================================
+# Greedy Constants
+# ===============================================================
+
+DIRECTIONS_2D: list[int] = [0, 1, 2]
+DIRECTIONS_3D: list[int] = [0, 1, 2, 3, 4] 
+
+# ===============================================================
+# Hill Climber Constants
+# ===============================================================
+
+MAX_UNCHANGED_ITERATIONS: int = 600
+DIRECTION_CHOICES_2D: list[int] = [-2, -1, 1, 2]
+DIRECTION_CHOICES_3D: list[int] = [-3, -2, -1, 1, 2, 3]
+
+# ===============================================================
+# Simulated Annealing Constants
+# ===============================================================
+
+TEMPERATURE: int = 2
+TEMPERATURE_DECAY: int = 0.99
+
+# ===============================================================
+# Utils Constant
+# ===============================================================
+
+ITERATIVE_ALGORITHM_FACTOR: int = 10
+
+# ===============================================================
 # Protein Sequences
 # ===============================================================
 
@@ -63,4 +91,3 @@ direction_map_3d: dict[int, list[int]] = {
 # ===============================================================
 
 algorithms: list[str] = ["Random", "Greedy", "Hill Climber", "Simulated Annealing"]
-

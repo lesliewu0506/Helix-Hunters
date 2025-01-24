@@ -2,6 +2,7 @@ import random as rd
 import numpy as np
 
 from . import HillClimber
+from src.utils import TEMPERATURE_DECAY, TEMPERATURE
 
 class SimulatedAnnealing(HillClimber):
     """
@@ -22,9 +23,22 @@ class SimulatedAnnealing(HillClimber):
     Notes
     -----
     This class inherits most of the `HillClimber` class functions. 
+
+    Raises
+    ------
+    ValueError
+        If the dimension is not 2 or 3.
+
+    Example
+    -------
+    >>> annealing = SimulatedAnnealing("HHPHHHPH", 2)
+    >>> annealing.run(show_plot = True, repeats = 5, iterations = 1000)
     """
 
-    def __init__(self, protein_sequence: str, dimension: int, temperature: float = 2) -> None:
+    def __init__(self, protein_sequence: str, dimension: int, temperature: float = TEMPERATURE) -> None:
+        if dimension not in [2, 3]:
+            raise ValueError("Invalid dimension given. Choose from:\n[2, 3].")
+
         super().__init__(protein_sequence, dimension)
 
         self.T: float = temperature
@@ -56,7 +70,15 @@ class SimulatedAnnealing(HillClimber):
 
         iterations : int, optional
             The number of iterations per run. Default is `1000`.
+        
+        Raises
+        ------
+        ValueError
+            If repeats or iterations has an invalid value (<1).
         """
+        if repeats < 1 or iterations < 1:
+            raise ValueError("Both repeats and iterations must be at least 1.")
+
         self.run_algorithm(
             algorithm = "Simulated Annealing",
             show_plot = show_plot,
@@ -106,5 +128,5 @@ class SimulatedAnnealing(HillClimber):
         By trial and error, the value of 0.99 has been found and used for this project.
         This ensures that the annealing is stopped around 500 iterations.
         """
-        temperature = temperature * 0.99
+        temperature = temperature * TEMPERATURE_DECAY
         return temperature

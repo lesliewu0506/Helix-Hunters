@@ -11,7 +11,7 @@ import csv
 import src.visualisation as vis
 
 from src.classes import Protein
-from src.utils import protein_sequence_map, algorithm_folder_map, direction_map_2d, direction_map_3d
+from src.utils import protein_sequence_map, algorithm_folder_map, direction_map_2d, direction_map_3d, DIRECTION_CHOICES_2D, DIRECTION_CHOICES_3D
 
 # ===============================================================
 # Utility Functions
@@ -43,10 +43,10 @@ def random_fold(protein_sequence: str, dimension: int) -> list[int]:
     relative_direction_list: list[int] = []
 
     if dimension == 2:
-        random_choices = [0, 1, 2]
+        random_choices = DIRECTION_CHOICES_2D
 
     elif dimension == 3:
-        random_choices = [0, 1, 2, 3, 4]
+        random_choices = DIRECTION_CHOICES_3D
 
     for _ in range(len(protein_sequence) - 2):
         direction = rd.choice(random_choices)

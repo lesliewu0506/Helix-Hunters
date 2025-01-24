@@ -1,8 +1,6 @@
 from src.classes import Protein
 from src.utils import save_and_visualize_results
 from typing import Optional, Callable
-input_type_1 = Callable[[int], None]
-input_type_2 = Callable[[float, Optional[Callable[[int, int, float], tuple[bool, float]]]], tuple[int, Protein, list[int]]]
 
 class General():
     """
@@ -22,6 +20,17 @@ class General():
     Notes
     -----
     This class is not intended to be used directly.
+
+    Example
+    -------
+    ```python
+    class HillClimber(General):
+        def __init__(self, protein_sequence: str, dimension: int) -> None:
+            super().__init__(protein_sequence, dimension)
+
+        def run(self, ...):
+            self.run_algorithm(...)
+    ```
     """
 
     def __init__(self, protein_sequence: str, dimension: int) -> None:
@@ -61,7 +70,7 @@ class General():
         save_data: bool,
         repeats: int, 
         iterations: int,
-        algorithm_function,
+        algorithm_function: Callable[[int, Optional[Callable[[int, int, float], tuple[bool, float]]], float], None],
         accept_function: Optional[Callable[[int, int, float], tuple[bool, float]]] = None,
         temperature: float = 1
         ) -> None:
@@ -90,8 +99,7 @@ class General():
         
         algortihm_function : Callable
             The main function for implementing the optimization algorithm.
-            It updates the attributes initialized and has optional returns 
-            of the form of a tuple consisting of best score, best protein and score progression list.
+            It updates the attributes initialized.
         
         check_solution_function: Callable, optional
             A function for that determines whether a new solution is accepted based on an acceptance probability.
@@ -99,6 +107,16 @@ class General():
         
         temperature : int
             The initial temperature for annealing algorithm. Default is `1`.
+        
+        Notes
+        -----
+        The method saves the best protein structure, score progression, and histogram data.
+        These results can be visualized or saved to files for further analysis.
+
+        Raises
+        ------
+        RunTimeError
+            If no valid protein structure was found during the optimization process.
         """
         for _ in range(repeats):
             algorithm_function(iterations, accept_function, temperature)
@@ -117,4 +135,4 @@ class General():
                 save_data = save_data,
                 score_progression = self.score_progression_list)
         else:
-            print("Error: Did not find a valid protein.")
+            raise RuntimeError("No valid protein structure found during the optimization process.")

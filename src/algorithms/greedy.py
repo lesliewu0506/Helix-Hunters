@@ -1,8 +1,8 @@
 import random as rd
 
-from src.utils import direction_translator
-from src.classes import Protein
 from . import General
+from src.classes import Protein
+from src.utils import direction_translator, DIRECTIONS_2D, DIRECTIONS_3D
 
 class Greedy(General):
     """
@@ -16,9 +16,22 @@ class Greedy(General):
     
     dimension : int
         The dimension in which the folding takes place (`2` or `3`).
+
+    Raises
+    ------
+    ValueError
+        If the dimension is not 2 or 3.
+
+    Example
+    -------
+    >>> greedy = Greedy("HHPHHHPH", 2)
+    >>> greedy.run(show_plot = True, repeats = 5, iterations = 1000)
     """
 
     def __init__(self, protein_sequence: str, dimension: int) -> None:
+        if dimension not in [2, 3]:
+            raise ValueError("Invalid dimension given. Choose from:\n[2, 3].")
+
         super().__init__(protein_sequence, dimension)
 
     def run(
@@ -30,7 +43,7 @@ class Greedy(General):
         iterations: int = 10000
         ) -> None:
         """
-        Runs the Greedily algorithm to generate a protein structure.
+        Runs the Greedy algorithm to generate protein structures.
 
         Parameters
         ----------
@@ -48,7 +61,15 @@ class Greedy(General):
 
         iterations : int, optional
             The number of iterations per run. Default is `10000`.
+        
+        Raises
+        ------
+        ValueError
+            If repeats or iterations has an invalid value (<1).
         """
+        if repeats < 1 or iterations < 1:
+            raise ValueError("Both repeats and iterations must be at least 1.")
+
         self.run_algorithm(
             algorithm = "Greedy",
             show_plot = show_plot,
@@ -58,7 +79,7 @@ class Greedy(General):
             iterations = iterations,
             algorithm_function = self._greedy_iterated)
 
-    def _greedy_iterated(self, n: int, dummy_1: None, dummy_2: float) -> None:
+    def _greedy_iterated(self, n: int, accept_function: None, temperature: float) -> None:
         """
         Helper function that generates multiple protein structures for a given protein sequence.
         For each iteration, it will use a mix of random and greedy algorithm to create the structure.
@@ -107,11 +128,11 @@ class Greedy(General):
         relative_direction_list: list[int] = []
 
         if dimension == 2:
-            directions = [0, 1, 2]
+            directions = DIRECTIONS_2D
 
         elif dimension == 3:
-            directions = [0, 1, 2, 3, 4]
-
+            directions = DIRECTIONS_3D
+        
         for i in range(len(protein_sequence) - 2):
             
             if i % 5 == 0:
@@ -135,9 +156,7 @@ class Greedy(General):
         best_directions = []
         minimum_score = 1
 
-        for direction in [0, 1, 2, 3, 4]:
-            if dimension == 2 and direction in [3, 4]:
-                continue
+        for direction in (DIRECTIONS_3D if dimension == 3 else DIRECTIONS_2D):
 
             new_direction_list = direction_list + [direction]
             abs_direction = direction_translator(new_direction_list, dimension)
