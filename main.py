@@ -57,6 +57,6 @@ if __name__ == "__main__":
     #     annealing.run(show_plot = False, save_plot = True, save_data= True, repeats = 1, iterations = 1000)
 
     #     print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
-    random = Random(protein_sequences[-1], dimension = 3)
+    random = Random(protein_sequences[-1], dimension = 2)
     random.run(show_plot = True, iterations = 1000)
     pass

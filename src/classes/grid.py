@@ -1,9 +1,17 @@
 class Grid():
     """
     A class to represent a structure of a protein sequence.
-    It contains self.structure, a dict with:
+    It contains a `dict` with:
     - keys (x, y, z): coordinates of an amino acid.
     - values (type, order): type of amino acid and the order in the chain.
+
+    Parameters
+    ----------
+    protein_sequence : str
+        Protein sequence (for example `HHPHHHPH`).
+    
+    amino_directions : `list[int]`, optional
+        A list of absolute directions.
     """
     # Maps direction to a change in x, y and z
     direction_map: dict[int, tuple[int, int, int]] = {
@@ -13,10 +21,28 @@ class Grid():
         2 : (0, 1, 0),
         -2 : (0, -1, 0),
         3 : (0, 0, 1),
-        -3 : (0, 0, -1)
-    }
+        -3 : (0, 0, -1)}
 
     def __init__(self, protein_sequence: str, amino_directions: list[int] | None) -> None:
+        """ 
+        `structure` : `dict[tuple[int, int, int], tuple[str, int]]`
+            The structure contains the coordinates of an amino acid and its order in the sequence.
+
+        `protein_sequence` : str
+            Protein sequence (for example `HHPHHHPH`).
+    
+        `amino_directions` : `list[int]`, optional
+            A list of absolute directions.
+
+        `x_current` : int
+            The current x-coordinate. Default is `0`.
+
+        `y_current` : int
+            The current y-coordinate. Default is `0`.
+
+        `z_current` : int
+            The current z-coordinate. Default is `0`.
+        """
         self.structure: dict[tuple[int, int, int], tuple[str, int]] = {}
         self.protein_sequence: str = protein_sequence
         self.amino_directions: list[int] | None = amino_directions

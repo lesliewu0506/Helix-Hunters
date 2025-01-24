@@ -1,7 +1,29 @@
 class Rating():
-    """A class to represent the rating of a protein structure based on its sequence and structure."""
+    """
+    A class to represent the rating of a protein structure based on its sequence and structure.
+    It will take in a protein structure and calculate its rating based on rules:
+    - If two `H` amino acids are next to each other, it gets a score `-1`.
+    - If `H` and `C` are next to each other, it also gets a score `-1`.
+    - If two `C` amino acids are next to each other, its gets a score `-5`.
+    
+    This only applies if the amino acids are not sequential.
+    
+    Parameter
+    ---------
+    structure : `dict[tuple[int, int, int], tuple[str, int]]`
+        The structure contains the information of the folding of a protein.
+    """
 
     def __init__(self, structure: dict[tuple[int, int, int], tuple[str, int]]) -> None:
+        """ 
+        Attributes
+        ----------
+        `structure` : dict[tuple[int, int, int], tuple[str, int]]
+            The structure contains the coordinates of an amino acid and its order in the sequence.
+
+        `score` : int
+            The score based on its structure.
+        """
         self.structure: dict[tuple[int, int, int], tuple[str, int]] = structure
         self.score: int = 0
 

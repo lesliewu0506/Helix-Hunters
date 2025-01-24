@@ -4,14 +4,38 @@ from typing import Callable, Optional
 
 class Protein():
     """
-    A class to represent a protein and its attributes.
+    A class to represent a protein.
     It stores a protein sequence and uses a provided folding function
-    to generate a folding pattern (amino_directions) or it uses a prebuilt folding pattern. Then it creates
-    a structure (mapping of positions to amino acids) and computes
+    to generate a folding pattern (`amino_directions`) or it uses a prebuilt folding pattern.
+    Then it creates a structure (mapping of positions to amino acids) and computes
     the total rating of the protein.
+
+    Parameters
+    ----------
+    protein_sequence : str
+        Protein sequence (for example `HHPHHHPH`).
+    
+    amino_directions : `list[int]`, optional
+        A list of absolute directions. Default is `None`.
     """
 
     def __init__(self, protein_sequence: str, amino_directions: Optional[list[int]] = None) -> None:
+        """
+        Attributes
+        ----------
+        `protein_sequence` : str
+            Protein sequence (for example `HHPHHHPH`).
+
+        `amino_directions` : `list[int]`, optional
+            A list of absolute directions. Default is `None`.
+        
+        `structure` : `Grid`, optional
+            The structure contains the coordinates of an amino acid and its order in the sequence.
+            Default is `None`.
+
+        `protein_rating` : int
+            The score based on its structure.
+        """
         self.protein_sequence: str = protein_sequence
         self.amino_directions: Optional[list[int]] = amino_directions
         self.structure: Optional[Grid] = None

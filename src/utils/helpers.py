@@ -56,7 +56,7 @@ def random_fold(protein_sequence: str, dimension: int) -> list[int]:
 
 def direction_translator(directions: list[int], dimension: int) -> list[int]:
     """
-    Translates relative paths (0, 1, 2, 3, 4) to absolute paths (-3, -2, -1, 1, 2, 3)
+    Translates relative paths (0, 1, 2, 3, 4) to absolute paths (-3, -2, -1, 1, 2, 3).
     Also adds 1 and 0 at start and end respectively for correct format.
     
     Parameters
@@ -216,7 +216,7 @@ def output_histogram_csv(
         The dimension in which the folding takes place (`2` or `3`).
 
     protein_sequence : str
-        Protein sequence (for example `HHHPPPHPCCP`).
+        Protein sequence (for example `HHPHHHPH`).
 
     algorithm : str
         The name of the algorithm used (for example `Hill Climber`).
