@@ -23,7 +23,7 @@ def generate_all_foldings(protein_sequence: str) -> None:
     sequence_length = len(protein_sequence)
     directions = [0, 1, 2]
 
-    with open(f'{protein_sequence}.csv', 'w', newline = '') as csvfile:
+    with open(f'src/brute_force/all_foldings/{protein_sequence}.csv', 'w', newline = '') as csvfile:
         
         writer = csv.writer(csvfile)
 

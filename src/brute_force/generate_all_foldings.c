@@ -44,7 +44,7 @@ void generate_all_foldings(const char* protein_sequence)
     
     // Create CSV file
     char filename[60];
-    sprintf(filename, "/mnt/c/Users/lesli/Downloads/%s.csv", protein_sequence);
+    sprintf(filename, "%s.csv", protein_sequence);
     FILE* file = fopen(filename, "w");
 
     // Check for error in opening file
