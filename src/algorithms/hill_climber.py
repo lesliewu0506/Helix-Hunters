@@ -14,7 +14,7 @@ class HillClimber(General):
     Parameters
     ----------
     protein_sequence : str
-        Protein sequence (for example `HHHPPPHPCCP`).
+        Protein sequence (for example `HHPHHHPH`).
 
     dimension : int
         The dimension in which the folding takes place (`2` or `3`).

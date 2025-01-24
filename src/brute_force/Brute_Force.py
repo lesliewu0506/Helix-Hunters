@@ -16,7 +16,7 @@ def brute_force(sequence: str, save: bool = False) -> None:
     Parameters
     ----------
     sequence : str
-        Protein sequence (for example `HHHPPPHPCCP`).
+        Protein sequence (for example `HHPHHHPH`).
 
     save : bool, optional
         Whether to save the plots. Default is `False`.

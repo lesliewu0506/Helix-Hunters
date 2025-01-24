@@ -12,7 +12,7 @@ class General():
     and then call `run_algorithm`.
 
     Parameters
-    ---------
+    ----------
     protein_sequence : str
         Protein sequence (for example `HHPHHHPH`).
     
@@ -34,7 +34,7 @@ class General():
         `protein_squence` : str
             Protein sequence (for example `HHPHHHPH`).
 
-        `histogram_data` : list[list[`int`]]
+        `histogram_data` : `list[list[int]]`
             List containing all the scores for multiple runs.
 
         `best_score` : int
@@ -43,7 +43,7 @@ class General():
         `best_protein` : `Protein`, optional
             The best `Protein` object found. Default set to `None`.
         
-        `score_progression_list` : list[`int`]
+        `score_progression_list` : `list[int]`
             The score progression over iterations.
         """
         self.dimension: int = dimension
@@ -66,7 +66,7 @@ class General():
         temperature: float = 2
         ) -> None:
         """
-        Runs a protein optimization algorithm.
+        Runs a protein optimization algorithm. Can show and save the data created with arguments.
 
         Parameters
         ----------

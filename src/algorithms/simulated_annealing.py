@@ -11,7 +11,7 @@ class SimulatedAnnealing(HillClimber):
     Parameters
     ----------
     protein_sequence : str
-        Protein sequence (for example `HHHPPPHPCCP`).
+        Protein sequence (for example `HHPHHHPH`).
     
     dimension : int
         The dimension in which the folding takes place (`2` or `3`).
@@ -25,6 +25,10 @@ class SimulatedAnnealing(HillClimber):
     """
 
     def __init__(self, protein_sequence: str, dimension: int, temperature: int = 2) -> None:
+        """
+        `T` : float, optional
+            The temperature for simulated Annealing. Default is `2`.
+        """
         super().__init__(protein_sequence, dimension)
 
         self.T: float = temperature

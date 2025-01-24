@@ -4,7 +4,10 @@ from src.classes import Protein
 
 class Random(General):
     """
-    The Random class generates a random sequences for a protein structure.
+    The Random class generates random sequences for a protein structure.
+    It will run for `repeats` times with `iterations` iterations.
+    At the end it will return the best protein structure found.
+    Has optional arguments for showing and saving the data created by the run.
 
     Parameters
     ----------
@@ -12,7 +15,7 @@ class Random(General):
         The dimension in which the folding takes place (`2` or `3`).
 
     protein_sequence : str
-        Protein sequence (for example `HHHPPPHPCCP`).
+        Protein sequence (for example `HHPHHHPH`).
     """
     def __init__(self, protein_sequence: str, dimension: int) -> None:
         super().__init__(protein_sequence, dimension)

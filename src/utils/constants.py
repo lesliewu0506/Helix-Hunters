@@ -63,3 +63,4 @@ direction_map_3d: dict[int, list[int]] = {
 # ===============================================================
 
 algorithms: list[str] = ["Random", "Greedy", "Hill Climber", "Simulated Annealing"]
+

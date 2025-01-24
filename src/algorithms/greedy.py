@@ -11,11 +11,11 @@ class Greedy(General):
     
     Parameters
     ----------
+    protein_sequence : str
+        Protein sequence (for example `HHPHHHPH`).
+    
     dimension : int
         The dimension in which the folding takes place (`2` or `3`).
-
-    protein_sequence : str
-        Protein sequence (for example `HHHPPPHPCCP`).
     """
 
     def __init__(self, protein_sequence: str, dimension: int) -> None:
@@ -99,7 +99,7 @@ class Greedy(General):
 
         Notes
         -----
-        Not implementing greedy decision on every iteration.
+        Does not implement greedy decision on every iteration.
         This would cause the function to check every possible direction.
         The total run time would be enormous. That is why every fifth
         iteration a greedy decision is made.

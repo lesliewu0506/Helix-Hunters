@@ -16,9 +16,9 @@ direction_map = {
 def generate_all_foldings(protein_sequence: str) -> None:
     """
     Generate all possible foldings for a given sequence length 
-    where the first item is always 1 and the last item 0
+    where the first item is always `1` and the last item `0`
     and consecutive items are never opposing directions.
-    Then saves it to a csv file.
+    Then saves it to a `CSV` file.
     """
     sequence_length = len(protein_sequence)
     directions = [0, 1, 2]
@@ -38,7 +38,7 @@ def _check_folding(folding: list[int]) -> Optional[list[int]]:
     """
     Checks if a configuration is valid.
     Translates the folding list first into absolute directions.
-    Returns the list of directions if valid, else None.
+    Returns the list of directions if valid, else `None`.
     """
     abs_folding: list[int] = direction_translator(folding, 2)
 
@@ -49,8 +49,8 @@ def _check_folding(folding: list[int]) -> Optional[list[int]]:
 def _check_valid_folding(folding: list[int]) -> bool:
     """
     Helper function that checks a folding sequence.
-    If folding is not valid, returns False.
-    Else return True.
+    If folding is not valid, returns `False`.
+    Else return `True`.
     """
     coordinates: set[tuple[int, int]] = set()
     x_current: int = 0
