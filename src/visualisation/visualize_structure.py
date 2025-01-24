@@ -15,10 +15,11 @@ def visualize_protein(
     ) -> None:
     """
     Main function for visualizing the protein structure.
+    It can create a `2D` or `3D` structure.
     Amino acids are represented as colored dots,
-    where 'H' is red, 'P' is blue, and 'C' is green.
+    where `H` is red, `P` is blue, and `C` is green.
     Sequential connections are black lines.
-    Polar connections are connections between 'H' and 'H', 'H' and 'C' or 'C' and 'C' amino acids.
+    Polar connections are connections between `H` and `H`, `H` and `C` or `C` and `C` amino acids.
     These connections are highlighted by colored dashed lines.
 
     Parameters
@@ -41,14 +42,13 @@ def visualize_protein(
     save : bool
         If `True` save the plots.
     """
-
     if protein.protein_rating == 1:
         print("Error: did not get a valid protein for the plot.")
         return None
     
     protein_structure: dict[tuple[int, int, int], tuple[str, int]] = {}
-    protein_sequence = protein.protein_sequence
-    protein_rating = protein.get_rating()
+    protein_sequence: str = protein.protein_sequence
+    protein_rating: int = protein.get_rating()
 
     if protein.structure is not None:
         protein_structure = protein.structure.get_structure()
@@ -70,8 +70,10 @@ def visualize_protein(
     if save:
         if algorithm == "Brute Force":
             plt.savefig(f"{file_path}.png", dpi = 600)
+
         else:
-            plt.savefig(f"{file_path}/3D {algorithm} Best Fold.png", dpi = 600)
+            plt.savefig(f"{file_path}/{dimension}D {algorithm} Best Fold.png", dpi = 600)
+
     if show:
         plt.show()
 

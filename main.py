@@ -14,18 +14,18 @@ if __name__ == "__main__":
     # This is only for demonstration purposes.
 
     # Generate all possible folding structures
-    for protein_sequence in protein_sequences[:3]:
-        generate_all_foldings(protein_sequence)
-        # Try all possible combinations
-        brute_force(protein_sequence, save = True)
+    # for protein_sequence in protein_sequences[:3]:
+    #     generate_all_foldings(protein_sequence)
+    #     # Try all possible combinations
+    #     brute_force(protein_sequence, save = True)
 
     # ==================================================================
     # Experiment
     # ==================================================================
     # This will collect data for different algorithms.
-    run(dimension = 3, repeats = 1, iterations = 10000)
+    # run(dimension = 3, repeats = 1, iterations = 10000)
     # View the boxplots for the different distributions
-    view(dimension = 2, protein_sequence = "all")
+    # view(dimension = 2, protein_sequence = "all")
 
     # ==================================================================
     # The following sections generate data for each algorithm seperately
@@ -57,6 +57,6 @@ if __name__ == "__main__":
     #     annealing.run(show_plot = False, save_plot = True, save_data= True, repeats = 1, iterations = 1000)
 
     #     print(f"Best score for Simulated Annealing algorithm for protein {protein_sequence}: {annealing.best_score}")
-    # random = Random(protein_sequences[-1], dimension = 2)
-    # random.run(show_plot = True, iterations = 1000)
+    random = Random(protein_sequences[-1], dimension = 3)
+    random.run(show_plot = True, iterations = 1000)
     pass

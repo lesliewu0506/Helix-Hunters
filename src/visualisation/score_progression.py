@@ -19,9 +19,9 @@ def visualize_score_progression(
         The dimension in which the folding takes place (`2` or `3`).
 
     protein_sequence : str
-        Protein sequence (for example `HHHPPPHPCCP`).
+        Protein sequence (for example `HHPHHHPH`).
 
-    score_list : list[int]
+    score_list : `list[int]`
         List of the scores during a run.
 
     algorithm : str

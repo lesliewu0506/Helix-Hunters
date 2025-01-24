@@ -9,10 +9,9 @@ def boxplot(protein_sequence: str, dimension: int, show_plot: bool, save_plot: b
     """
     Main function for plotting a boxplot of the score distributions
     of different algorithms of a protein sequence.
-    It imports the data from CSV files that corresponds to the protein sequence.
+    It imports the data from `CSV` files that corresponds to the protein sequence.
     Then it couples each data with the corresponding algorithm in a `dict`. 
     The minimum score is then calculated for the limits for the boxplots.
-    The plots are automatically saved in a designated folder.
 
     Parameters
     ----------
@@ -73,7 +72,7 @@ def _create_data_structure(protein_sequence: str, folder: str, dimension: int) -
 
 def _import_data(protein_sequence: str, algorithm: str, folder: str, dimension: int) -> list[int]:
     """
-    Helper function that imports the scores from a CSV file.
+    Helper function that imports the scores from a `CSV` file.
     It returns a list of the scores.
     """
     histogram_data: list[int] = []

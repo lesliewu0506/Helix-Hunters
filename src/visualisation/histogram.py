@@ -12,7 +12,7 @@ def visualize_histogram(
     save: bool
     ) -> None:
     """
-    Creates a stylish histogram with gradient color for the score distribution of an algorithm.
+    Creates a histogram with gradient color for the score distribution of an algorithm.
     
     Parameters
     ----------
@@ -20,9 +20,9 @@ def visualize_histogram(
         The dimension in which the folding takes place (`2` or `3`).
 
     protein_sequence : str
-        Protein sequence (for example `HHHPPPHPCCP`).
+        Protein sequence (for example `HHPHHHPH`).
 
-    score_list : list[int]
+    score_list : `list[int]`
         List of the scores during the run.
 
     iterations : int
