@@ -1,14 +1,18 @@
-import random as rd
+import csv
+import random
 import numpy as np
-from typing import List, Callable, Tuple
+from src.classes.grid import Grid
+from src.classes.rating import Rating
+from typing import List, Callable, Optional
 
 class Genetic_Algorithm():
     """The Genetic random class generates a sequence for the folding direction."""
 
     def __init__(self, protein_sequence: str, population_size: int, mutation_rate: float) -> None:
-        self.protein_sequence = protein_sequence
-        self.population_size = population_size
-        self.mutation_rate = mutation_rate
+        self.protein_sequence: str = protein_sequence
+        self.population_size: Optional[List[int]] = amino_directions
+        self.structure: Optional[Grid] = None
+        self.protein_rating: int = 1
 
     def run(self, interations: int = 10000) -> None:
         """Run the Algorithm for iterations"""
@@ -21,10 +25,49 @@ class Genetic_Algorithm():
             if self.check_convergence(fitness_scores):
                 print(f"Convergence acquired at iteration {iteration}")
                 break 
+    
+    def structure(self, function: Callable[[str], List[int]]) -> None:
+        self.amino_directions = function(self.protein_sequence)
+        structure = Grid(self.protein_sequence, self.amino_directions)
 
-    def initialized_population(self):
-        population = list()
-        target_length = len(target)
+        # If structure not valid rating 1 
+        if not structure.create_structure():
+            self.protein_rating = 1
+        else:
+            self.structure = structure
+            self.protein_rating = Rating(self.structure.get_structure()).get_rating()
+
+    def building_structure(self) -> None:
+        if self.amino_directions is not None:
+            structure = Grid(self.protein_sequence, self.amino_directions)
+
+            # Check if structure is valid else give rating 1
+            if not structure.create_structure():
+                self.protein_rating = 1
+            else:
+                self.structure = structure
+                self.protein_rating = Rating(self.structure.get_structure()).get_rating()
+
+       def output_csv(self, file_path: str = "output") -> None:
+        """
+        Creates a CSV file withamino acids and their fold.
+        """
+        if self.amino_directions is not None:
+            with open(f'{file_path}.csv', 'w', newline='') as csvfile:
+                writer = csv.writer(csvfile)
+
+                writer.writerow(['amino', 'fold'])
+
+                for amino, direction in zip(self.protein_sequence, self.amino_directions):
+                    writer.writerow([amino, direction])
+
+                writer.writerow(['score', self.protein_rating])
+
+    def initialized_population(self) -> List[List[int]]:
+        """Initalize the population with sequences"""
+        population = []
+        target_length = len(self.population_size):
+        genes = [0,1,2,3]
 
         for i in range(population_size):
             temperature = list()
