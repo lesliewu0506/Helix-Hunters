@@ -1,18 +1,14 @@
 import random as rd
-import matplotlib as plt
 import numpy as np
-from prettytable import PrettyTable
-
-from src.utils.helpers import random_fold
-from src.classes.protein import Protein
-from typing import Callable, Optional
-from .general import General
+from typing import List, Callable, Tuple
 
 class Genetic_Algorithm():
     """The Genetic random class generates a sequence for the folding direction."""
 
-    def __init__(self, protein_sequence: str) -> None:
-        super().__init__(protein_sequence)
+    def __init__(self, protein_sequence: str, population_size: int, mutation_rate: float) -> None:
+        self.protein_sequence = protein_sequence
+        self.population_size = population_size
+        self.mutation_rate = mutation_rate
 
     def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 10000) -> None:
         """The Genetic algorithm generates sequences for a protein and calculates the scores
@@ -25,7 +21,7 @@ class Genetic_Algorithm():
             iterations = iterations,
             algorithm_function = self._greedy_iterated)
         
-    def initialize_population(target):
+    def initialized_population(self):
         population = list()
         target_length = len(target)
 
@@ -57,17 +53,6 @@ class Genetic_Algorithm():
 
 
 """
-
-def evaluated_fit(parameters):
-    a, b, c = parameters
-    if a <= 0:
-        return = -float('inf')
-    vertex_x = -b / (2*a) 
-    vertex_y = a * (vertex_x ** 2) + b * vertex_x + c
-    y_left = a * (-1) ** 2 + b * (-1) + c
-    y_right = a * (-1) ** 2 + b * (1) + c
-    curviness = abs(y_left - vertex_y) + abs(y_right - vertex_y)
-    return -curviness
 
 def create_initial_population(size, lower_bound, upper_bound):
 
