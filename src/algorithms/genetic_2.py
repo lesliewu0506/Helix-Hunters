@@ -10,17 +10,18 @@ class Genetic_Algorithm():
         self.population_size = population_size
         self.mutation_rate = mutation_rate
 
-    def run(self, show_plot: bool = False, save_plot: bool = False, save_data: bool = False, repeats: int = 1, iterations: int = 10000) -> None:
-        """The Genetic algorithm generates sequences for a protein and calculates the scores
-        self.run_algorithm(
-            algorithm = "Genetic",
-            show_plot = show_plot,
-            save_plot = save_plot,
-            saved_data = save_data,
-            repeats = repeats,
-            iterations = iterations,
-            algorithm_function = self._greedy_iterated)
-        
+    def run(self, interations: int = 10000) -> None:
+        """Run the Algorithm for iterations"""
+        population = self.initialized_population()
+        for iteration in range(interations):
+            fitness_scores = self.evaluate_population(population)
+            parents = self.select_parents(population, fitness_scores)
+            offspring = self.generate_crossover(parents)
+            population = self.apply_mutation(offspring)
+            if self.check_convergence(fitness_scores):
+                print(f"Convergence acquired at iteration {iteration}")
+                break 
+
     def initialized_population(self):
         population = list()
         target_length = len(target)
@@ -51,8 +52,6 @@ class Genetic_Algorithm():
         mutated_offspring = []
 
 
-
-"""
 
 def create_initial_population(size, lower_bound, upper_bound):
 
