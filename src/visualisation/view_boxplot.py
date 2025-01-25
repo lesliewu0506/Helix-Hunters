@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 
-from src.utils import ALGORTIHMS, PROTEIN_SEQUENCE_MAP
+from src.utils import ALGORITHMS, PROTEIN_SEQUENCE_MAP
 
 def boxplot(protein_sequence: str, dimension: int, show_plot: bool, save_plot: bool) -> None:
     """
@@ -34,10 +34,10 @@ def boxplot(protein_sequence: str, dimension: int, show_plot: bool, save_plot: b
     ax: Axes
 
     _ , ax = plt.subplots(figsize = (12, 7))
-    box = ax.boxplot(data_list, patch_artist = True, labels = ALGORTIHMS)
+    box = ax.boxplot(data_list, patch_artist = True, labels = ALGORITHMS)
 
     # Customize boxplot appearance
-    colors = plt.cm.viridis(np.linspace(0, 1, len(ALGORTIHMS)))
+    colors = plt.cm.viridis(np.linspace(0, 1, len(ALGORITHMS)))
     for patch, color in zip(box['boxes'], colors):
         patch.set_facecolor(color)
         patch.set_alpha(0.85)
@@ -66,7 +66,7 @@ def _create_data_structure(protein_sequence: str, folder: str, dimension: int) -
     It returns the data structure as a dictionary.
     """
     data_structure: dict[str, list[int]] = {}
-    for algorithm in ALGORTIHMS:
+    for algorithm in ALGORITHMS:
         data_structure[algorithm] = _import_data(protein_sequence, algorithm, folder, dimension)
     return data_structure
 

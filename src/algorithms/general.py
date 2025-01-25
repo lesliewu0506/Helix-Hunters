@@ -1,5 +1,5 @@
 from src.classes import Protein
-from src.utils import save_and_visualize_results, TEMPERATURE
+from src.utils import save_and_visualize_results, TEMPERATURE, POPULATION_SIZE, MUTATION_RATE
 from typing import Optional, Callable
 
 class General():
@@ -72,7 +72,9 @@ class General():
         iterations: int,
         algorithm_function: Callable[[int, Optional[Callable[[int, int, float], tuple[bool, float]]], float], None],
         accept_function: Optional[Callable[[int, int, float], tuple[bool, float]]] = None,
-        temperature: float = TEMPERATURE
+        temperature: float = TEMPERATURE,
+        population_size: int = POPULATION_SIZE,
+        mutation_rate: float = MUTATION_RATE
         ) -> None:
         """
         Runs a protein optimization algorithm. Can show and save the data created with arguments.
@@ -119,7 +121,7 @@ class General():
             If no valid protein structure was found during the optimization process.
         """
         for _ in range(repeats):
-            algorithm_function(iterations, accept_function, temperature)
+            algorithm_function(iterations, accept_function = accept_function, temperature = temperature, population_size = population_size, mutation_rate = mutation_rate)
         
         # Save and visualize protein
         if self.best_protein is not None:

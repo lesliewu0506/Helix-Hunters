@@ -1,9 +1,10 @@
 import src.visualisation as vis
 import multiprocessing
-from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing
-from src.utils import PROTEIN_SEQUENCES, ITERATIVE_ALGORITHM_FACTOR
 
-algorithms = [("Random", Random), ("Greedy", Greedy), ("Hill Climber", HillClimber), ("Simulated Annealing", SimulatedAnnealing)]
+from src.algorithms import *
+from src.utils import ALGORITHMS, PROTEIN_SEQUENCES, ITERATIVE_ALGORITHM_FACTOR
+
+algorithms = [("Random", Random), ("Greedy", Greedy), ("Hill Climber", HillClimber), ("Simulated Annealing", SimulatedAnnealing), ("Genetic", Genetic)]
 num_processes: int = multiprocessing.cpu_count()
 
 def run(protein_sequence: str ="all", algorithm: str = "all", dimension: int = 3, show: bool = False, save: bool = True, repeats: int = 1, iterations: int = 10000) -> None:
@@ -61,7 +62,7 @@ def run(protein_sequence: str ="all", algorithm: str = "all", dimension: int = 3
 
     >>> run(protein_sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH", dimension = 3, show = True, save = False, repeats = 1, iterations = 10000)
     """
-    valid_algorithms = ["Random", "Greedy", "Hill Climber", "Simulated Annealing", "all"]
+    valid_algorithms: list[str] = ALGORITHMS + ["all"]
     if algorithm not in valid_algorithms:
         raise ValueError(f"Invalid algorithm name. Choose from:\n{valid_algorithms}")
     

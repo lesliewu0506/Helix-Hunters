@@ -29,6 +29,13 @@ TEMPERATURE: int = 4
 TEMPERATURE_DECAY: int = 0.999
 
 # ===============================================================
+# Genetic Constants
+# ===============================================================
+
+POPULATION_SIZE: int = 1000
+MUTATION_RATE: float = 0.1
+
+# ===============================================================
 # Utils Constant
 # ===============================================================
 
@@ -70,7 +77,7 @@ ALGORITHM_FOLDER_MAP: dict[str, str] = {
     "Hill Climber" : "hill",
     "Simulated Annealing" : "annealing",
     "Plant Propagation" : "propagation",
-    "Genetic Algorithm" : "genetic"}
+    "Genetic" : "genetic"}
 
 DIRECTION_MAP_2D: dict[int, list[int]] = {
     1 : [2, 1, -2],
@@ -90,4 +97,4 @@ DIRECTION_MAP_3D: dict[int, list[int]] = {
 # Algorithms
 # ===============================================================
 
-ALGORTIHMS: list[str] = ["Random", "Greedy", "Hill Climber", "Simulated Annealing"]
+ALGORITHMS: list[str] = ["Random", "Greedy", "Hill Climber", "Simulated Annealing", "Genetic"]
