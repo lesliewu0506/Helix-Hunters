@@ -81,10 +81,10 @@ def direction_translator(directions: list[int], dimension: int) -> list[int]:
     Another function should remove `0` from the list.
     """
     if dimension == 2:
-        direction_map: dict[int, list[int]] = DIRECTION_CHOICES_2D
+        direction_map: dict[int, list[int]] = DIRECTION_MAP_2D
 
     elif dimension == 3:
-        direction_map = DIRECTION_CHOICES_3D
+        direction_map = DIRECTION_MAP_3D
 
     folding_sequence: list[int] = [1]
 

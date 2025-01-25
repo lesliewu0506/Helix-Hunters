@@ -1,8 +1,10 @@
 import src.visualisation as vis
+import multiprocessing
 from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing
 from src.utils import PROTEIN_SEQUENCES, ITERATIVE_ALGORITHM_FACTOR
 
 algorithms = [("Random", Random), ("Greedy", Greedy), ("Hill Climber", HillClimber), ("Simulated Annealing", SimulatedAnnealing)]
+num_processes: int = multiprocessing.cpu_count()
 
 def run(protein_sequence: str ="all", algorithm: str = "all", dimension: int = 3, show: bool = False, save: bool = True, repeats: int = 1, iterations: int = 10000) -> None:
     """
@@ -74,16 +76,26 @@ def run(protein_sequence: str ="all", algorithm: str = "all", dimension: int = 3
         raise ValueError("Invalid repeats or iterations given. Use >= 1.")
     
     # Filter protein sequence
-    selected_protein_sequence =  (PROTEIN_SEQUENCES if protein_sequence == "all" 
+    selected_protein_sequence = (PROTEIN_SEQUENCES if protein_sequence == "all" 
         else [seq for seq in PROTEIN_SEQUENCES if seq == protein_sequence])
 
     # Filter algorithm
     selected_algorithm = (algorithms if algorithm == "all" 
         else [alg for alg in algorithms if alg[0] == algorithm])
     
-    for protein_sequence in selected_protein_sequence:
-        for algorithm, cls in selected_algorithm:
-            _run_algorithm(cls, algorithm, protein_sequence, dimension, show, save, repeats, iterations)
+    # for protein_sequence in selected_protein_sequence:
+    #     for algorithm, cls in selected_algorithm:
+    #         _run_algorithm(cls, algorithm, protein_sequence, dimension, show, save, repeats, iterations)
+
+    # Prepare tasks for multiprocessing
+    tasks = [
+        (cls, alg_name, protein_seq, dimension, show, save, repeats, iterations)
+        for protein_seq in selected_protein_sequence
+        for alg_name, cls in selected_algorithm]
+
+    # Run tasks in parallel
+    with multiprocessing.Pool(processes = num_processes) as pool:
+        pool.starmap(_run_algorithm, tasks)
 
 def _run_algorithm(
         cls: Random | Greedy | HillClimber | SimulatedAnnealing,
@@ -144,8 +156,15 @@ def view(
     if dimension not in [2, 3]:
         raise ValueError("Invalid dimension given. Choose from:\n[2, 3].")
 
-    if protein_sequence == "all":
-        for sequence in PROTEIN_SEQUENCES:
-            vis.boxplot(sequence, dimension, show_plot, save_plot)
-    else:
-        vis.boxplot(protein_sequence, dimension, show_plot, save_plot)
+    # Filter protein sequence
+    selected_protein_sequence = (PROTEIN_SEQUENCES if protein_sequence == "all" 
+        else [seq for seq in PROTEIN_SEQUENCES if seq == protein_sequence])
+
+    # Prepare tasks for multiprocessing
+    tasks = [
+        (sequence, dimension, show_plot, save_plot)
+        for sequence in selected_protein_sequence]
+
+    # Run tasks in parallel
+    with multiprocessing.Pool(processes = num_processes) as pool:
+        pool.starmap(vis.boxplot, tasks)
