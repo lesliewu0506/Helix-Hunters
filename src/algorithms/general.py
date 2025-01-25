@@ -1,5 +1,5 @@
 from src.classes import Protein
-from src.utils import save_and_visualize_results
+from src.utils import save_and_visualize_results, TEMPERATURE
 from typing import Optional, Callable
 
 class General():
@@ -72,7 +72,7 @@ class General():
         iterations: int,
         algorithm_function: Callable[[int, Optional[Callable[[int, int, float], tuple[bool, float]]], float], None],
         accept_function: Optional[Callable[[int, int, float], tuple[bool, float]]] = None,
-        temperature: float = 1
+        temperature: float = TEMPERATURE
         ) -> None:
         """
         Runs a protein optimization algorithm. Can show and save the data created with arguments.

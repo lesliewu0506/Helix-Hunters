@@ -18,7 +18,7 @@ class SimulatedAnnealing(HillClimber):
         The dimension in which the folding takes place (`2` or `3`).
 
     temperature : int, optional
-        The initial temperature for annealing algorithm. Default is `2`.
+        The initial temperature for annealing algorithm. Default is `4`.
 
     Notes
     -----
@@ -125,8 +125,8 @@ class SimulatedAnnealing(HillClimber):
         Notes
         -----
         This decay function drops fast.
-        By trial and error, the value of 0.99 has been found and used for this project.
-        This ensures that the annealing is stopped around 500 iterations.
+        By trial and error, the value of 0.999 has been found and used for this project.
+        This ensures that the annealing is stopped around 1500 iterations.
         """
         temperature = temperature * TEMPERATURE_DECAY
         return temperature

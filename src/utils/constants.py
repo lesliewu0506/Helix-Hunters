@@ -25,8 +25,8 @@ DIRECTION_CHOICES_3D: list[int] = [-3, -2, -1, 1, 2, 3]
 # Simulated Annealing Constants
 # ===============================================================
 
-TEMPERATURE: int = 2
-TEMPERATURE_DECAY: int = 0.99
+TEMPERATURE: int = 4
+TEMPERATURE_DECAY: int = 0.999
 
 # ===============================================================
 # Utils Constant
@@ -38,7 +38,7 @@ ITERATIVE_ALGORITHM_FACTOR: int = 10
 # Protein Sequences
 # ===============================================================
 
-protein_sequences: list[str] = [
+PROTEIN_SEQUENCES: list[str] = [
     "HHPHHHPH",
     "HHPHHHPHPHHHPH",
     "HPHPPHHPHPPHPHHPPHPH",
@@ -53,7 +53,7 @@ protein_sequences: list[str] = [
 # Global Mappings
 # ===============================================================
 
-protein_sequence_map: dict[str, str] = {
+PROTEIN_SEQUENCE_MAP: dict[str, str] = {
     "HHPHHHPH" : "0",
     "HHPHHHPHPHHHPH" : "1",
     "HPHPPHHPHPPHPHHPPHPH" : "2",
@@ -64,7 +64,7 @@ protein_sequence_map: dict[str, str] = {
     "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH" : "7",
     "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" : "8"}
 
-algorithm_folder_map: dict[str, str] = {
+ALGORITHM_FOLDER_MAP: dict[str, str] = {
     "Random" : "random",
     "Greedy" : "greedy",
     "Hill Climber" : "hill",
@@ -72,13 +72,13 @@ algorithm_folder_map: dict[str, str] = {
     "Plant Propagation" : "propagation",
     "Genetic Algorithm" : "genetic"}
 
-direction_map_2d: dict[int, list[int]] = {
+DIRECTION_MAP_2D: dict[int, list[int]] = {
     1 : [2, 1, -2],
     -1 : [-2, -1, 2],
     2 : [-1, 2, 1],
     -2 : [1, -2, -1]}
 
-direction_map_3d: dict[int, list[int]] = {
+DIRECTION_MAP_3D: dict[int, list[int]] = {
     1 : [2, 1, -2, 3, -3],
     -1 : [-2, -1, 2, -3, 3],
     2 : [-1, 2, 1, 3, -3],
@@ -90,4 +90,4 @@ direction_map_3d: dict[int, list[int]] = {
 # Algorithms
 # ===============================================================
 
-algorithms: list[str] = ["Random", "Greedy", "Hill Climber", "Simulated Annealing"]
+ALGORTIHMS: list[str] = ["Random", "Greedy", "Hill Climber", "Simulated Annealing"]

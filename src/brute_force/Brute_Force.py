@@ -3,7 +3,7 @@ import csv
 
 from src.visualisation import visualize_protein
 from src.classes import Protein
-from src.utils.constants import protein_sequence_map
+from src.utils import PROTEIN_SEQUENCE_MAP
 
 def brute_force(sequence: str, save: bool = False) -> None:
     """
@@ -21,7 +21,7 @@ def brute_force(sequence: str, save: bool = False) -> None:
     save : bool, optional
         Whether to save the plots. Default is `False`.
     """
-    folder = protein_sequence_map[sequence]
+    folder = PROTEIN_SEQUENCE_MAP[sequence]
     num_processes: int = multiprocessing.cpu_count()
     best_score = 0
     best_structures: list[Protein] = []

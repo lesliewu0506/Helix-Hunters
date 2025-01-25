@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 
-from src.utils import algorithms, protein_sequence_map
+from src.utils import ALGORTIHMS, PROTEIN_SEQUENCE_MAP
 
 def boxplot(protein_sequence: str, dimension: int, show_plot: bool, save_plot: bool) -> None:
     """
@@ -27,17 +27,17 @@ def boxplot(protein_sequence: str, dimension: int, show_plot: bool, save_plot: b
     save_plot : bool
         If `True` save the plot.
     """
-    folder: str = protein_sequence_map[protein_sequence]
+    folder: str = PROTEIN_SEQUENCE_MAP[protein_sequence]
     data_structure: dict[str, list[int]] = _create_data_structure(protein_sequence, folder, dimension)
     data_list: list[list[int]] = [data for data in data_structure.values()]
     min_score: int = _get_minimum_score(data_structure)
     ax: Axes
 
     _ , ax = plt.subplots(figsize = (12, 7))
-    box = ax.boxplot(data_list, patch_artist = True, labels = algorithms)
+    box = ax.boxplot(data_list, patch_artist = True, labels = ALGORTIHMS)
 
     # Customize boxplot appearance
-    colors = plt.cm.viridis(np.linspace(0, 1, len(algorithms)))
+    colors = plt.cm.viridis(np.linspace(0, 1, len(ALGORTIHMS)))
     for patch, color in zip(box['boxes'], colors):
         patch.set_facecolor(color)
         patch.set_alpha(0.85)
@@ -66,7 +66,7 @@ def _create_data_structure(protein_sequence: str, folder: str, dimension: int) -
     It returns the data structure as a dictionary.
     """
     data_structure: dict[str, list[int]] = {}
-    for algorithm in algorithms:
+    for algorithm in ALGORTIHMS:
         data_structure[algorithm] = _import_data(protein_sequence, algorithm, folder, dimension)
     return data_structure
 

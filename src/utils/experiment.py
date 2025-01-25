@@ -1,6 +1,6 @@
 import src.visualisation as vis
 from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing
-from src.utils import protein_sequences, ITERATIVE_ALGORITHM_FACTOR
+from src.utils import PROTEIN_SEQUENCES, ITERATIVE_ALGORITHM_FACTOR
 
 algorithms = [("Random", Random), ("Greedy", Greedy), ("Hill Climber", HillClimber), ("Simulated Annealing", SimulatedAnnealing)]
 
@@ -63,7 +63,7 @@ def run(protein_sequence: str ="all", algorithm: str = "all", dimension: int = 3
     if algorithm not in valid_algorithms:
         raise ValueError(f"Invalid algorithm name. Choose from:\n{valid_algorithms}")
     
-    valid_protein_sequences: list[str] = protein_sequences + ["all"]
+    valid_protein_sequences: list[str] = PROTEIN_SEQUENCES + ["all"]
     if protein_sequence not in valid_protein_sequences:
         raise ValueError(f"Invalid protein sequence. Choose from:\n{valid_protein_sequences}")
 
@@ -74,8 +74,8 @@ def run(protein_sequence: str ="all", algorithm: str = "all", dimension: int = 3
         raise ValueError("Invalid repeats or iterations given. Use >= 1.")
     
     # Filter protein sequence
-    selected_protein_sequence =  (protein_sequences if protein_sequence == "all" 
-        else [seq for seq in protein_sequences if seq == protein_sequence])
+    selected_protein_sequence =  (PROTEIN_SEQUENCES if protein_sequence == "all" 
+        else [seq for seq in PROTEIN_SEQUENCES if seq == protein_sequence])
 
     # Filter algorithm
     selected_algorithm = (algorithms if algorithm == "all" 
@@ -139,13 +139,13 @@ def view(
     >>> view(protein_sequence = "HHPHHHPH", dimension = 2, show_plot = True, save_plot = False)
     """
     # Check arguments given
-    if protein_sequence != "all" and protein_sequence not in protein_sequences:
-        raise ValueError(f"Invalid protein sequence. Choose from:\n{protein_sequences}")
+    if protein_sequence != "all" and protein_sequence not in PROTEIN_SEQUENCES:
+        raise ValueError(f"Invalid protein sequence. Choose from:\n{PROTEIN_SEQUENCES}")
     if dimension not in [2, 3]:
         raise ValueError("Invalid dimension given. Choose from:\n[2, 3].")
 
     if protein_sequence == "all":
-        for sequence in protein_sequences:
+        for sequence in PROTEIN_SEQUENCES:
             vis.boxplot(sequence, dimension, show_plot, save_plot)
     else:
         vis.boxplot(protein_sequence, dimension, show_plot, save_plot)

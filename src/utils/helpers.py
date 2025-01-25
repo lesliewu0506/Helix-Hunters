@@ -11,7 +11,7 @@ import csv
 import src.visualisation as vis
 
 from src.classes import Protein
-from src.utils import protein_sequence_map, algorithm_folder_map, direction_map_2d, direction_map_3d, DIRECTION_CHOICES_2D, DIRECTION_CHOICES_3D
+from src.utils import PROTEIN_SEQUENCE_MAP, ALGORITHM_FOLDER_MAP, DIRECTION_MAP_2D, DIRECTION_MAP_3D, DIRECTION_CHOICES_2D, DIRECTION_CHOICES_3D
 
 # ===============================================================
 # Utility Functions
@@ -81,10 +81,10 @@ def direction_translator(directions: list[int], dimension: int) -> list[int]:
     Another function should remove `0` from the list.
     """
     if dimension == 2:
-        direction_map: dict[int, list[int]] = direction_map_2d
+        direction_map: dict[int, list[int]] = DIRECTION_CHOICES_2D
 
     elif dimension == 3:
-        direction_map = direction_map_3d
+        direction_map = DIRECTION_CHOICES_3D
 
     folding_sequence: list[int] = [1]
 
@@ -154,8 +154,8 @@ def save_and_visualize_results(
     protein_sequence = best_protein.protein_sequence
 
     # Create correct path for each algorithm and sequence
-    folder = protein_sequence_map[protein_sequence]
-    base_path: str = f"results/protein_{algorithm_folder_map[algorithm]}_folds/{folder}"
+    folder = PROTEIN_SEQUENCE_MAP[protein_sequence]
+    base_path: str = f"results/protein_{ALGORITHM_FOLDER_MAP[algorithm]}_folds/{folder}"
 
     # Plots the progression of Hill Climber/Simulated Annealing algorithm
     if algorithm in ["Hill Climber", "Simulated Annealing"]:
@@ -224,7 +224,7 @@ def output_histogram_csv(
     histogram_data : `list[list[int]]`
         List containing all the scores for multiple runs.
     """
-    folder = protein_sequence_map[protein_sequence]
+    folder = PROTEIN_SEQUENCE_MAP[protein_sequence]
     file_path: str = f"data/histogram_data/{folder}/{dimension}D_{algorithm}_{protein_sequence}.csv"
     with open(file_path, 'w', newline = '') as csvfile:
         writer = csv.writer(csvfile)
