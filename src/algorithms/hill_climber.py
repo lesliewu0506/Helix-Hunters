@@ -136,7 +136,7 @@ class HillClimber(General):
 
         while same_score_index < MAX_UNCHANGED_ITERATIONS:
             # Choose random amino acid in sequence and give it new direction
-            index = rd.randrange(len(amino_directions))
+            index = rd.randrange(len(amino_directions) - 1)
 
             if self.dimension == 2:
                 new_direction = rd.choice([direction for direction in DIRECTION_CHOICES_2D if direction != amino_directions[index]])

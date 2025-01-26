@@ -107,8 +107,14 @@ class General():
             A function for that determines whether a new solution is accepted based on an acceptance probability.
             Default is `None`.
         
-        temperature : int
-            The initial temperature for annealing algorithm. Default is `1`.
+        temperature : int, optional
+            The initial temperature for annealing algorithm. Default is `TEMPERATURE`.
+
+        population_size : int, optional
+            The size of the starting population. Default is `POPULATION_SIZE`.
+
+        mutation_rate : float, optional
+            The mutation rate for the offspring. Default is `MUTATION_RATE`.
         
         Notes
         -----
