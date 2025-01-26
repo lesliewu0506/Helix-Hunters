@@ -1,19 +1,17 @@
 # Import Brute Force Scripts
 from src.brute_force import brute_force, generate_all_foldings
 
-from src.algorithms import *
 # Import Helpers 
 from src.utils import run, view, PROTEIN_SEQUENCES
 
 if __name__ == "__main__":
     # =========================== Experiment ===========================
     # This will collect data for different algorithms
-    # run(protein_sequence = PROTEIN_SEQUENCES[-1], algorithm = "Genetic", show = True, save = False, dimension = 3, repeats = 1, iterations = 1000)
-    gd = Genetic(PROTEIN_SEQUENCES[-1], 3)
-    gd.run()
+    run(protein_sequence = "all", algorithm = "all", show = False, save = True, dimension = 3, repeats = 10, iterations = 10000)
+
     # =========================== Visualisation ========================
     # View the boxplots for the different distributions
-    # view(protein_sequence = "all", dimension = 3, show_plot = True, save_plot = False)
+    view(protein_sequence = "all", dimension = 3, show_plot = True, save_plot = True)
 
     # =========================== Brute Force ==========================
     # NOTE: This function is good only for the first three protein sequences in 2D.

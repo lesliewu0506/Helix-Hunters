@@ -76,9 +76,8 @@ ALGORITHM_FOLDER_MAP: dict[str, str] = {
     "Greedy" : "greedy",
     "Hill Climber" : "hill",
     "Simulated Annealing" : "annealing",
-    "Plant Propagation" : "propagation",
-    "Genetic" : "genetic"}
-
+    "Plant Propagation" : "propagation"}
+# "Genetic" : "genetic"
 DIRECTION_MAP_2D: dict[int, list[int]] = {
     1 : [2, 1, -2],
     -1 : [-2, -1, 2],
@@ -97,4 +96,5 @@ DIRECTION_MAP_3D: dict[int, list[int]] = {
 # Algorithms
 # ===============================================================
 
-ALGORITHMS: list[str] = ["Random", "Greedy", "Hill Climber", "Simulated Annealing", "Genetic"]
+ALGORITHMS: list[str] = ["Random", "Greedy", "Hill Climber", "Simulated Annealing"]
+# ALGORITHMS: list[str] = ["Random", "Greedy", "Hill Climber", "Simulated Annealing", "Genetic"]

@@ -87,7 +87,7 @@ class HillClimber(General):
             algorithm_function = self._hill_climber,
             accept_function = self._accept_function)
 
-    def _hill_climber(self, iterations: int, accept_function: Callable, temperature: float) -> None:
+    def _hill_climber(self, iterations: int, accept_function: Callable, temperature: float, population_size: int, mutation_rate: float) -> None:
         """Main function for running the Hill Climber algorithm."""
         best_score_list: list[int] = []
         for _ in range(iterations):
