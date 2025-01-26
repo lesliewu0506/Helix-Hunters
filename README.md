@@ -61,7 +61,7 @@ protein_sequence = PROTEIN_SEQUENCES[-1]
 algorithm = "Random"
 algorithm = "Greedy"
 algorithm = "Hill Climber"
-algorithm = "Simulated Annealing
+algorithm = "Simulated Annealing"
 ```
 - Of een plot wordt getoond en opgeslagen, kan worden gedaan met de parameters:
 ```python
