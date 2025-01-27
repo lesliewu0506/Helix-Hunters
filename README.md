@@ -44,57 +44,62 @@ Of via conda:
 ```
 conda install --file requirements.txt
 ```
-Een voorbeeldje kan gerund worden door aanroepen van:
-```python
-python main.py
-```
 
 ### Run Functie
-In de main.py script kunnen de argumenten van de `run`-functie worden aangepast om specifieke algoritmes of eiwitten te runnen. Als de parameters `protein_sequence` en `algorithm` niet worden gegeven, worden alle eiwitten en algoritmes gerund. 
-- Als er een specifieke eiwit getest moet worden, kan er gebruik gemaakt worden van de parameter `protein_sequences`. Dit bevat een lijst met alle mogelijke eiwitten voor deze case. Het selecteren van één van de eiwitten kan met de volgende voorbeelden:
-```python
-protein_sequence = PROTEIN_SEQUENCES[0]
-protein_sequence = PROTEIN_SEQUENCES[-1]
+Met de CLI kan de `run` command worden gebruikt om de algoritmes te runnen voor de eiwitten. Als de geen opties worden meegegeven, dan worden alle algoritmes gerund voor alle eiwitten met 1 repeat 10000 iteraties. Een voorbeeld ziet er zo uit:
 ```
-- Als er een specifieke algortime getst moet worden, kan er gebruik gemaakt worden van de parameter `algorithm` met de volgende voorbeelden:
-```python
-algorithm = "Random"
-algorithm = "Greedy"
-algorithm = "Hill Climber"
-algorithm = "Simulated Annealing"
+$ python main.py run
 ```
-- Of een plot wordt getoond en opgeslagen, kan worden gedaan met de parameters:
-```python
-show: bool = True
-save: bool = True
+- Als er een specifieke eiwit getest moet worden, kan er gebruik gemaakt worden van de optie `-p/--protein`:
 ```
-- In welke dimensie de vouwing plaatsvindt kan met behulp van de `dimension` parameter. Dit kan alleen maar `2` of `3` zijn:
-```python
-dimension = 2
-dimension = 3
+$ python main.py run -p HHPHHHPHPHHHPH
+$ python main.py run --protein HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH
 ```
-- Het aantal herhalingen (repeats) en iteraties kan ook worden aangepast met behulp van:
+- Als er een specifieke algortime getst moet worden, kan er gebruik gemaakt worden van de optie `-a/--algorithm`:
+```
+$ python main.py run -a Random
+$ python main.py run -a Greedy
+$ python main.py run --algorithm "Hill Climber"
+$ python main.py run --algorithm "Simulated Annealing"
+```
+- Of een plot wordt getoond en opgeslagen, kan worden gedaan met de volgende flags:
 ```python
-repeats = 10
-iterations = 10000
+$ python main.py run --graph # Plotten
+$ python main.py run --save  # Opslaan
+```
+- In welke dimensie de vouwing plaatsvindt, kan met behulp van de `-d/--dimension` optie:
+```
+$ python main.py run -d 3
+$ python main.py run --dimension 2
+```
+- Het aantal herhalingen (repeats) `-r/--repeats` en iteraties `-i/--iterations` kan ook worden aangepast met behulp van:
+```
+$ python main.py run -r 5
+$ python main.py run -iterations 1000
 ```
 Deze aanpassingen kunnen gecombineerd worden zoals:
-```python
-run(protein_sequence = protein_sequences[4], algorithm = "Simulated Annealing", show = True, save = False, dimension = 3, repeats = 1, iterations = 1000)
+```
+$ python main.py run -p HHPHHHPHPHHHPH -a "Hill Climber" -d 2 --graph -r 5 -i 1000 --graph --save
 ```
 Een zeer uitgebreide documentatie kan gevonden worden in de docstring van de `run` functie met nog meer voorbeelden.
 
 ### View Functie
 
-Om de algoritmes te vergelijken kan een boxplot worden geplot van de verschillende distributies van scores van alle algortimes. De `view`-functie kan de boxplots tonen en opslaan. Deze functie heeft ook een parameter om te kiezen welke eiwit getoond wordt voor de vergelijking. Als dit niet wordt meegegeven in de functie, zal het alle eiwitten tonen.
-Ook in deze functie kan worden bepaald of het in 2D of 3D is en of de plot getoond en opgeslagen moet worden. Een voorbeeld van deze functie:
-```python
-view(protein_sequence = "all", dimension = 3, show_plot = True, save_plot = False)
+Om de algoritmes te vergelijken kan een boxplot worden geplot van de verschillende distributies van scores van alle algortimes. De `view` command kan de boxplots tonen en opslaan. Deze command heeft ook een optie om te kiezen welke eiwit getoond wordt voor de vergelijking. Als dit niet wordt meegegeven in de functie, zal het alle eiwitten tonen.
+Ook in deze functie kan worden bepaald of het in 2D of 3D is en of de plot getoond en opgeslagen moet worden met dezelfde opties als de `run` command:
+```
+$ python main.py view --save
+$ python main.py view -p HPHPPHHPHPPHPHHPPHPH -d 2 --graph --save
 ```
 Voor een uitgebreide documentatie van deze functie, kan de docstring bekeken worden.
 
 ### Brute Force
-Om een optimale oplossing te vinden is er ook een brute force methode aangemaakt die alle mogelijk eiwitten bekijkt en beoordeeld. Dit is echter alleen toepasbaar op de eerste 2 eiwitten in 2D. Desalniettemin is er voor het idee een script geschreven om alle mogelijke vouwingen te genereren in `python` en in `C`, die in een `CSV` bestand worden opgeslagen. Vervolgens kan met een functie `brute_force` al deze vouwingen geëvalueerd worden. Om dit te runnen kan het codestukje van Brute Force uitgecommend worden. Om alle mogelijke vouwingen te genereren met de `C` implementatie, kan het volgende command gerund worden:
+Om een optimale oplossing te vinden is er ook een brute force methode aangemaakt die alle mogelijk eiwitten bekijkt en beoordeeld. Dit is echter alleen toepasbaar op de eerste 2 eiwitten in 2D. Desalniettemin is er voor het idee een script geschreven om alle mogelijke vouwingen te genereren in `python` en in `C`, die in een `CSV` bestand worden opgeslagen. Vervolgens kan met een functie `brute_force` al deze vouwingen geëvalueerd worden. Om deze functies te runnen, kan het command `bruteforce` geroepen worden:
+```
+$ python main.py bruteforce
+```
+
+Om alle mogelijke vouwingen te genereren met de `C` implementatie, kan het volgende command gerund worden:
 ```
 ./generate_all_foldings HHPHHHPH
 ```

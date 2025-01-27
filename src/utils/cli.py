@@ -209,6 +209,6 @@ def brute_force():
     Plots and saves the best structure and prints the rating of the best structure.
     Finally saves the directions into a CSV file.
     """
-    for protein_sequence in PROTEIN_SEQUENCES[:1]:
+    for protein_sequence in PROTEIN_SEQUENCES[:2]:
         brute.generate_all_foldings(protein_sequence)
         brute.brute_force(protein_sequence, save = True)
