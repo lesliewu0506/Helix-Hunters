@@ -7,7 +7,15 @@ from src.utils import ALGORITHMS, PROTEIN_SEQUENCES, ITERATIVE_ALGORITHM_FACTOR
 algorithms = [("Random", Random), ("Greedy", Greedy), ("Hill Climber", HillClimber), ("Simulated Annealing", SimulatedAnnealing), ("Genetic", Genetic)]
 num_processes: int = multiprocessing.cpu_count()
 
-def run(protein_sequence: str ="all", algorithm: str = "all", dimension: int = 3, show: bool = False, save: bool = True, repeats: int = 1, iterations: int = 10000) -> None:
+def run(
+        protein_sequence: str = "all",
+        algorithm: str = "all",
+        dimension: int = 3,
+        show: bool = False,
+        save: bool = True,
+        repeats: int = 1,
+        iterations: int = 10000
+        ) -> None:
     """
     Main function for running the experiment.
     It will run every algorithm on every protein sequence, save the data and print the best score.
@@ -17,6 +25,9 @@ def run(protein_sequence: str ="all", algorithm: str = "all", dimension: int = 3
 
     Parameters
     ----------
+    protein_sequence : str
+        Protein sequence (for example `HHPHHHPH`).
+
     algorithm: str, optional
         The algorithm to run. If no argument is given, all algorithm will be run. Default is `"all"`.
 
@@ -83,10 +94,6 @@ def run(protein_sequence: str ="all", algorithm: str = "all", dimension: int = 3
     # Filter algorithm
     selected_algorithm = (algorithms if algorithm == "all" 
         else [alg for alg in algorithms if alg[0] == algorithm])
-    
-    # for protein_sequence in selected_protein_sequence:
-    #     for algorithm, cls in selected_algorithm:
-    #         _run_algorithm(cls, algorithm, protein_sequence, dimension, show, save, repeats, iterations)
 
     # Prepare tasks for multiprocessing
     tasks = [
