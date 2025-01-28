@@ -36,7 +36,7 @@ In dit project zijn de volgende algoritmes geïmplementeerd:
 
 ## Aan de slag
 ### Vereisten
-Deze codebase is volledig geschreven in Python 3.12. In requirements.txt staan alle benodigde packages om de code succesvol te draaien. Deze zijn gemakkelijk te installeren via pip dmv. de volgende instructie:
+Deze codebase is volledig geschreven in Python 3.12. In `requirements.txt` staan alle benodigde packages om de code succesvol te draaien. Deze zijn gemakkelijk te installeren via pip dmv. de volgende instructie:
 ```
 pip install -r requirements.txt
 ```
@@ -44,6 +44,19 @@ Of via conda:
 ```
 conda install --file requirements.txt
 ```
+### Ubuntu WSL Problemen
+Het kan voorkomen dat in een ubuntu terminal de volgende message wordt weergegeven:
+```
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.2.1 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+```
+Een oplossing hiervoor is om een virtual environment te maken en daarin een oudere versie van numpy te installeren. Het runnen van de commands in command prompt of powershell zou geen problemen moeten veroorzaken.
 
 ### Run Functie
 Met de CLI kan de `run` command worden gebruikt om de algoritmes te runnen voor de eiwitten. Als de geen opties worden meegegeven, dan worden alle algoritmes gerund voor alle eiwitten met 1 repeat 10000 iteraties. Een voorbeeld ziet er zo uit:
