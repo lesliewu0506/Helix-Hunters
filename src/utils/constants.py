@@ -1,23 +1,41 @@
 """
 This module contains general-purpose constants that can be used
-across the project. These constant are designed to simplify repetitive tasks, improve 
-code readability, and promote reusability.
+across the project. These constant are designed to simplify
+repetitive tasks, improve code readability, and promote reusability.
 
-Constants in this file are not specific to any single module but can be 
-used by various parts of the project wherever needed.
+Constants in this file are not specific to any single module but
+can be used by various parts of the project wherever needed.
 """
+
 # ===============================================================
 # Greedy Constants
 # ===============================================================
 
+"""
+Relative directions:
+- 0: go left
+- 1: go straight
+- 2: go right
+- 3: go up
+- 4: go down
+"""
 DIRECTIONS_2D: list[int] = [0, 1, 2]
-DIRECTIONS_3D: list[int] = [0, 1, 2, 3, 4] 
+DIRECTIONS_3D: list[int] = [0, 1, 2, 3, 4]
 
 # ===============================================================
 # Hill Climber Constants
 # ===============================================================
 
 MAX_UNCHANGED_ITERATIONS: int = 600
+"""
+Absolute directions based on Bas Terwijn's format:
+- 1: positive step in first dimension (x)
+- -1: negative step in first dimension (x)
+- 2: positive step in second dimension (y)
+- -2: negative step in second dimension (y)
+- 3: positive step in third dimension (z)
+- -3: negative step in third dimension (z)
+"""
 DIRECTION_CHOICES_2D: list[int] = [-2, -1, 1, 2]
 DIRECTION_CHOICES_3D: list[int] = [-3, -2, -1, 1, 2, 3]
 
@@ -40,6 +58,7 @@ MUTATION_RATE: float = 0.1
 # ===============================================================
 
 ITERATIVE_ALGORITHM_FACTOR: int = 10
+DIMENSIONS: list[int] = [2, 3]
 
 # ===============================================================
 # Protein Sequences
@@ -76,7 +95,8 @@ ALGORITHM_FOLDER_MAP: dict[str, str] = {
     "Greedy" : "greedy",
     "Hill Climber" : "hill",
     "Simulated Annealing" : "annealing"}
-# "Genetic" : "genetic"
+
+"""Maps the previous direction to the next direction."""
 DIRECTION_MAP_2D: dict[int, list[int]] = {
     1 : [2, 1, -2],
     -1 : [-2, -1, 2],
@@ -96,4 +116,3 @@ DIRECTION_MAP_3D: dict[int, list[int]] = {
 # ===============================================================
 
 ALGORITHMS: list[str] = ["Random", "Greedy", "Hill Climber", "Simulated Annealing"]
-# ALGORITHMS: list[str] = ["Random", "Greedy", "Hill Climber", "Simulated Annealing", "Genetic"]

@@ -1,6 +1,6 @@
 from . import General
 from src.classes import Protein
-from src.utils import random_fold
+from src.utils import random_fold, DIMENSIONS
 
 class Random(General):
     """
@@ -28,8 +28,8 @@ class Random(General):
     >>> random.run(show_plot = True, repeats = 5, iterations = 1000)
     """
     def __init__(self, protein_sequence: str, dimension: int) -> None:
-        if dimension not in [2, 3]:
-            raise ValueError("Invalid dimension given. Choose from:\n[2, 3].")
+        if dimension not in DIMENSIONS:
+            raise ValueError(f"Invalid dimension given. Choose from:\n{DIMENSIONS}.")
 
         super().__init__(protein_sequence, dimension)
 
@@ -53,7 +53,8 @@ class Random(General):
             If `True` save the plot. Default is `False`.
 
         save_data : bool, optional
-            If `True`, saves the optimization results to a file. Default is `False`.
+            If `True`, saves the optimization results to a file.
+            Default is `False`.
 
         repeats : int, optional
             The number of independent runs to perform. Default is `1`.
@@ -78,16 +79,24 @@ class Random(General):
             iterations = iterations,
             algorithm_function = self._random_iterated)
 
-    def _random_iterated(self, n: int, accept_function: None, temperature: float, population_size: int, mutation_rate: float) -> None:
+    def _random_iterated(self,
+                         n: int,
+                         accept_function: None,
+                         temperature: float,
+                         population_size: int,
+                         mutation_rate: float
+                         ) -> None:
         """
-        Helper function that generates multiple random generated folding sequences for a given protein string.
+        Helper function that generates multiple random
+        folding sequences for a given protein string.
         Plots the distribution of the scores in a histogram.
         Shows the best structure that the random algorithm has generated.
 
         Notes
         -----
-        Only valid structures are accepted. 
-        Without this restriction, most of the generated structures would be invalid.
+        Only valid structures are accepted.
+        Without this restriction,
+        most of the generated structures would be invalid.
         """
         score_list: list[int] = []
 

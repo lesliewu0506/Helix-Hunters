@@ -19,7 +19,8 @@ def visualize_protein(
     Amino acids are represented as colored dots,
     where `H` is red, `P` is blue, and `C` is green.
     Sequential connections are black lines.
-    Polar connections are connections between `H` and `H`, `H` and `C` or `C` and `C` amino acids.
+    Polar connections are connections between
+    `H` and `H`, `H` and `C` or `C` and `C` amino acids.
     These connections are highlighted by colored dashed lines.
 
     Parameters
@@ -62,10 +63,26 @@ def visualize_protein(
     z_min, z_max = min(z_coords), max(z_coords)
 
     if dimension == 2:
-        _plot_2d(x_min, y_min, x_max, y_max, protein_sequence, protein_structure, protein_rating, algorithm)
+        _plot_2d(x_min,
+                 y_min,
+                 x_max,
+                 y_max,
+                 protein_sequence,
+                 protein_structure,
+                 protein_rating,
+                 algorithm)
 
-    elif dimension == 3: 
-        _plot_3d(x_min, y_min, z_min, x_max, y_max, z_max, protein_sequence, protein_structure, protein_rating, algorithm)
+    elif dimension == 3:
+        _plot_3d(x_min,
+                 y_min,
+                 z_min,
+                 x_max,
+                 y_max,
+                 z_max,
+                 protein_sequence,
+                 protein_structure,
+                 protein_rating,
+                 algorithm)
 
     if save:
         if algorithm == "Brute Force":
@@ -91,7 +108,9 @@ def _plot_2d(
     ) -> None:
     """Helper function for plotting the structure in 2D."""
     plt.figure(figsize = (12, 12))
-    plt.title(f"2D protein plot\nAlgortihm: {algorithm} \nProtein: {protein_sequence}\nscore: {protein_rating}", fontsize = 12, fontweight = "bold")
+    plt.title(f"2D protein plot\nAlgortihm: {algorithm} \nProtein: {protein_sequence}\nscore: {protein_rating}",
+              fontsize = 12,
+              fontweight = "bold")
 
     # Set limits and distance between amino acids
     plt.xlim(x_min - 5, x_max + 5)
@@ -129,7 +148,9 @@ def _plot_3d(
     fig = plt.figure(figsize = (12, 12))
     ax = fig.add_subplot(projection='3d')
 
-    ax.set_title(f"3D protein plot\nAlgortihm: {algorithm} \nProtein: {protein_sequence}\nscore: {protein_rating}", fontsize = 12, fontweight = "bold")
+    ax.set_title(f"3D protein plot\nAlgortihm: {algorithm} \nProtein: {protein_sequence}\nscore: {protein_rating}",
+                 fontsize = 12,
+                 fontweight = "bold")
 
     # Set limits and distance between amino acids
     ax.set_xlim(x_min - 2, x_max + 2)
@@ -177,15 +198,29 @@ def _plot_sequential_connections(
     protein_structure: dict[tuple[int, int, int], tuple[str, int]],
     ax: Optional[Axes] = None
     ) -> None:
-    """Helper function for plotting the sequential connections of the protein with a black line."""
+    """
+    Helper function for plotting the sequential connections
+    of the protein with a black line.
+    """
     coordinates: list[tuple[int, int, int]] = list(protein_structure.keys())
 
     for (x_prev, y_prev, z_prev), (x, y, z) in zip(coordinates[:-1], coordinates[1:]):
         if ax:
-            ax.plot([x_prev, x], [y_prev, y], [z_prev, z], color = "black", linestyle = "-", linewidth = 2, zorder = 2)
+            ax.plot([x_prev, x],
+                    [y_prev, y],
+                    [z_prev, z],
+                    color = "black",
+                    linestyle = "-",
+                    linewidth = 2,
+                    zorder = 2)
 
         else:
-            plt.plot([x_prev, x], [y_prev, y], color = "black", linestyle = "-", linewidth = 2, zorder= 2)
+            plt.plot([x_prev, x],
+                     [y_prev, y],
+                     color = "black",
+                     linestyle = "-",
+                     linewidth = 2,
+                     zorder= 2)
 
 def _plot_polar_connections(
     protein_structure: dict[tuple[int, int, int], tuple[str, int]],
@@ -197,7 +232,13 @@ def _plot_polar_connections(
     lime green: H-H connection and C-H connection
     darkorange: C-C connection
     """
-    neighbour_map: set[tuple[int, int, int]] = {(1, 0, 0) , (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)}
+    neighbour_map: set[tuple[int, int, int]] = {
+        (1, 0, 0),
+        (-1, 0, 0),
+        (0, 1, 0),
+        (0, -1, 0),
+        (0, 0, 1),
+        (0, 0, -1)}
 
     for x_current, y_current, z_current in protein_structure:
 
@@ -211,8 +252,15 @@ def _plot_polar_connections(
                 z_next = z_current + dz
 
                 # Check for valid and non sequential points
-                if ((x_next, y_next, z_next) in protein_structure and not 
-                    _check_sequential(protein_structure, x_current, y_current, x_next, y_next, z_current, z_next)):
+                if ((x_next, y_next, z_next) in protein_structure and not
+                    _check_sequential(
+                        protein_structure,
+                        x_current,
+                        y_current,
+                        x_next,
+                        y_next,
+                        z_current,
+                        z_next)):
 
                     amino_2 = protein_structure[(x_next, y_next, z_next)][0]
                     color = _check_connection_type(amino_1, amino_2)
@@ -236,16 +284,16 @@ def _plot_polar_connections(
                                 zorder = 1)
 
 def _check_sequential(
-    protein_structure: dict[tuple[int, int, int], tuple[str, int]], 
-    x_old: int, 
-    y_old: int, 
-    x_new: int, 
+    protein_structure: dict[tuple[int, int, int], tuple[str, int]],
+    x_old: int,
+    y_old: int,
+    x_new: int,
     y_new: int,
     z_old: int,
     z_new: int
     ) -> bool:
     """
-    Helper function for checking if two amino acids are in a sequential order. 
+    Helper function for checking if two amino acids are in a sequential order.
     Returns True if sequential, False otherwise.
     """
     i = protein_structure[(x_old, y_old, z_old)][1]
@@ -288,6 +336,14 @@ def _plot_legend(ax: Optional[Axes] = None) -> None:
     # Polar lines
     for line in polar_lines:
         if ax:
-            ax.plot([], [], [], color=line["color"], linestyle = "--", label = line["label"], linewidth = 2)
+            ax.plot([], [], [],
+                    color=line["color"],
+                    linestyle = "--",
+                    label = line["label"],
+                    linewidth = 2)
         else:
-            plt.plot([], [], color = line["color"], linestyle = "--", label = line["label"], linewidth = 2)
+            plt.plot([], [],
+                     color = line["color"],
+                     linestyle = "--",
+                     label = line["label"],
+                     linewidth = 2)

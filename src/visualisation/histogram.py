@@ -12,7 +12,8 @@ def visualize_histogram(
     save: bool
     ) -> None:
     """
-    Creates a histogram with gradient color for the score distribution of an algorithm.
+    Creates a histogram with gradient color
+    for the score distribution of an algorithm.
     
     Parameters
     ----------
@@ -47,14 +48,20 @@ def visualize_histogram(
     # Center bars on each x-tick
     bins = np.arange(min_score - 0.5, max_score + 1.5, 1)
 
-    n, bins, patches = plt.hist(score_list, bins = bins, edgecolor = "black", alpha = 0.85, linewidth = 1.5)
+    n, bins, patches = plt.hist(score_list,
+                                bins = bins,
+                                edgecolor = "black",
+                                alpha = 0.85,
+                                linewidth = 1.5)
 
     # Set different color for bars
     cmap = plt.get_cmap("plasma")
     for patch, value in zip(patches, n):
         patch.set_facecolor(cmap(value / max(n)))
     
-    plt.title(f"{dimension}D Protein Score Distribution\nProtein sequence: {protein_sequence}\nAlgorithm: {algorithm}, {iterations} iterations", fontsize = 14, fontweight = "bold")
+    plt.title(f"{dimension}D Protein Score Distribution\nProtein sequence: {protein_sequence}\nAlgorithm: {algorithm}, {iterations} iterations",
+              fontsize = 14,
+              fontweight = "bold")
     plt.xlabel("Protein Score", fontsize = 12)
     plt.ylabel("Frequency", fontsize = 12)
 

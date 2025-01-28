@@ -9,8 +9,10 @@ def brute_force(sequence: str, save: bool = False) -> None:
     """
     Main function that evaluates every possible protein structure.
     It reads all the structures from a `CSV` file.
-    Using the `multiprocessing` module, it evaluates every structure with helper functions.
-    Plots and saves the best structure and prints the rating of the best structure.
+    Using the `multiprocessing` module,
+    it evaluates every structure with helper functions.
+    Plots and saves the best structure
+    and prints the rating of the best structure.
     Finally saves the directions into a `CSV` file.
 
     Parameters
@@ -37,12 +39,22 @@ def brute_force(sequence: str, save: bool = False) -> None:
 
             # Process chunk when chunk size reached
             if len(chunk) == 1000000:
-                best_score, best_structures = _process_chunk(sequence, chunk, best_score, best_structures, num_processes)
+                best_score, best_structures = _process_chunk(
+                                                sequence,
+                                                chunk,
+                                                best_score,
+                                                best_structures,
+                                                num_processes)
                 chunk = []
 
         # Process final chunk
         if chunk:
-            best_score, best_structures = _process_chunk(sequence, chunk, best_score, best_structures, num_processes)
+            best_score, best_structures = _process_chunk(
+                                            sequence,
+                                            chunk,
+                                            best_score,
+                                            best_structures,
+                                            num_processes)
 
     csvfile.close()
 
@@ -66,7 +78,10 @@ def _process_chunk(
     best_structures: list[Protein],
     num_processes: int
     ) -> tuple[int, list[Protein]]:
-    """Helper function that processes chunks in parallel and updates best_score and best_structures."""
+    """
+    Helper function that processes chunks in parallel
+    and updates best_score and best_structures.
+    """
     with multiprocessing.Pool(num_processes) as pool:
         results = pool.map(evaluate_folding_wrapper, [(sequence, f) for f in foldings])
 

@@ -11,22 +11,28 @@ def cmd_group():
     \b
     1. run:
     Main function for running the experiment.
-    It will run every algorithm on every protein sequence, save the data and print the best score.
-    Or if a specific protein sequence is given, it will only run that protein sequence.
+    It will run every algorithm on every protein sequence,
+    save the data and print the best score.
+    Or if a specific protein sequence is given,
+    it will only run that protein sequence.
     Or if a specific algorithm is given, it will only run that algorithm.
     A combination of both is also possible.
 
     \b
     2. view:
-    Main function for showing the boxplots for the different algorithms and saves the boxplots.
-    Takes in protein sequence and dimension as arguments and plots the corresponding boxplot.
-    If no arguments are given, it will plot all boxplots in 3D and show and save the plots.
+    Main function for showing the boxplots
+    for the different algorithms and saves the boxplots.
+    Takes in protein sequence and dimension as arguments
+    and plots the corresponding boxplot.
+    If no arguments are given,
+    it will plot all boxplots in 3D and show and save the plots.
 
     \b
     3. bruteforce:
-    Main function for generating all protein foldings structures in 2D and evaluating all of them.
-    Finds the protein structures with the lowest scores and saves them. This will only evaluate the
-    first two protein sequences. 
+    Main function for generating all protein foldings structures in 2D
+    and evaluating all of them.
+    Finds the protein structures with the lowest scores and saves them.
+    This will only evaluate the first two protein sequences.
 
     Usage:
 
@@ -51,7 +57,7 @@ def cmd_group():
     default = "all",
     show_default = True,
     type = str,
-    help = f"Give the protein sequence to fold. Choose from:\n{PROTEIN_SEQUENCES}. If not given, all protein sequences will be ran."
+    help = f"Give the protein sequence to fold. Choose from:\n{PROTEIN_SEQUENCES}."
 )
 @click.option(
     "-a",
@@ -59,7 +65,7 @@ def cmd_group():
     default = "all",
     show_default = True,
     type = str,
-    help = f"Give the name of the algorithm to use. Choose from:\n{ALGORITHMS}. If not given, all algorithms will be ran."
+    help = f"Give the name of the algorithm to use. Choose from:\n{ALGORITHMS}."
 )
 @click.option(
     "--graph",
@@ -109,8 +115,10 @@ def run_experiment(
     Main function for running the experiment.
 
     \b
-    It will run every algorithm on every protein sequence, save the data and print the best score.
-    Or if a specific protein sequence is given, it will only run that protein sequence.
+    It will run every algorithm on every protein sequence,
+    save the data and print the best score.
+    Or if a specific protein sequence is given,
+    it will only run that protein sequence.
     Or if a specific algorithm is given, it will only run that algorithm.
     A combination of both is also possible.
     
@@ -125,10 +133,12 @@ def run_experiment(
 
         $ python main.py run
 
-    2. Run Hill Climber on a specific protein sequence with 5 repeats in 2D, showing the plot and 1000 iterations:
+    2. Run Hill Climber on a specific protein sequence with 5 repeats in 2D,
+    showing the plot and 1000 iterations:
 
     \b
-        $ python main.py run -p HHPHHHPHPHHHPH -a "Hill Climber" -d 2 --graph -r 5 -i 1000
+        $ python main.py run -p HHPHHHPHPHHHPH
+        -a "Hill Climber" -d 2 --graph -r 5 -i 1000
     """
     run(
         protein_sequence = protein,
@@ -145,7 +155,7 @@ def run_experiment(
     default = "all",
     show_default = True,
     type = str,
-    help = f"Give the protein sequence to fold. Choose from:    {PROTEIN_SEQUENCES}. If not given, all protein sequences will be ran."
+    help = f"Give the protein sequence to fold. Choose from:{PROTEIN_SEQUENCES}."
 )
 @click.option(
     "--graph",
@@ -177,8 +187,10 @@ def view_experiment(
 
     \b
     Shows the boxplots for the different algorithms and saves the boxplots.
-    Takes in protein sequence and dimension as arguments and plots the corresponding boxplot.
-    If no arguments are given, it will plot all boxplots in 3D and show and save the plots.
+    Takes in protein sequence and dimension as arguments
+    and plots the corresponding boxplot.
+    If no arguments are given,
+    it will plot all boxplots in 3D and show and save the plots.
     
     Examples:
 
@@ -205,8 +217,10 @@ def brute_force():
     
     It generates all possible folding combinations into a CSV file.
     It then reads all the structures from a CSV file.
-    Using the multiprocessing module, it evaluates every structure with helper functions.
-    Plots and saves the best structure and prints the rating of the best structure.
+    Using the multiprocessing module,
+    it evaluates every structure with helper functions.
+    Plots and saves the best structure
+    and prints the rating of the best structure.
     Finally saves the directions into a CSV file.
     """
     for protein_sequence in PROTEIN_SEQUENCES[:2]:

@@ -6,9 +6,10 @@ class Protein():
     """
     A class to represent a protein.
     It stores a protein sequence and uses a provided folding function
-    to generate a folding pattern (`amino_directions`) or it uses a prebuilt folding pattern.
-    Then it creates a structure (mapping of positions to amino acids) and computes
-    the total rating of the protein.
+    to generate a folding pattern (`amino_directions`)
+    or it uses a prebuilt folding pattern.
+    Then it creates a structure (mapping of positions to amino acids)
+    and computes the total rating of the protein.
 
     Parameters
     ----------
@@ -19,7 +20,10 @@ class Protein():
         A list of absolute directions. Default is `None`.
     """
 
-    def __init__(self, protein_sequence: str, amino_directions: Optional[list[int]] = None) -> None:
+    def __init__(self,
+                 protein_sequence: str,
+                 amino_directions: Optional[list[int]] = None
+                 ) -> None:
         """
         Attributes
         ----------
@@ -30,7 +34,8 @@ class Protein():
             A list of absolute directions. Default is `None`.
         
         `structure` : `Grid`, optional
-            The structure contains the coordinates of an amino acid and its order in the sequence.
+            The structure contains the coordinates
+            of an amino acid and its order in the sequence.
             Default is `None`.
 
         `protein_rating` : int
@@ -41,8 +46,13 @@ class Protein():
         self.structure: Optional[Grid] = None
         self.protein_rating: int = 1
 
-    def build_structure(self, function: Callable[[str, int], list[int]], dimension: int) -> None:
-        """Creates the attributes for the protein with specific folding function."""
+    def build_structure(self,
+                        function: Callable[[str, int], list[int]],
+                        dimension: int
+                        )-> None:
+        """
+        Creates the attributes for the protein with specific folding function.
+        """
         self.amino_directions = function(self.protein_sequence, dimension)
         structure = Grid(self.protein_sequence, self.amino_directions)
         
@@ -68,7 +78,7 @@ class Protein():
     def output_csv(self, file_path: str = "output") -> None:
         """
         Creates a csv file containing the amino acids and their fold.
-        Uses 'file_path' as output directory. 
+        Uses 'file_path' as output directory.
         If not specified, creates 'output.csv' in current directory.
         """
         if self.amino_directions is not None:

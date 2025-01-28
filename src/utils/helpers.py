@@ -1,17 +1,20 @@
 """
-This module contains general-purpose utility functions that can be used across 
-the project. These functions are designed to simplify repetitive tasks, improve 
-code readability, and promote reusability.
+This module contains general-purpose utility functions
+that can be used across the project.
+These functions are designed to simplify repetitive tasks,
+improve code readability, and promote reusability.
 
-Helper functions in this file are not specific to any single module but can be 
-used by various parts of the project wherever needed.
+Helper functions in this file are not specific to
+any single module but can be used by various
+parts of the project wherever needed.
 """
 import random as rd
 import csv
 import src.visualisation as vis
 
 from src.classes import Protein
-from src.utils import PROTEIN_SEQUENCE_MAP, ALGORITHM_FOLDER_MAP, DIRECTION_MAP_2D, DIRECTION_MAP_3D, DIRECTION_CHOICES_2D, DIRECTION_CHOICES_3D
+from src.utils import (PROTEIN_SEQUENCE_MAP, ALGORITHM_FOLDER_MAP, DIRECTION_MAP_2D,
+                       DIRECTION_MAP_3D, DIRECTION_CHOICES_2D, DIRECTION_CHOICES_3D)
 
 # ===============================================================
 # Utility Functions
@@ -19,7 +22,8 @@ from src.utils import PROTEIN_SEQUENCE_MAP, ALGORITHM_FOLDER_MAP, DIRECTION_MAP_
 
 def random_fold(protein_sequence: str, dimension: int) -> list[int]:
     """
-    Generates a random folding sequence using relative direction (0, 1, 2, 3, 4).
+    Generates a random folding sequence using
+    relative direction (0, 1, 2, 3, 4).
     Translates them into absolute direction (-3, -2, -1, 1, 2, 3).
 
     Parameters
@@ -56,7 +60,8 @@ def random_fold(protein_sequence: str, dimension: int) -> list[int]:
 
 def direction_translator(directions: list[int], dimension: int) -> list[int]:
     """
-    Translates relative paths (0, 1, 2, 3, 4) to absolute paths (-3, -2, -1, 1, 2, 3).
+    Translates relative paths (0, 1, 2, 3, 4)
+    to absolute paths (-3, -2, -1, 1, 2, 3).
     Also adds 1 and 0 at start and end respectively for correct format.
     
     Parameters
@@ -102,21 +107,24 @@ def save_and_visualize_results(
     dimension: int,
     best_protein: Protein,
     algorithm: str,
-    histogram_data: list[list[int]], 
-    histogram: list[int], 
-    iterations: int, 
-    show_plot: bool, 
-    save_plot: bool, 
-    save_data: bool, 
+    histogram_data: list[list[int]],
+    histogram: list[int],
+    iterations: int,
+    show_plot: bool,
+    save_plot: bool,
+    save_data: bool,
     score_progression: list[int] = []
     ) -> None:
     """
-    Main function for visualizing and saving the results of the optimization algorithm.
-    It plots the histogram for the distribution of scores of an algorithm for a protein sequence.
-    It also plots the best protein structure found from that particular algorithm.
+    Main function for visualizing and saving
+    the results of the optimization algorithm.
+    It plots the histogram for the distribution of scores
+    of an algorithm for a protein sequence.
+    It also plots the best protein structure found
+    from that particular algorithm.
     Its structure is then written into a `CSV` file with a specific format.
-    If the algorithm is either `Hill Climber` or `Simulated Annealing`, it will also plot
-    and save the score progression plot.
+    If the algorithm is either `Hill Climber` or `Simulated Annealing`,
+    it will also plot and save the score progression plot.
     It can also write the distribution of scores to a `CSV` file.
 
     Parameters

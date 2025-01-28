@@ -15,7 +15,7 @@ direction_map = {
 
 def generate_all_foldings(protein_sequence: str) -> None:
     """
-    Generate all possible foldings for a given sequence length 
+    Generate all possible foldings for a given sequence length
     where the first item is always `1` and the last item `0`
     and consecutive items are never opposing directions.
     Then saves it to a `CSV` file.
@@ -23,7 +23,9 @@ def generate_all_foldings(protein_sequence: str) -> None:
     sequence_length = len(protein_sequence)
     directions = [0, 1, 2]
 
-    with open(f'src/brute_force/all_foldings/{protein_sequence}.csv', 'w', newline = '') as csvfile:
+    with open(f"src/brute_force/all_foldings/{protein_sequence}.csv",
+              "w",
+              newline = "") as csvfile:
         
         writer = csv.writer(csvfile)
 

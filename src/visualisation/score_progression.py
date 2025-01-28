@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 def visualize_score_progression(
     dimension: int,
-    protein_sequence: str, 
+    protein_sequence: str,
     score_list: list[int],
     algorithm: str,
     file_path: str,
@@ -11,7 +11,8 @@ def visualize_score_progression(
     save: bool
     ) -> None:
     """
-    Creates a plot for the evolution of the protein score with the Hill Climber/Simulated Annealing algorithm.
+    Creates a plot for the evolution of the protein score
+    with the Hill Climber/Simulated Annealing algorithm.
     
     Parameters
     ----------
@@ -25,7 +26,8 @@ def visualize_score_progression(
         List of the scores during a run.
 
     algorithm : str
-        The name of the algorithm used (either `Hill Climber` or `Simulated Annealing`).
+        The name of the algorithm used
+        (either `Hill Climber` or `Simulated Annealing`).
 
     file_path : str
         Path to save the plots.
@@ -37,9 +39,14 @@ def visualize_score_progression(
         If `True` save the plot.
     """
     plt.figure(figsize = (12, 7))
-    plt.plot(np.arange(1, len(score_list) + 1), score_list, label = "Score Progression", linewidth = 2)
+    plt.plot(np.arange(1, len(score_list) + 1),
+             score_list,
+             label = "Score Progression",
+             linewidth = 2)
     
-    plt.title(f"{dimension}D {algorithm} Progression\nProtein: {protein_sequence}", fontsize = 14, fontweight = "bold")
+    plt.title(f"{dimension}D {algorithm} Progression\nProtein: {protein_sequence}",
+              fontsize = 14,
+              fontweight = "bold")
     plt.xlabel("Iterations", fontsize = 12)
     plt.ylabel("Score", fontsize = 12)
 

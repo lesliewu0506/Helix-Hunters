@@ -24,9 +24,10 @@ class Grid():
         -3 : (0, 0, -1)}
 
     def __init__(self, protein_sequence: str, amino_directions: list[int] | None) -> None:
-        """ 
+        """
         `structure` : `dict[tuple[int, int, int], tuple[str, int]]`
-            The structure contains the coordinates of an amino acid and its order in the sequence.
+            The structure contains the coordinates
+            of an amino acid and its order in the sequence.
 
         `protein_sequence` : str
             Protein sequence (for example `HHPHHHPH`).

@@ -2,12 +2,14 @@ import random as rd
 import numpy as np
 
 from . import HillClimber
-from src.utils import TEMPERATURE_DECAY, TEMPERATURE
+from src.utils import TEMPERATURE_DECAY, TEMPERATURE, DIMENSIONS
 
 class SimulatedAnnealing(HillClimber):
     """
-    The Simulated Annealing class optimizes a protein structure by mimicking the process of annealing in metals.
-    It searches for multiple solutions by accepting worse solutions with decreasing probability as the iterations progress.
+    The Simulated Annealing class optimizes a protein structure
+    by mimicking the process of annealing in metals.
+    It searches for multiple solutions by accepting
+    worse solutions with decreasing probability as the iterations progress.
 
     Parameters
     ----------
@@ -22,7 +24,7 @@ class SimulatedAnnealing(HillClimber):
 
     Notes
     -----
-    This class inherits most of the `HillClimber` class functions. 
+    This class inherits most of the `HillClimber` class functions.
 
     Raises
     ------
@@ -35,9 +37,13 @@ class SimulatedAnnealing(HillClimber):
     >>> annealing.run(show_plot = True, repeats = 5, iterations = 1000)
     """
 
-    def __init__(self, protein_sequence: str, dimension: int, temperature: float = TEMPERATURE) -> None:
-        if dimension not in [2, 3]:
-            raise ValueError("Invalid dimension given. Choose from:\n[2, 3].")
+    def __init__(self,
+                 protein_sequence: str,
+                 dimension: int,
+                 temperature: float = TEMPERATURE
+                 ) -> None:
+        if dimension not in DIMENSIONS:
+            raise ValueError(f"Invalid dimension given. Choose from:\n{DIMENSIONS}.")
 
         super().__init__(protein_sequence, dimension)
 
@@ -52,7 +58,8 @@ class SimulatedAnnealing(HillClimber):
         iterations: int = 1000
         ) -> None:
         """
-        Runs the Simulated Annealing algorithm to optimize the protein structure.
+        Runs the Simulated Annealing algorithm
+        to optimize the protein structure.
 
         Parameters
         ----------
@@ -63,7 +70,8 @@ class SimulatedAnnealing(HillClimber):
             If `True` save the plot. Default is `False`.
 
         save_data : bool, optional
-            If `True`, saves the optimization results to a file. Default is `False`.
+            If `True`, saves the optimization results to a file.
+            Default is `False`.
 
         repeats : int, optional
             The number of independent runs to perform. Default is `1`.
@@ -90,11 +98,18 @@ class SimulatedAnnealing(HillClimber):
             accept_function = self._accept_function,
             temperature = self.T)
 
-    def _accept_function(self, new_rating: int, old_rating: int, temperature: float) -> tuple[bool, float]:
+    def _accept_function(self,
+                         new_rating: int,
+                         old_rating: int,
+                         temperature: float
+                         ) -> tuple[bool, float]:
         """
-        Helper function that determines whether a new structure is accepted based on the acceptance probability.
-        The acceptance probability is calculated using the Metropolis criterion, where 
-        worse solutions are accepted with a probability that decreases as the temperature lowers.
+        Helper function that determines whether a new structure
+        is accepted based on the acceptance probability.
+        The acceptance probability is calculated
+        using the Metropolis criterion,
+        where worse solutions are accepted with a probability
+        that decreases as the temperature lowers.
         """
         if new_rating == 1:
             # Update temperature
@@ -115,7 +130,7 @@ class SimulatedAnnealing(HillClimber):
         # Return if accepted new rating
         if rd.random() < probability:
             return True, temperature
-        else: 
+        else:
             return False, temperature
 
     def _update_temperature(self, temperature: float) -> float:
@@ -125,7 +140,8 @@ class SimulatedAnnealing(HillClimber):
         Notes
         -----
         This decay function drops fast.
-        By trial and error, the value of 0.999 has been found and used for this project.
+        By trial and error, the value of 0.999
+        has been found and used for this project.
         This ensures that the annealing is stopped around 1500 iterations.
         """
         temperature = temperature * TEMPERATURE_DECAY

@@ -5,8 +5,10 @@ from typing import Optional, Callable
 class General():
     """
     A general template for protein structure optimization algorithms.
-    The `General` class contains most basic functions every algorithm class would need.
-    Every class that inherits `General` should implement their own `algorithm function`
+    The `General` class contains most basic functions
+    every algorithm class would need.
+    Every class that inherits `General`
+    should implement their own `algorithm function`
     and then call `run_algorithm`.
 
     Parameters
@@ -64,11 +66,11 @@ class General():
 
     def run_algorithm(
         self,
-        algorithm: str, 
-        show_plot: bool, 
-        save_plot: bool, 
+        algorithm: str,
+        show_plot: bool,
+        save_plot: bool,
         save_data: bool,
-        repeats: int, 
+        repeats: int,
         iterations: int,
         algorithm_function: Callable[[int, Optional[Callable[[int, int, float], tuple[bool, float]]], float], None],
         accept_function: Optional[Callable[[int, int, float], tuple[bool, float]]] = None,
@@ -77,7 +79,8 @@ class General():
         mutation_rate: float = MUTATION_RATE
         ) -> None:
         """
-        Runs a protein optimization algorithm. Can show and save the data created with arguments.
+        Runs a protein optimization algorithm.
+        Can show and save the data created with arguments.
 
         Parameters
         ----------
@@ -104,30 +107,41 @@ class General():
             It updates the attributes initialized.
         
         check_solution_function: Callable, optional
-            A function for that determines whether a new solution is accepted based on an acceptance probability.
+            A function for that determines whether a new solution
+            is accepted based on an acceptance probability.
             Default is `None`.
         
         temperature : int, optional
-            The initial temperature for annealing algorithm. Default is `TEMPERATURE`.
+            The initial temperature for annealing algorithm.
+            Default is `TEMPERATURE`.
 
         population_size : int, optional
-            The size of the starting population. Default is `POPULATION_SIZE`.
+            The size of the starting population.
+            Default is `POPULATION_SIZE`.
 
         mutation_rate : float, optional
-            The mutation rate for the offspring. Default is `MUTATION_RATE`.
+            The mutation rate for the offspring.
+            Default is `MUTATION_RATE`.
         
         Notes
         -----
-        The method saves the best protein structure, score progression, and histogram data.
-        These results can be visualized or saved to files for further analysis.
+        The method saves the best protein structure,
+        score progression, and histogram data.
+        These results can be visualized
+        or saved to files for further analysis.
 
         Raises
         ------
         RunTimeError
-            If no valid protein structure was found during the optimization process.
+            If no valid protein structure was found
+            during the optimization process.
         """
         for _ in range(repeats):
-            algorithm_function(iterations, accept_function = accept_function, temperature = temperature, population_size = population_size, mutation_rate = mutation_rate)
+            algorithm_function(iterations,
+                               accept_function = accept_function,
+                               temperature = temperature,
+                               population_size = population_size,
+                               mutation_rate = mutation_rate)
         
         # Save and visualize protein
         if self.best_protein is not None:
@@ -135,7 +149,7 @@ class General():
                 dimension = self.dimension,
                 best_protein = self.best_protein,
                 algorithm = algorithm,
-                histogram_data = self.histogram_data, 
+                histogram_data = self.histogram_data,
                 histogram = self.histogram_data[-1],
                 iterations = iterations,
                 show_plot = show_plot,

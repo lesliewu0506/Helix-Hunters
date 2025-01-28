@@ -5,12 +5,18 @@ from matplotlib.axes import Axes
 
 from src.utils import ALGORITHMS, PROTEIN_SEQUENCE_MAP
 
-def boxplot(protein_sequence: str, dimension: int, show_plot: bool, save_plot: bool) -> None:
+def boxplot(
+        protein_sequence: str,
+        dimension: int,
+        show_plot: bool,
+        save_plot: bool
+        ) -> None:
     """
     Main function for plotting a boxplot of the score distributions
     of different algorithms of a protein sequence.
-    It imports the data from `CSV` files that corresponds to the protein sequence.
-    Then it couples each data with the corresponding algorithm in a `dict`. 
+    It imports the data from `CSV` files
+    that corresponds to the protein sequence.
+    Then it couples each data with the corresponding algorithm in a `dict`.
     The minimum score is then calculated for the limits for the boxplots.
 
     Parameters
@@ -59,7 +65,11 @@ def boxplot(protein_sequence: str, dimension: int, show_plot: bool, save_plot: b
 
     plt.close()
 
-def _create_data_structure(protein_sequence: str, folder: str, dimension: int) -> dict[str, list[int]]:
+def _create_data_structure(
+        protein_sequence: str,
+        folder: str,
+        dimension: int
+        ) -> dict[str, list[int]]:
     """
     Helper function that creates a dictionary
     with algorithm names as keys and the boxplot data as values.

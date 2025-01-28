@@ -1,7 +1,9 @@
 class Rating():
     """
-    A class to represent the rating of a protein structure based on its sequence and structure.
-    It will take in a protein structure and calculate its rating based on rules:
+    A class to represent the rating of a protein structure
+    based on its sequence and structure.
+    It will take in a protein structure
+    and calculate its rating based on rules:
     - If two `H` amino acids are next to each other, it gets a score `-1`.
     - If `H` and `C` are next to each other, it also gets a score `-1`.
     - If two `C` amino acids are next to each other, its gets a score `-5`.
@@ -15,11 +17,12 @@ class Rating():
     """
 
     def __init__(self, structure: dict[tuple[int, int, int], tuple[str, int]]) -> None:
-        """ 
+        """
         Attributes
         ----------
-        `structure` : dict[tuple[int, int, int], tuple[str, int]]
-            The structure contains the coordinates of an amino acid and its order in the sequence.
+        `structure` : `dict[tuple[int, int, int], tuple[str, int]]`
+            The structure contains the coordinates
+            of an amino acid and its order in the sequence.
 
         `score` : int
             The score based on its structure.
@@ -30,7 +33,9 @@ class Rating():
         self._count_adjacent()
 
     def _count_adjacent(self) -> None:
-        """Calculates the strength of the protein based on adjacent amino acids."""
+        """
+        Calculates the strength of the protein based on adjacent amino acids.
+        """
         # Mapping for all neighbouring points
         direction_map = {(1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)}
 
@@ -59,7 +64,10 @@ class Rating():
         self.score = self.score // 2
 
     def _check_pair(self, amino_1: str, amino_2: str) -> int:
-        """Checks the pair for possible connections and returns the strength of connection."""
+        """
+        Checks the pair for possible connections
+        and returns the strength of connection.
+        """
         if (amino_1 == 'H' and amino_2 in ['H', 'C']) or (amino_1 == 'C' and amino_2 == 'H'):
             return -1
         elif amino_1 == 'C' and amino_2 == 'C':
@@ -69,4 +77,3 @@ class Rating():
     def get_rating(self) -> int:
         """Returns rating of the protein."""
         return self.score
-  

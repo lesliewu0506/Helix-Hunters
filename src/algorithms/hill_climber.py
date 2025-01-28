@@ -2,13 +2,14 @@ import random as rd
 
 from . import General
 from src.classes import Protein
-from src.utils import random_fold, MAX_UNCHANGED_ITERATIONS, DIRECTION_CHOICES_2D, DIRECTION_CHOICES_3D
+from src.utils import (random_fold, MAX_UNCHANGED_ITERATIONS,
+                       DIRECTION_CHOICES_2D, DIRECTION_CHOICES_3D, DIMENSIONS)
 from typing import Callable
 
 class HillClimber(General):
     """
     The Hill Climber class optimizes a protein structure.
-    It randomly changes a valid value in the protein structure. 
+    It randomly changes a valid value in the protein structure.
     Each improvement or equivalent solution is kept for the next iteration.
 
     Parameters
@@ -36,8 +37,8 @@ class HillClimber(General):
     """
 
     def __init__(self, protein_sequence: str, dimension: int) -> None:
-        if dimension not in [2, 3]:
-            raise ValueError("Invalid dimension given. Choose from:\n[2, 3].")
+        if dimension not in DIMENSIONS:
+            raise ValueError(f"Invalid dimension given. Choose from:\n{DIMENSIONS}.")
 
         super().__init__(protein_sequence, dimension)
 
@@ -61,7 +62,8 @@ class HillClimber(General):
             If `True` save the plot. Default is `False`.
 
         save_data : bool, optional
-            If `True`, saves the optimization results to a file. Default is `False`.
+            If `True`, saves the optimization results to a file.
+            Default is `False`.
 
         repeats : int, optional
             The number of independent runs to perform. Default is `1`.
@@ -87,11 +89,19 @@ class HillClimber(General):
             algorithm_function = self._hill_climber,
             accept_function = self._accept_function)
 
-    def _hill_climber(self, iterations: int, accept_function: Callable, temperature: float, population_size: int, mutation_rate: float) -> None:
+    def _hill_climber(self,
+                      iterations: int,
+                      accept_function: Callable,
+                      temperature: float,
+                      population_size: int,
+                      mutation_rate: float
+                      ) -> None:
         """Main function for running the Hill Climber algorithm."""
         best_score_list: list[int] = []
         for _ in range(iterations):
-            best_score, protein, score_progression_list = self._hill_climber_helper(temperature, accept_function)
+            best_score, protein, score_progression_list = self._hill_climber_helper(
+                                                                    temperature,
+                                                                    accept_function)
             # Save best results
             if best_score < self.best_score:
                 self.best_protein = protein
@@ -107,11 +117,15 @@ class HillClimber(General):
         accept_solution: Callable[[int, int, float], tuple[bool, float]],
         ) -> tuple[int, Protein, list[int]]:
         """
-        Helper function that iteratively changes the protein structure and evaluated the results.
-        It accepts a change if the score of the protein improved or stayed the same.
+        Helper function that iteratively changes the protein structure
+        and evaluated the results.
+        It accepts a change if the score of the protein
+        improved or stayed the same.
         The iterations stop when the score has not changed over 600 iterations.
         It has optional arguments for Simulated Annealing.
-        It returns the best score, the `Protein` object and the list for scores for a score progression plot.
+        It returns the best score,
+        the `Protein` object and the list for scores
+        for a score progression plot.
 
         Notes
         -----
@@ -139,10 +153,14 @@ class HillClimber(General):
             index = rd.randrange(len(amino_directions) - 1)
 
             if self.dimension == 2:
-                new_direction = rd.choice([direction for direction in DIRECTION_CHOICES_2D if direction != amino_directions[index]])
+                new_direction = rd.choice([direction
+                                           for direction in DIRECTION_CHOICES_2D
+                                           if direction != amino_directions[index]])
 
             elif self.dimension == 3:
-                new_direction = rd.choice([direction for direction in DIRECTION_CHOICES_3D if direction != amino_directions[index]])
+                new_direction = rd.choice([direction
+                                           for direction in DIRECTION_CHOICES_3D
+                                           if direction != amino_directions[index]])
 
             # Copy amino directions with new direction added
             new_amino_directions: list[int] = amino_directions[:]
@@ -169,8 +187,15 @@ class HillClimber(General):
             score_progression_list.append(best_rating)
         return best_rating, protein, score_progression_list
     
-    def _accept_function(self, candidate_score: int, best_rating: int, temperature: float) -> tuple[bool, float]:
-        """Helper function for accepting the new rating. Returns `True` if smaller or equal."""
+    def _accept_function(self,
+                         candidate_score: int,
+                         best_rating: int,
+                         temperature: float
+                         ) -> tuple[bool, float]:
+        """
+        Helper function for accepting the new rating.
+        Returns `True` if smaller or equal.
+        """
         if candidate_score <= best_rating:
             return True, temperature
         return False, temperature
