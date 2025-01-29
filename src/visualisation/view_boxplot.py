@@ -50,8 +50,8 @@ def boxplot(
 
     title: str = f"{dimension}D Protein Score Distribution for Different Algorithms\nProtein Sequence: {protein_sequence}"
     ax.set_title(title, fontsize = 14, fontweight = "bold")
-    ax.set_xlabel("Algorithm", fontsize = 12)
-    ax.set_ylabel("Score", fontsize = 12)
+    plt.xticks(fontsize = 19, fontweight = "bold")
+    ax.set_ylabel("Score", fontsize = 19, fontweight = "bold")
 
     ax.set_ylim(min_score - 1 , 2)
     ax.grid(axis = "y", linestyle = "--", alpha = 0.85)
