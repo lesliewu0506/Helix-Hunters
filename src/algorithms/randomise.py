@@ -1,6 +1,6 @@
 from . import General
 from src.classes import Protein
-from src.utils import random_fold, DIMENSIONS
+from src.utils import random_fold
 
 class Random(General):
     """
@@ -11,16 +11,11 @@ class Random(General):
 
     Parameters
     ----------
-    dimension : int
-        The dimension in which the folding takes place (`2` or `3`).
-
     protein_sequence : str
         Protein sequence (for example `HHPHHHPH`).
 
-    Raises
-    ------
-    ValueError
-        If the dimension is not 2 or 3.
+    dimension : int
+        The dimension in which the folding takes place (`2` or `3`).
 
     Example
     -------
@@ -28,9 +23,6 @@ class Random(General):
     >>> random.run(show_plot = True, repeats = 5, iterations = 1000)
     """
     def __init__(self, protein_sequence: str, dimension: int) -> None:
-        if dimension not in DIMENSIONS:
-            raise ValueError(f"Invalid dimension given. Choose from:\n{DIMENSIONS}.")
-
         super().__init__(protein_sequence, dimension)
 
     def run(
@@ -61,15 +53,7 @@ class Random(General):
 
         iterations : int, optional
             The number of iterations per run. Default is `10000`.
-        
-        Raises
-        ------
-        ValueError
-            If repeats or iterations has an invalid value (<1).
         """
-        if repeats < 1 or iterations < 1:
-            raise ValueError("Both repeats and iterations must be at least 1.")
-
         self.run_algorithm(
             algorithm = "Random",
             show_plot = show_plot,
@@ -79,13 +63,12 @@ class Random(General):
             iterations = iterations,
             algorithm_function = self._random_iterated)
 
-    def _random_iterated(self,
-                         n: int,
-                         accept_function: None,
-                         temperature: float,
-                         population_size: int,
-                         mutation_rate: float
-                         ) -> None:
+    def _random_iterated(
+            self,
+            n: int,
+            accept_function: None,
+            temperature: float
+            ) -> None:
         """
         Helper function that generates multiple random
         folding sequences for a given protein string.
@@ -94,9 +77,12 @@ class Random(General):
 
         Notes
         -----
-        Only valid structures are accepted.
+        - Only valid structures are accepted.
         Without this restriction,
         most of the generated structures would be invalid.
+        - `accept_function` and `temperature` are dummy variables,
+        that are not intended to be used. 
+        They are there to be compatible with the General class.
         """
         score_list: list[int] = []
 

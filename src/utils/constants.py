@@ -12,7 +12,7 @@ can be used by various parts of the project wherever needed.
 # ===============================================================
 
 """
-Relative directions:
+Relative directions from previous amino's perspective:
 - 0: go left
 - 1: go straight
 - 2: go right
@@ -45,13 +45,6 @@ DIRECTION_CHOICES_3D: list[int] = [-3, -2, -1, 1, 2, 3]
 
 TEMPERATURE: int = 4
 TEMPERATURE_DECAY: int = 0.999
-
-# ===============================================================
-# Genetic Constants
-# ===============================================================
-
-POPULATION_SIZE: int = 1000
-MUTATION_RATE: float = 0.1
 
 # ===============================================================
 # Utils Constant

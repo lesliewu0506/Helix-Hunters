@@ -2,7 +2,7 @@ import random as rd
 import numpy as np
 
 from . import HillClimber
-from src.utils import TEMPERATURE_DECAY, TEMPERATURE, DIMENSIONS
+from src.utils import TEMPERATURE_DECAY, TEMPERATURE
 
 class SimulatedAnnealing(HillClimber):
     """
@@ -26,25 +26,18 @@ class SimulatedAnnealing(HillClimber):
     -----
     This class inherits most of the `HillClimber` class functions.
 
-    Raises
-    ------
-    ValueError
-        If the dimension is not 2 or 3.
-
     Example
     -------
     >>> annealing = SimulatedAnnealing("HHPHHHPH", 2)
     >>> annealing.run(show_plot = True, repeats = 5, iterations = 1000)
     """
 
-    def __init__(self,
-                 protein_sequence: str,
-                 dimension: int,
-                 temperature: float = TEMPERATURE
-                 ) -> None:
-        if dimension not in DIMENSIONS:
-            raise ValueError(f"Invalid dimension given. Choose from:\n{DIMENSIONS}.")
-
+    def __init__(
+            self,
+            protein_sequence: str,
+            dimension: int,
+            temperature: float = TEMPERATURE
+            ) -> None:
         super().__init__(protein_sequence, dimension)
 
         self.T: float = temperature
@@ -78,15 +71,7 @@ class SimulatedAnnealing(HillClimber):
 
         iterations : int, optional
             The number of iterations per run. Default is `1000`.
-        
-        Raises
-        ------
-        ValueError
-            If repeats or iterations has an invalid value (<1).
         """
-        if repeats < 1 or iterations < 1:
-            raise ValueError("Both repeats and iterations must be at least 1.")
-
         self.run_algorithm(
             algorithm = "Simulated Annealing",
             show_plot = show_plot,
@@ -98,11 +83,12 @@ class SimulatedAnnealing(HillClimber):
             accept_function = self._accept_function,
             temperature = self.T)
 
-    def _accept_function(self,
-                         new_rating: int,
-                         old_rating: int,
-                         temperature: float
-                         ) -> tuple[bool, float]:
+    def _accept_function(
+            self,
+            new_rating: int,
+            old_rating: int,
+            temperature: float
+            ) -> tuple[bool, float]:
         """
         Helper function that determines whether a new structure
         is accepted based on the acceptance probability.

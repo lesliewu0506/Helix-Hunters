@@ -50,6 +50,7 @@ def cmd_group():
     """
     pass
 
+# Create "run" command
 @cmd_group.command("run")
 @click.option(
     "-p",
@@ -148,6 +149,8 @@ def run_experiment(
         save = save,
         repeats = repeats,
         iterations = iterations)
+    
+# Create "view" command
 @cmd_group.command("view")
 @click.option(
     "-p",
@@ -209,7 +212,8 @@ def view_experiment(
         dimension = dimension,
         show_plot = graph,
         save_plot = save)
-    
+
+# Create "bruteforce" command
 @cmd_group.command("bruteforce")
 def brute_force():
     """

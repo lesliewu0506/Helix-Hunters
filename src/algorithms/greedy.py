@@ -2,7 +2,7 @@ import random as rd
 
 from . import General
 from src.classes import Protein
-from src.utils import direction_translator, DIRECTIONS_2D, DIRECTIONS_3D, DIMENSIONS
+from src.utils import direction_translator, DIRECTIONS_2D, DIRECTIONS_3D
 
 class Greedy(General):
     """
@@ -17,11 +17,6 @@ class Greedy(General):
     dimension : int
         The dimension in which the folding takes place (`2` or `3`).
 
-    Raises
-    ------
-    ValueError
-        If the dimension is not 2 or 3.
-
     Example
     -------
     >>> greedy = Greedy("HHPHHHPH", 2)
@@ -29,9 +24,6 @@ class Greedy(General):
     """
 
     def __init__(self, protein_sequence: str, dimension: int) -> None:
-        if dimension not in DIMENSIONS:
-            raise ValueError(f"Invalid dimension given. Choose from:\n{DIMENSIONS}.")
-
         super().__init__(protein_sequence, dimension)
 
     def run(
@@ -62,15 +54,7 @@ class Greedy(General):
 
         iterations : int, optional
             The number of iterations per run. Default is `10000`.
-        
-        Raises
-        ------
-        ValueError
-            If repeats or iterations has an invalid value (<1).
         """
-        if repeats < 1 or iterations < 1:
-            raise ValueError("Both repeats and iterations must be at least 1.")
-
         self.run_algorithm(
             algorithm = "Greedy",
             show_plot = show_plot,
@@ -80,13 +64,12 @@ class Greedy(General):
             iterations = iterations,
             algorithm_function = self._greedy_iterated)
 
-    def _greedy_iterated(self,
-                         n: int,
-                         accept_function: None,
-                         temperature: float,
-                         population_size: int,
-                         mutation_rate: float
-                         ) -> None:
+    def _greedy_iterated(
+            self,
+            n: int,
+            accept_function: None,
+            temperature: float
+            ) -> None:
         """
         Helper function that generates multiple protein structures
         for a given protein sequence.

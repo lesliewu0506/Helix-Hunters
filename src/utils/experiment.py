@@ -1,7 +1,7 @@
 import src.visualisation as vis
 import multiprocessing
 
-from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing, Genetic
+from src.algorithms import Random, Greedy, HillClimber, SimulatedAnnealing
 from src.utils import (ALGORITHMS, PROTEIN_SEQUENCES,
                        ITERATIVE_ALGORITHM_FACTOR, DIMENSIONS)
 
@@ -9,8 +9,8 @@ algorithms = [
     ("Random", Random),
     ("Greedy", Greedy),
     ("Hill Climber", HillClimber),
-    ("Simulated Annealing", SimulatedAnnealing),
-    ("Genetic", Genetic)]
+    ("Simulated Annealing", SimulatedAnnealing)]
+ 
 num_processes: int = multiprocessing.cpu_count()
 
 def run(

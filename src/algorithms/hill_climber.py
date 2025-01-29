@@ -3,7 +3,7 @@ import random as rd
 from . import General
 from src.classes import Protein
 from src.utils import (random_fold, MAX_UNCHANGED_ITERATIONS,
-                       DIRECTION_CHOICES_2D, DIRECTION_CHOICES_3D, DIMENSIONS)
+                       DIRECTION_CHOICES_2D, DIRECTION_CHOICES_3D)
 from typing import Callable
 
 class HillClimber(General):
@@ -22,12 +22,7 @@ class HillClimber(General):
 
     Notes
     -----
-    This algorithm has built in support for Simulated Annealing.
-
-    Raises
-    ------
-    ValueError
-        If the dimension is not 2 or 3.
+    This algorithm has built-in support for Simulated Annealing.
 
     Example
     -------
@@ -37,9 +32,6 @@ class HillClimber(General):
     """
 
     def __init__(self, protein_sequence: str, dimension: int) -> None:
-        if dimension not in DIMENSIONS:
-            raise ValueError(f"Invalid dimension given. Choose from:\n{DIMENSIONS}.")
-
         super().__init__(protein_sequence, dimension)
 
     def run(
@@ -70,15 +62,7 @@ class HillClimber(General):
 
         iterations : int, optional
             The number of iterations per run. Default is `1000`.
-        
-        Raises
-        ------
-        ValueError
-            If repeats or iterations has an invalid value (<1).
         """
-        if repeats < 1 or iterations < 1:
-            raise ValueError("Both repeats and iterations must be at least 1.")
-
         self.run_algorithm(
             algorithm = "Hill Climber",
             show_plot = show_plot,
@@ -89,13 +73,12 @@ class HillClimber(General):
             algorithm_function = self._hill_climber,
             accept_function = self._accept_function)
 
-    def _hill_climber(self,
-                      iterations: int,
-                      accept_function: Callable,
-                      temperature: float,
-                      population_size: int,
-                      mutation_rate: float
-                      ) -> None:
+    def _hill_climber(
+            self,
+            iterations: int,
+            accept_function: Callable[[int, int, float], tuple[bool, float]],
+            temperature: float
+            ) -> None:
         """Main function for running the Hill Climber algorithm."""
         best_score_list: list[int] = []
         for _ in range(iterations):
@@ -187,11 +170,12 @@ class HillClimber(General):
             score_progression_list.append(best_rating)
         return best_rating, protein, score_progression_list
     
-    def _accept_function(self,
-                         candidate_score: int,
-                         best_rating: int,
-                         temperature: float
-                         ) -> tuple[bool, float]:
+    def _accept_function(
+            self,
+            candidate_score: int,
+            best_rating: int,
+            temperature: float
+            ) -> tuple[bool, float]:
         """
         Helper function for accepting the new rating.
         Returns `True` if smaller or equal.

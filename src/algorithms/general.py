@@ -1,5 +1,5 @@
 from src.classes import Protein
-from src.utils import save_and_visualize_results, TEMPERATURE, POPULATION_SIZE, MUTATION_RATE
+from src.utils import save_and_visualize_results, TEMPERATURE, DIMENSIONS
 from typing import Optional, Callable
 
 class General():
@@ -56,7 +56,15 @@ class General():
         
         `score_progression_list` : `list[int]`
             The score progression over iterations.
+
+        Raises
+        ------
+        ValueError
+            If the dimension is not `2` or `3`.
         """
+        if dimension not in DIMENSIONS:
+            raise ValueError(f"Invalid dimension given. Choose from:\n{DIMENSIONS}.")
+
         self.dimension: int = dimension
         self.protein_sequence: str = protein_sequence
         self.histogram_data: list[list[int]] = []
@@ -74,9 +82,7 @@ class General():
         iterations: int,
         algorithm_function: Callable[[int, Optional[Callable[[int, int, float], tuple[bool, float]]], float], None],
         accept_function: Optional[Callable[[int, int, float], tuple[bool, float]]] = None,
-        temperature: float = TEMPERATURE,
-        population_size: int = POPULATION_SIZE,
-        mutation_rate: float = MUTATION_RATE
+        temperature: float = TEMPERATURE
         ) -> None:
         """
         Runs a protein optimization algorithm.
@@ -115,14 +121,6 @@ class General():
             The initial temperature for annealing algorithm.
             Default is `TEMPERATURE`.
 
-        population_size : int, optional
-            The size of the starting population.
-            Default is `POPULATION_SIZE`.
-
-        mutation_rate : float, optional
-            The mutation rate for the offspring.
-            Default is `MUTATION_RATE`.
-        
         Notes
         -----
         The method saves the best protein structure,
@@ -132,17 +130,22 @@ class General():
 
         Raises
         ------
+        ValueError
+            If repeats or iterations has an invalid value (<1).
+
         RunTimeError
             If no valid protein structure was found
             during the optimization process.
         """
+        if repeats < 1 or iterations < 1:
+            raise ValueError("Both repeats and iterations must be at least 1.")
+
         for _ in range(repeats):
-            algorithm_function(iterations,
-                               accept_function = accept_function,
-                               temperature = temperature,
-                               population_size = population_size,
-                               mutation_rate = mutation_rate)
-        
+            algorithm_function(
+                iterations,
+                accept_function = accept_function,
+                temperature = temperature)
+
         # Save and visualize protein
         if self.best_protein is not None:
             save_and_visualize_results(
